@@ -74,7 +74,6 @@ const loginMap = {
   "Asier":   { email: "asier@premios.com",   avatar: "fotos/asieras.jpeg" },
   "Rulas":   { email: "rulas@premios.com",   avatar: "fotos/rulillas.jpeg" },
   "Fervico": { email: "fervico@premios.com", avatar: "fotos/fervico.jpeg" },
-  "Rober":   { email: "rober@premios.com",   avatar: "fotos/rober.jpeg" },
   "Maria":   { email: "maria@premios.com",   avatar: "fotos/maria.jpeg" },
   "Manu":    { email: "manu@premios.com",    avatar: "fotos/manu.jpeg" },
   "Iker":    { email: "iker@premios.com",    avatar: "fotos/iker.jpeg" },
@@ -84,7 +83,6 @@ const loginMap = {
   "Dario":   { email: "dario@premios.com",   avatar: "fotos/dario.jpeg" },
   "Ines":    { email: "ines@premios.com",    avatar: "fotos/ines.jpeg" },
   "Labrada": { email: "labrada@premios.com", avatar: "fotos/labrada.jpeg" },
-  "Fermoriv":{ email: "fermoriiv@premios.com", avatar: "fotos/Fermoriv.jpeg" },
   "Lucia":   { email: "lucia@premios.com",   avatar: "fotos/Lucia.jpeg" },
   "Marco":   { email: "marco@premios.com",   avatar: "fotos/marco.jpeg" },
   "Gamepro": { email: "gamepro@premios.com", avatar: "fotos/gamepro.jpeg" },
@@ -130,6 +128,7 @@ localStorage.setItem("usuarioLogueado", nombre);
 
     mostrarPerfil(nombre);
     controlarAccesoResultados();
+    controlarSeccionesCerradas();
 
     document.getElementById("login").style.display = "none";
     document.getElementById("appContent").style.display = "block";
@@ -158,7 +157,72 @@ function controlarAccesoResultados() {
   const user = localStorage.getItem("usuarioLogueado");
   const btn = document.getElementById("btnResultados");
   if (!btn) return;
-  btn.style.display = ["Asier", "Rulas"].includes(user) ? "" : "none";
+  btn.style.display = ["Rulas", "Lucia"].includes(user) ? "" : "none";
+}
+
+
+/* =====================================
+   MODO PREPARACIÓN — JOSEMARI III
+===================================== */
+
+// Cambiar a true cuando se abran las secciones.
+const CATEGORIAS_ABIERTAS = false;
+const VOTACIONES_ABIERTAS = false;
+
+// Nombres exactos del login.
+const ORGANIZADORES = ["Rulas", "Lucia"];
+
+function esOrganizador() {
+  const usuario = localStorage.getItem("usuarioLogueado");
+  return ORGANIZADORES.includes(usuario);
+}
+
+function controlarSeccionesCerradas() {
+  const organizador = esOrganizador();
+
+  const accesos = {
+    categorias: CATEGORIAS_ABIERTAS,
+    votacion: VOTACIONES_ABIERTAS,
+    "votacion-nominados": VOTACIONES_ABIERTAS,
+    "tu-votacion": VOTACIONES_ABIERTAS
+  };
+
+  // Ocultar del menú las secciones cerradas.
+  document.querySelectorAll(
+    "nav.top .nav-actions button"
+  ).forEach(boton => {
+
+    const onclick = boton.getAttribute("onclick") || "";
+
+    for (const [seccion, abierta] of Object.entries(accesos)) {
+
+      if (onclick.includes(`'${seccion}'`)) {
+        boton.hidden = !organizador && !abierta;
+
+        // hidden puede ser anulado por otros estilos.
+        boton.style.display =
+          !organizador && !abierta ? "none" : "";
+      }
+    }
+  });
+}
+
+function puedeVerSeccion(seccion) {
+  if (esOrganizador()) return true;
+
+  if (seccion === "categorias") {
+    return CATEGORIAS_ABIERTAS;
+  }
+
+  if ([
+    "votacion",
+    "votacion-nominados",
+    "tu-votacion"
+  ].includes(seccion)) {
+    return VOTACIONES_ABIERTAS;
+  }
+
+  return true;
 }
 
 /* ============================
@@ -240,6 +304,10 @@ document.getElementById("perfilUsuario")?.addEventListener("click", () => {
    NAVEGACIÓN ENTRE SECCIONES
 ============================ */
 function mostrarSeccion(seccion) {
+  if (!puedeVerSeccion(seccion)) {
+  mostrarSeccion("inicio");
+  return;
+}
   const necesitaLogin = !["login","inicio","participantes","categorias"].includes(seccion);
   const user = localStorage.getItem("usuarioLogueado");
 
@@ -281,6 +349,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   if (user && loginMap[user]) {
     mostrarPerfil(user);
     controlarAccesoResultados();
+    controlarSeccionesCerradas();
 
     document.getElementById("login").style.display = "none";
     document.getElementById("appContent").style.display = "block";
@@ -359,71 +428,123 @@ window.closeVideoLightboxHard = function () {
     if (e.key === "Escape" && !modal.hidden) closeVideoLightbox();
   });
 })();
+
+
 /* ============================================
-   HERO LATERAL — CASCADA INFINITA DE IMÁGENES
+   INICIO — FOTOS HORIZONTALES ARRIBA Y ABAJO
 ============================================ */
 (function () {
-  const DURACION_SCROLL = 90;        // velocidad
-  const FOTOS_POR_LADO = 20;         // fotos por columna
 
-  const IMAGENES_IZQ = [
-    "fotos/login/foto1.jpeg","fotos/login/foto3.jpeg","fotos/login/foto5.jpeg",
-    "fotos/login/foto7.jpeg","fotos/login/foto9.jpeg","fotos/login/foto11.jpeg",
-    "fotos/login/foto13.jpeg","fotos/login/foto15.jpeg","fotos/login/foto17.jpeg",
-    "fotos/login/foto19.jpeg","fotos/login/foto21.jpg","fotos/login/foto23.jpeg",
-    "fotos/login/foto25.jpeg","fotos/login/foto27.jpeg","fotos/login/foto29.jpeg",
-    "fotos/login/foto31.jpeg","fotos/login/foto33.jpeg","fotos/login/foto35.jpeg"
-  ];
+  const TOTAL_FOTOS = 85;
 
-  const IMAGENES_DER = [
-    "fotos/login/foto2.jpeg","fotos/login/foto4.jpeg","fotos/login/foto6.jpeg",
-    "fotos/login/foto8.jpeg","fotos/login/foto10.jpeg","fotos/login/foto12.jpeg",
-    "fotos/login/foto14.jpeg","fotos/login/foto16.jpeg","fotos/login/foto18.jpeg",
-    "fotos/login/foto20.jpeg","fotos/login/foto22.jpeg","fotos/login/foto24.jpeg",
-    "fotos/login/foto26.jpeg","fotos/login/foto28.jpeg","fotos/login/foto30.jpeg",
-    "fotos/login/foto32.jpeg","fotos/login/foto34.jpeg","fotos/login/foto36.jpeg"
-  ];
+  /* Si alguna foto tiene una extensión distinta,
+     la ponemos aquí.
+     Todas por defecto serán .jpeg */
+  const EXTENSIONES_ESPECIALES = {
+    21: ".jpg"
+  };
 
-  function mezclar(arr) {
-    return arr.slice().sort(() => Math.random() - 0.5);
+  function obtenerRutaFoto(numero) {
+    const extension =
+      EXTENSIONES_ESPECIALES[numero] || ".jpeg";
+
+    return `fotos/login/foto${numero}${extension}`;
   }
 
-  function crearHeroMarquee(selector, imagenes, direccion = "up") {
-    const cont = document.querySelector(selector + " .hero-stage");
-    if (!cont) return;
+  /* Lista completa de fotos: foto1 ... foto85 */
+  const TODAS_LAS_FOTOS = Array.from(
+    { length: TOTAL_FOTOS },
+    (_, i) => obtenerRutaFoto(i + 1)
+  );
 
-    cont.innerHTML = "";
-    const barajadas = mezclar(imagenes);
+  /* Mezcla aleatoria */
+  function mezclar(fotos) {
+    const copia = [...fotos];
 
-    // duplicado para scroll infinito
-    const total = barajadas.slice(0, FOTOS_POR_LADO);
-    [...total, ...total].forEach(src => {
-      const div = document.createElement("div");
-      div.className = "hero-polaroid";
-      const img = new Image();
-      img.src = src;
-      div.appendChild(img);
-      cont.appendChild(div);
+    for (let i = copia.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copia[i], copia[j]] = [copia[j], copia[i]];
+    }
+
+    return copia;
+  }
+
+  /* Reparte las fotos mezcladas entre arriba y abajo
+     para que queden salteadas */
+  function repartirFotos(fotos) {
+    const mezcladas = mezclar(fotos);
+
+    const arriba = [];
+    const abajo = [];
+
+    mezcladas.forEach((foto, indice) => {
+      if (indice % 2 === 0) {
+        arriba.push(foto);
+      } else {
+        abajo.push(foto);
+      }
     });
 
-    cont.style.animation = `${direccion === "up" ? "scrollCascadaUp" : "scrollCascadaDown"} ${DURACION_SCROLL}s linear infinite`;
+    return { arriba, abajo };
   }
 
-  function initLaterales() {
-    crearHeroMarquee(".hero-marquee.izquierda", IMAGENES_IZQ, "up");
-    crearHeroMarquee(".hero-marquee.derecha", IMAGENES_DER, "down");
+  /* Construye una fila de fotografías */
+  function crearGrupo(fotos) {
+    const grupo = document.createElement("div");
+    grupo.className = "hero-photo-group";
+
+    fotos.forEach(src => {
+      const marco = document.createElement("div");
+      marco.className = "hero-polaroid";
+
+      const imagen = document.createElement("img");
+      imagen.src = src;
+      imagen.alt = "";
+
+      marco.appendChild(imagen);
+      grupo.appendChild(marco);
+    });
+
+    return grupo;
   }
 
-  // Cambiar aleatorio al cambiar de pestaña
-  document.querySelectorAll("nav button, nav .btn").forEach(btn => {
-    btn.addEventListener("click", initLaterales);
-  });
+  /* Rellena una cinta con dos grupos idénticos
+     para conseguir un desplazamiento infinito */
+  function crearCinta(selector, fotos) {
+    const escenario = document.querySelector(
+      selector + " .hero-stage"
+    );
+
+    if (!escenario) return;
+
+    escenario.replaceChildren();
+
+    const primerGrupo = crearGrupo(fotos);
+    const segundoGrupo = crearGrupo(fotos);
+
+    segundoGrupo.setAttribute("aria-hidden", "true");
+
+    escenario.appendChild(primerGrupo);
+    escenario.appendChild(segundoGrupo);
+  }
+
+  function iniciarCintas() {
+    const { arriba, abajo } =
+      repartirFotos(TODAS_LAS_FOTOS);
+
+    crearCinta(".hero-strip-top", arriba);
+    crearCinta(".hero-strip-bottom", abajo);
+  }
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initLaterales);
+    document.addEventListener(
+      "DOMContentLoaded",
+      iniciarCintas
+    );
   } else {
-    initLaterales();
+    iniciarCintas();
   }
+
 })();
 
 
@@ -2488,11 +2609,17 @@ if (btnReset && !btnReset.dataset.bound) {
 const modalCategoria = document.getElementById("modalCategoria");
 const modalImgCat = document.getElementById("modalImagenCategoria");
 const modalDescCat = document.getElementById("modalDescripcionCategoria");
+const modalTituloCat = document.getElementById("modalTituloCategoria");
 const cerrarCat = modalCategoria.querySelector(".cerrar");
 
 document.querySelectorAll(".categoria").forEach(cat => {
   cat.addEventListener("click", () => {
+    const titulo = cat.querySelector("h3").textContent.trim();
+
     modalImgCat.src = cat.querySelector("img").src;
+    modalImgCat.alt = titulo;
+
+    modalTituloCat.textContent = titulo;
     modalDescCat.textContent = cat.dataset.descripcion;
     modalCategoria.style.display = "block";
   });
@@ -2511,51 +2638,925 @@ window.addEventListener("click", (e) => {
 // DESCRIPCIONES DE PARTICIPANTES
 // ===============================
 const descripciones = {
-  "Asieras": "ASIER, más conocido como chichotas,cedido de balonmano Alarcos Ciudad Real e Hijo de Peter el batallas, es el dueño del famoso campo San Bartolomé, le gusta mucho drogarse y emborracharse, por lo menos no fuma porros ",
-  "Rulillas": "RULAS es el mayor amante de las tortillas y los nuggets, tiene a chicote a su servicio para hacerle cualquier tipo de macarron con tomatico, le gusta mucho que le vomiten en la silla, es un maltratador de tortugas profesional, una vez encerró a su tortuga en un cubo de basura durante 21 años, es un mitico personaje de este grupo de subnormales que tiene una de las frases mas miticas de Operacion Triunfo POSSSS AVEEERRRRR",
-  "Darawayas": "DARIO, alias la Tortuga Londinense, es el fan número uno de la pam veraniega, junto con el pequeño kastorcin tienen un negocio llamado socios.basura, el camara del grupo que el año pasado nos deleitó con miticas escenas pornograficas de la gala, es un amante del fortnite y un guarro que se tira a todas las peruanas que pilla ",
-  "Ivanpechotes": "IVANPE es conocido como el rehén de Jugui Qui Jugui, si juegas con el al futbol ten en cuenta que tienes que correr mas que un puto Velocirraptor en plena era del Jurasico, porque la gacela Thomphson no va a dejar a nadie escapar, baila como un abuelo senil de 347 años y aun no sabemos quien es su amor verdadero si la francesa esa o Lamine Yamal ",
-  "DaniGG": "DANI es un militar casposo siempre en el calabozo, no sale nunca de Madrid por ver a su querida esposa, es mas guarro que un satisfyer de segunda mano, y hablando de manos a saber cuantas le habran metido por el culo... Creemos que seria capaz de vender a toda su familia y amigos por un saludo del Rey Felipe",
-  "Lusilu": "LUCÍA tambien apodada como Lusilu o como la famosa novia de Sergio Ramos, aunque Alvaro de Luna tampoco se queda atras, su mayor enemiga es Siri y se odian a muerte, estudia ADE(Asociacion De Esquizofrenicos) no le pega nada, como diria su esposo con mas de 3000 años las mujeres a la cocina!",
-  "Almansa": "INES La de los caminos, se dedica a ir poniendo grano a grano e ir haciendo caminos en Ciudad Real, ahora mismo esta yendo a Lituania en uno de sus caminos magicos, siempre pone su casa para hacer las reuniones aunque el pobre Martín la vaya a denunciar ella nunca nos denegará la entrada, no sabemos que vamos a hacer los sabados resacosos Almansunsin",
-  "Robertuki": "ROBER el tio mas pesado que vas a ver en la historia, en vez de darte la mano al verte como haría una persona normal coge y te mete una hostia, pero y este tio?, aun no sabemos si viene del sur de España o de la profunda Antartida lo que si sabemos es que es el fundador de obesos sin fronteras, aunque sea Don Rosalio Parrales y trabaje mas que un negro en el Hospital de la estación de León, lo odiamos mucho.",
-  "Toñaco": "MARCO el famoso jugador cedido del Caserio que al final se fue al Alarcos y un negro que acababa de salir de la selva tropical lo echo sin ningún tipo de remordimiento, por eso volvio a su equipo Caserio Colesterol, hizo la aparicion estelar en la famosa fiesta como DjPoyocu pero hizo bomba de humo, aun lo estan buscando en todo el norte de Ciudad Real, cuenta la leyenda que el tequifresi lo mató",
-  "Manolo": "MANU animal mas feróz de la selva, Panterini estudia 300 horas al dia y casi no se le ve el pelo(aunque esta mas calvo que don limpio el cabron), hace viajes a madrid y a todos los lugares del planeta con su cuñado Emilio",
-  "Kastor": "MARIO, el pequeño castor importado desde Birmingham, este animal tan curioso realiza derrapes por campos de futbol y cada vez que va a algun concierto se le antojan unos garbanzitos, es un gran aficionado al Real madrid y junto con su socia Pam de los veranos formo socios.pene ",
-  "Maria": "MARÍA la famosisima francesiña, reclama siempre el puesto de la fiestera del año del año pasado, estudia letras y su jugador favorito es Karim, tambien tiene un perrito llamado ivanpechotes que es un poco tonto pero le queremos igual :)",
-  "Gamepro": "GAMEPRO tiene muchos nombres, hubo un momento en la historia en el que las leyendas dicen que se llamaba Hugo, ahora es el mejor cocinero de pollo de toda la ciudad, tiene tecnicas infalibles que dejan alucinando a todo el mundo, segun las fuentes fiables dicen que va abrir un restaurante de pollo y patatillas en la ciudad de Albacete",
-  "El Enano": "FERVICO la persona más pequeña del planeta no podia faltar en estos premios,el pequeño ferguson es un gran amante de Spiderman lo malo es que su estatura no le permite ni llegar a una papelera, le gustan muchos las tetas sobre todo de las mujerzuelas de cabello pelirrojo, lo malo que ahora se ha pasado al otro bando y esta con un Tomellosero llamado Unai el gay",
-  "Poru": "PORU el gran amante de los porros pero ultimamente se ha aficionado mucho al café, tanto que ha sacado su propia marca llamada Pacofee y un youtuber se la ha plagiado,ahora esta de erasmus en polonia aunque no sabemos si nuestro querido Ropas volvera, sabemos que esta bien y que está haciendo muchas previas",
-  "Ikardo": "IKER el chinorris de este equipo,el asesino de Ana Rosa, aunque no esta en el grupo es muy querido por esta panda de monos, suele llevar los pantalones de Bob esponja desde el 2 de Junio de 2004, no se los ha quitado ni para comer, es un tio muy tranquilo y que para nada sale de fiesta, folla menos que una puerta y es un mestizo que viene del Suroeste Asiatico y del Noreste de Poblete",
-  "Fermoriv": "FERMORIV es un amante del lanzamiento de quesos, tambien es conocido por criar poshos en incubadoras que posteriormente son vendidos a la deep weep para hacer experimentos ilegales con ellos, también picha muchos culitos de bebes junto con otros enfermeros aqui presentes",
-  "Lab el Viejo": "LABRADA nacio en el año 409 a.c en la antigua Roma, es la persona más vieja del mundo mundial, le encanta coleccionar cromos de niños(mariconada historica) y hacer tradeos con Luisillo el pillo, es un abuelo senil y ludopata que le echa a  las apuestas, pero este tio se la juega mucho y le echa 1 euro para llevarse 2, es que si no no le sale ecnomicamente rentable, es un gran amante de los horses y se los folla de par en par"
+  "Asieras": "",
+  "Rulillas": "",
+  "Darawayas": "",
+  "Ivanpechotes": "",
+  "DaniGG": "",
+  "Lusilu": "",
+  "Almansa": "",
+  "Robertuki": "",
+  "Toñaco": "",
+  "Manolo": "",
+  "Kastor": "",
+  "Maria": "",
+  "Gamepro": "",
+  "El Enano": "",
+  "Poru": "",
+  "Ikardo": "",
+  "Fermoriv": "",
+  "Lab el Viejo": ""
 };
 
 
-// ===============================
-// MODAL DE PARTICIPANTES
-// ===============================
+
+/* ==========================================
+   PALMARÉS HISTÓRICO — JOSEMARI I Y II
+========================================== */
+
+/*
+  Formato de cada premio:
+  ["Categoría", año, "nombre-del-archivo", "detalle opcional"]
+
+  Los archivos se buscan en:
+  fotos/Palmares/2024/
+  fotos/Palmares/2025/
+*/
+
+const palmaresJosemari = {
+
+  "Asieras": [
+    ["Fiestero del Año", 2024, "fiestero2024"],
+    ["Mote del Año", 2024, "mote2024", "Chichotas"],
+    ["Dúo del Año", 2024, "duo2024"],
+    ["Pareja del Año", 2024, "pareja2024"],
+    ["MVP del Año", 2024, "mvp2024"],
+
+    ["Palabra/Frase del Año", 2025, "palabra", "Vamos No Me Jodas"],
+    ["Fiesta del Año", 2025, "fiesta", "Proyecto X"],
+    ["Fail del Año", 2025, "fail", "Tele por la Ventana"],
+    ["MVP del Año", 2025, "mvp"]
+  ],
+
+  "Rulillas": [
+    ["Cuñao del Año", 2024, "cuñao2024"],
+    ["Palabra/Frase del Año", 2024, "palabrafrase2024", "A veeeeeer"],
+    ["Dúo del Año", 2024, "duo2024"],
+
+    ["Picado del Año", 2025, "picado2025"],
+    ["Soltero del Año", 2025, "soltero"],
+    ["Palabra/Frase del Año", 2025, "palabra", "Vamos No Me Jodas"],
+    ["Fiesta del Año", 2025, "fiesta", "Proyecto X"]
+  ],
+
+  "Darawayas": [
+    ["Más Atractivo del Año", 2024, "atractivo2024"],
+    ["Fail del Año", 2024, "fail2024", "Azulejo Roto"],
+
+    ["Broma del Año", 2025, "broma", "Grabaciones Cagada"]
+  ],
+
+  "Ivanpechotes": [
+    ["Ludópata del Año", 2024, "ludopata2024"],
+    ["Más Gracioso del Año", 2024, "gracioso2024"],
+
+    ["Meme del Año", 2025, "meme", "Fer en las Tetorras de Clara"],
+    ["Baile del Año", 2025, "Baile", "Ivanpe x Mozos"],
+    ["Palabra/Frase del Año", 2025, "palabra", "Vamos No Me Jodas"]
+  ],
+
+  "DaniGG": [
+    ["Salido del Año", 2024, "salido2024"],
+    ["Borracho del Año", 2024, "borracho2024"],
+
+    ["Fiesta del Año", 2025, "fiesta", "Proyecto X"],
+    ["Broma del Año", 2025, "broma", "Lanzamiento de Objetos a Piscina"]
+  ],
+
+  "Lusilu": [
+    ["Viajero del Año", 2024, "viajero2024"],
+    ["Piba del Año", 2024, "piba2024"],
+
+    ["Trío/Cuarteto del Año", 2025, "trio"],
+    ["Papi/Mami del Año", 2025, "papi"]
+  ],
+
+  "Almansa": [
+    ["Piba del Año", 2024, "piba2024"],
+
+    ["Trío/Cuarteto del Año", 2025, "trio"],
+    ["Viajero del Año", 2025, "viajero"]
+  ],
+
+  "Toñaco": [
+    ["Rayado del Año", 2024, "rayado2024"],
+    ["Mote del Año", 2024, "mote2024", "Pocoyo"],
+
+    ["Picado del Año", 2025, "picado2025"],
+    ["Fiesta del Año", 2025, "fiesta", "Proyecto X"],
+    ["Foto del Año", 2025, "foto", "Porno X"]
+  ],
+
+  "Manolo": [
+    ["Autistada del Año", 2024, "autistada2024", "Un Verano Sin Manu"],
+    ["Decepción del Año", 2024, "decepcion2024"],
+
+    ["Correón del Año", 2025, "correon"]
+  ],
+
+  "Kastor": [
+    ["Mejor Imitador de Rulas", 2024, "imitador2024"],
+
+    ["Vídeo del Año", 2025, "video", "Castor alimentando a Castor"],
+    ["Broma del Año", 2025, "broma", "Grabaciones Cagada"]
+  ],
+
+  "Maria": [
+    ["Piba del Año", 2024, "piba2024"],
+
+    ["Trío/Cuarteto del Año", 2025, "trio"],
+    ["Borracho del Año", 2025, "borracho"],
+    ["MVP del Año", 2025, "mvp"]
+  ],
+
+  "Gamepro": [
+    ["Ligón del Año", 2024, "ligon2024"],
+    ["Revelación del Año", 2024, "revelacion2024"],
+
+    ["Foto del Año", 2025, "foto", "Porno X"]
+  ],
+
+  "El Enano": [
+    ["Soltero del Año", 2024, "soltero2024"],
+
+    ["El Que Mejor Viste del Año", 2025, "mejorviste"]
+  ],
+
+  "Poru": [
+    ["Chef del Año", 2024, "chef2024"],
+    ["Mote del Año", 2024, "mote2024", "Puro, Ropu, Forgotten"],
+
+    ["Braihot del Año", 2025, "braihot"],
+    ["Llorón del Año", 2025, "lloron"],
+    ["Mote del Año", 2025, "mote", "Cafetera"],
+    ["Revelación del Año", 2025, "revelacion"]
+  ],
+
+  "Ikardo": [
+    ["Mejor Personaje Fuera de JYP", 2024, "personaje2024"],
+
+    ["Guarrete del Año", 2025, "guarrete"],
+    ["Fiestero del Año", 2025, "fiestero"],
+    ["Fiesta del Año", 2025, "fiesta", "Proyecto X"]
+  ],
+
+  "Lab el Viejo": [
+    ["Viajero del Año", 2024, "viajero2024"],
+    ["Salido del Año", 2024, "salido2024"],
+    ["Foto del Año", 2024, "foto2024",
+      "Labrada recogiendo la mesa en Boombastic"],
+
+    ["Mensaje del Año", 2025, "mensaje",
+      "Haberlo Preguntado Mañana"],
+    ["Foto del Año", 2025, "foto", "Beso de Judas"]
+  ]
+
+};
+
+
+/* ==========================================
+   ABRIR EL MODAL CON EL PALMARÉS
+========================================== */
+
 const modal = document.getElementById("modalParticipante");
 const modalImg = document.getElementById("modalImagen");
+const modalNombre = document.getElementById("modalNombre");
+const modalPalmares = document.getElementById("modalPalmares");
 const modalDescripcion = document.getElementById("modalDescripcion");
-const spanCerrar = document.querySelector(".cerrar");
+const spanCerrar = modal.querySelector(".cerrar");
 
-// Abrir modal al pulsar un participante
-document.querySelectorAll(".participante").forEach(part => {
+
+/* Buscar automáticamente la extensión real */
+
+function buscarImagenPremio(img, año, archivo) {
+
+  const extensiones = [".png", ".jpg", ".jpeg", ".webp"];
+
+  const carpeta = `fotos/Palmares/${año}/`;
+
+  let intento = 0;
+
+  function probarSiguiente() {
+
+    if (intento >= extensiones.length) {
+      // No se encontró la diapositiva
+      img.style.display = "none";
+      return;
+    }
+
+    img.src = carpeta + archivo + extensiones[intento];
+
+    intento++;
+  }
+
+  img.onerror = probarSiguiente;
+
+  probarSiguiente();
+}
+
+
+/* Crear el HTML de un premio */
+
+function crearTarjetaPremio(premio) {
+
+  const [categoria, año, archivo, detalle] = premio;
+
+  const tarjeta = document.createElement("div");
+  tarjeta.className = "premio-item";
+
+  const miniatura = document.createElement("img");
+
+  miniatura.alt = `Diapositiva de ${categoria} (${año})`;
+  miniatura.loading = "lazy";
+
+  buscarImagenPremio(miniatura, año, archivo);
+
+  const texto = document.createElement("p");
+
+  const detalleTexto = detalle ? ` (${detalle})` : "";
+
+  texto.textContent =
+    `Ganador de ${categoria}${detalleTexto} (${año})`;
+
+  tarjeta.append(miniatura, texto);
+
+  return tarjeta;
+}
+
+
+/* Rellenar la ventana al pulsar una fotografía */
+
+document.querySelectorAll("#participantes .participante").forEach(part => {
+
   part.addEventListener("click", () => {
-    const img = part.querySelector("img");
-    const nombre = part.querySelector("h3").innerText.trim();
 
+    const img = part.querySelector("img");
+    const nombre = part.querySelector("h3").textContent.trim();
+
+    // Fotografía original
     modalImg.src = img.src;
-    modalDescripcion.innerText = descripciones[nombre] || "Sin descripción disponible.";
+    modalImg.alt = nombre;
+
+    // Nombre en la parte derecha
+    modalNombre.textContent = nombre;
+
+    // Eliminar premios del participante anterior
+    modalPalmares.replaceChildren();
+
+    // Buscar el palmarés correspondiente
+    const premios = palmaresJosemari[nombre] || [];
+
+    if (premios.length === 0) {
+
+      const mensaje = document.createElement("p");
+
+      mensaje.textContent =
+        "Todavía no tiene premios en su palmarés.";
+
+      modalPalmares.appendChild(mensaje);
+
+    } else {
+
+      // Los premios más antiguos aparecen primero
+      premios.forEach(premio => {
+
+        const tarjeta = crearTarjetaPremio(premio);
+
+        modalPalmares.appendChild(tarjeta);
+
+      });
+    }
+
+    // Ocultamos la descripción antigua
+    if (modalDescripcion) {
+      modalDescripcion.hidden = true;
+      modalDescripcion.textContent = "";
+    }
+
+    // Abrir la ventana
     modal.style.display = "block";
+
+    // Empezar siempre arriba
+    modal.querySelector(".modal-contenido").scrollTop = 0;
+
+  });
+
+});
+
+
+/* CERRAR LA VENTANA */
+
+spanCerrar.onclick = () => {
+  modal.style.display = "none";
+};
+
+window.addEventListener("click", evento => {
+  if (evento.target === modal) {
+    modal.style.display = "none";
+  }
+});
+
+document.addEventListener("keydown", evento => {
+  if (evento.key === "Escape" &&
+      modal.style.display === "block") {
+
+    modal.style.display = "none";
+  }
+});
+
+/* ==========================================
+   ABRIR Y CERRAR EL MENÚ MÓVIL
+========================================== */
+
+const btnMenuMovil = document.getElementById("btnMenuMovil");
+const menuPrincipal = document.getElementById("menuPrincipal");
+
+if (btnMenuMovil && menuPrincipal) {
+
+  function cerrarMenuMovil() {
+    menuPrincipal.classList.remove("menu-abierto");
+
+    btnMenuMovil.textContent = "☰";
+    btnMenuMovil.setAttribute("aria-expanded", "false");
+    btnMenuMovil.setAttribute("aria-label", "Abrir menú");
+  }
+
+  btnMenuMovil.addEventListener("click", () => {
+    const abierto = menuPrincipal.classList.toggle("menu-abierto");
+
+    btnMenuMovil.textContent = abierto ? "✕" : "☰";
+    btnMenuMovil.setAttribute("aria-expanded", String(abierto));
+    btnMenuMovil.setAttribute(
+      "aria-label",
+      abierto ? "Cerrar menú" : "Abrir menú"
+    );
+  });
+
+  // Cerrar automáticamente cuando se elige una sección
+  menuPrincipal.addEventListener("click", (evento) => {
+    if (evento.target.closest("button")) {
+      cerrarMenuMovil();
+    }
+  });
+
+  // También se puede cerrar con Escape
+  document.addEventListener("keydown", (evento) => {
+    if (evento.key === "Escape") {
+      cerrarMenuMovil();
+    }
+  });
+}
+
+
+/* RESALTAR EL APARTADO ACTIVO */
+
+const botonesNavegacion = document.querySelectorAll(
+  "nav.top .nav-actions .btn"
+);
+
+botonesNavegacion.forEach((boton) => {
+  boton.addEventListener("click", () => {
+    botonesNavegacion.forEach((otroBoton) => {
+      otroBoton.classList.remove("nav-activo");
+    });
+
+    boton.classList.add("nav-activo");
   });
 });
 
-// Cerrar modal con la X
-spanCerrar.onclick = () => modal.style.display = "none";
+// Inicio seleccionado al cargar la página
+const botonInicio = [...botonesNavegacion].find(
+  (boton) => boton.textContent.trim() === "Inicio"
+);
 
-// Cerrar haciendo clic fuera del modal
-window.onclick = e => {
-  if (e.target === modal) modal.style.display = "none";
-};      
+if (botonInicio) {
+  botonInicio.classList.add("nav-activo");
+}
+
+
+
+
+/* ==========================================
+   MUSEO DEL HIELO — EXPOSICIÓN DEFINITIVA
+========================================== */
+
+/* Fotografías de los participantes */
+
+const fotosMuseo = {
+  "Asieras": "fotos/asieras.jpeg",
+  "Rulillas": "fotos/rulillas.jpeg",
+  "Darawayas": "fotos/dario.jpeg",
+  "Ivanpechotes": "fotos/ivanp.jpeg",
+  "DaniGG": "fotos/dani.jpeg",
+  "Lusilu": "fotos/Lucia.jpeg",
+  "Almansa": "fotos/ines.jpeg",
+  "Toñaco": "fotos/marco.jpeg",
+  "Manolo": "fotos/manu.jpeg",
+  "Kastor": "fotos/mario.jpeg",
+  "Maria": "fotos/maria.jpeg",
+  "Gamepro": "fotos/gamepro.jpeg",
+  "El Enano": "fotos/fervico.jpeg",
+  "Poru": "fotos/Poru.jpeg",
+  "Ikardo": "fotos/iker.jpeg",
+  "Lab el Viejo": "fotos/labrada.jpeg",
+  "Rober": "fotos/rober.jpeg",
+  "Fermoriv": "fotos/Fermoriv.jpeg"
+};
+
+
+/* ==========================================
+   GANADORES HISTÓRICOS ADICIONALES
+========================================== */
+
+const extrasMuseo = {
+
+  2024: [
+    ["Rober", "El Que Mejor Viste del Año"],
+    ["Fergo", "Vídeo del Año"],
+    ["Piedrabuena", "Fiesta del Año"],
+    ["La Eurocopa", "Mejor Momento del Año"]
+  ],
+
+  2025: [
+    ["Ana Rosa", "Objeto del Año"],
+    ["Fermoriv", "Peor Momento del Año"],
+    ["Pepito", "Mejor Personaje Fuera de JYP"],
+    ["Carrera con tío borracho", "Mejor Momento del Año"],
+    ["Fermoriv", "Foto del Año", "Beso de Judas"],
+    ["Rober", "Decepción del Año"],
+    ["Robo de Botellas X", "Autistada del Año"]
+  ]
+
+};
+
+
+/* ==========================================
+   FOTOGRAFÍAS DE CADA CATEGORÍA
+========================================== */
+
+/*
+  Estos nombres corresponden a los archivos
+  de fotos/Museo/2024 y fotos/Museo/2025.
+
+  No escribimos aquí la extensión, porque
+  se buscará automáticamente.
+*/
+
+const imagenesMuseo = {
+
+  2024: {
+    "Autistada del Año": "autistada",
+    "Borracho del Año": "borracho",
+    "Chef del Año": "chef",
+    "Cuñao del Año": "cuñao",
+    "Decepción del Año": "decepcion",
+    "Dúo del Año": "duo",
+    "Fail del Año": "fail",
+    "Fiesta del Año": "fiesta",
+    "Fiestero del Año": "fiestero",
+    "Foto del Año": "foto",
+    "Ligón del Año": "ligon",
+    "Ludópata del Año": "ludopata",
+    "Más Atractivo del Año": "atractivo",
+    "Más Gracioso del Año": "gracioso",
+    "Mejor Imitador de Rulas": "imitador",
+    "Mejor Momento del Año": "momento",
+    "Mejor Personaje Fuera de JYP": "personaje",
+    "El Que Mejor Viste del Año": "mejorviste",
+    "MVP del Año": "mvp",
+    "Palabra/Frase del Año": "palabra",
+    "Pareja del Año": "pareja",
+    "Piba del Año": "piba",
+    "Rayado del Año": "rayado",
+    "Revelación del Año": "revelacion",
+    "Soltero del Año": "soltero",
+    "Vídeo del Año": "video"
+  },
+
+  2025: {
+    "Autistada del Año": "autistada",
+    "Baile del Año": "Baile",
+    "Braihot del Año": "brainhot",
+    "Borracho del Año": "borracho",
+    "Correón del Año": "correa",
+    "Decepción del Año": "decepcion",
+    "El Que Mejor Viste del Año": "mejorviste",
+    "Fail del Año": "fail",
+    "Fiesta del Año": "fiesta",
+    "Fiestero del Año": "fiestero",
+    "Guarrete del Año": "guarrete",
+    "Llorón del Año": "lloron",
+    "Mejor Momento del Año": "mejormomento",
+    "Mejor Personaje Fuera de JYP": "personaje",
+    "Meme del Año": "meme",
+    "Mensaje del Año": "mensaje",
+    "Mote del Año": "mote",
+    "Objeto del Año": "objeto",
+    "Papi/Mami del Año": "papimami",
+    "Palabra/Frase del Año": "palabra",
+    "Peor Momento del Año": "peormomento",
+    "Revelación del Año": "revelacion",
+    "Soltero del Año": "soltero",
+    "Trío/Cuarteto del Año": "trio",
+    "Viajero del Año": "viajero",
+    "Vídeo del Año": "videos"
+  }
+
+};
+
+
+/* ==========================================
+   FOTOGRAFÍAS DE PREMIOS COMPARTIDOS
+========================================== */
+
+function elegirImagenMuseo(año, categoria, ganador, detalle) {
+
+  if (año === 2024) {
+
+    if (categoria === "Mote del Año") {
+      if (ganador === "Asieras") return "mote1";
+      if (ganador === "Toñaco") return "mote2";
+      if (ganador === "Poru") return "mote3";
+    }
+
+    if (categoria === "Salido del Año") {
+      return ganador === "DaniGG"
+        ? "salido1"
+        : "salido2";
+    }
+
+    if (categoria === "Viajero del Año") {
+      return ganador === "Lab el Viejo"
+        ? "viajero1"
+        : "viajero2";
+    }
+
+  }
+
+  if (año === 2025) {
+
+    if (categoria === "Foto del Año") {
+      return detalle === "Beso de Judas"
+        ? "foto2"
+        : "foto1";
+    }
+
+    if (categoria === "Broma del Año") {
+      return detalle === "Grabaciones Cagada"
+        ? "broma2"
+        : "broma1";
+    }
+
+    if (categoria === "MVP del Año") {
+      return ganador === "Maria"
+        ? "mvp1"
+        : "mvp2";
+    }
+
+    if (categoria === "Picado del Año") {
+      return ganador === "Toñaco"
+        ? "picado1"
+        : "picado2";
+    }
+
+  }
+
+  return imagenesMuseo[año]?.[categoria] || null;
+}
+
+
+/* ==========================================
+   RECOPILAR TODOS LOS GANADORES
+========================================== */
+
+function obtenerGanadoresMuseo(año) {
+
+  const resultado = [];
+
+  // Los 16 participantes y sus premios.
+  Object.entries(palmaresJosemari).forEach(
+    ([nombre, premios]) => {
+
+      premios.forEach(premio => {
+
+        const [categoria, añoPremio, archivo, detalle] = premio;
+
+        if (añoPremio !== año) return;
+
+        resultado.push({
+          nombre,
+          categoria,
+          detalle: detalle || "",
+          foto: fotosMuseo[nombre] || null
+        });
+
+      });
+
+    }
+  );
+
+  // Ganadores históricos adicionales.
+  (extrasMuseo[año] || []).forEach(
+    ([nombre, categoria, detalle = ""]) => {
+
+      resultado.push({
+        nombre,
+        categoria,
+        detalle,
+        foto: fotosMuseo[nombre] || null
+      });
+
+    }
+  );
+
+  return resultado;
+}
+
+
+/* ==========================================
+   CARGAR FOTOS Y VÍDEOS DEL MUSEO
+========================================== */
+
+function crearMedioMuseo(año, archivo, titulo) {
+
+  const contenedor = document.createElement("div");
+  contenedor.className = "mh-medio";
+
+  if (!archivo) {
+    contenedor.textContent = "🏆";
+    contenedor.classList.add("mh-sin-foto");
+    return contenedor;
+  }
+
+  const base = `fotos/Museo/${año}/${archivo}`;
+
+  // Archivos que aparecen como vídeo en tus carpetas.
+  const esVideo =
+    (año === 2024 && archivo === "video") ||
+    (año === 2025 &&
+      ["Baile","brainhot", "meme", "videos"].includes(archivo));
+
+  if (esVideo) {
+
+    const video = document.createElement("video");
+
+    video.controls = true;
+    video.preload = "none";
+    video.playsInline = true;
+    video.setAttribute("aria-label", titulo);
+
+    const extensiones = [".mp4", ".webm", ".mov"];
+    let intento = 0;
+
+    video.addEventListener("error", () => {
+      if (intento < extensiones.length) {
+        video.src = base + extensiones[intento++];
+        video.load();
+      } else {
+        contenedor.textContent =
+          "Vídeo no disponible. Comprueba su formato.";
+      }
+    });
+
+    video.src = base + extensiones[intento++];
+
+    contenedor.appendChild(video);
+
+    return contenedor;
+  }
+
+  // Fotografías.
+  const img = document.createElement("img");
+
+  img.alt = titulo;
+  img.loading = "lazy";
+
+  const extensiones = [".jpg", ".jpeg", ".png", ".webp"];
+  let intento = 0;
+
+  img.onerror = () => {
+
+    if (intento < extensiones.length) {
+      img.src = base + extensiones[intento++];
+    } else {
+      contenedor.textContent = "Fotografía no disponible";
+    }
+
+  };
+
+  img.src = base + extensiones[intento++];
+
+  contenedor.appendChild(img);
+
+  // Abrir la fotografía en grande.
+  img.addEventListener("click", () => {
+    if (!img.naturalWidth) return;
+
+    const visor = document.getElementById("mhVisorFoto");
+    const imagenGrande = document.getElementById("mhImagenGrande");
+
+    imagenGrande.src = img.src;
+    imagenGrande.alt = titulo;
+
+    if (!visor.open) visor.showModal();
+  });
+
+  img.title = "Pulsar para ampliar";
+
+  return contenedor;
+}
+
+
+/* ==========================================
+   CONSTRUIR VITRINAS POR CATEGORÍA
+========================================== */
+
+function construirSalaMuseo(año) {
+
+  const contenedor = document.getElementById(
+    `museoGanadores${año}`
+  );
+
+  if (!contenedor) return;
+
+  contenedor.replaceChildren();
+
+  const ganadores = obtenerGanadoresMuseo(año);
+
+  // Agrupar por categoría.
+  const grupos = new Map();
+
+  ganadores.forEach(ganador => {
+
+    if (!grupos.has(ganador.categoria)) {
+      grupos.set(ganador.categoria, []);
+    }
+
+    grupos.get(ganador.categoria).push(ganador);
+
+  });
+
+  // Orden alfabético de las categorías.
+  const categoriasOrdenadas = [...grupos.entries()]
+    .sort((a, b) => a[0].localeCompare(b[0], "es"));
+
+  categoriasOrdenadas.forEach(([categoria, personas]) => {
+
+    const vitrina = document.createElement("article");
+    vitrina.className = "mh-vitrina";
+
+    const titulo = document.createElement("h4");
+    titulo.textContent = "🏆 " + categoria;
+
+    const galeria = document.createElement("div");
+    galeria.className = "mh-galeria";
+
+    /*
+      Agrupamos los premios compartidos que
+      tienen la misma fotografía y detalle.
+    */
+    const momentos = new Map();
+
+    personas.forEach(persona => {
+
+      const archivo = elegirImagenMuseo(
+        año,
+        categoria,
+        persona.nombre,
+        persona.detalle
+      );
+
+      const clave = `${archivo || "sin-foto"}|${persona.detalle}`;
+
+      if (!momentos.has(clave)) {
+        momentos.set(clave, {
+          archivo,
+          detalle: persona.detalle,
+          ganadores: []
+        });
+      }
+
+      momentos.get(clave).ganadores.push(persona);
+
+    });
+
+    momentos.forEach(momento => {
+
+      const pieza = document.createElement("div");
+      pieza.className = "mh-momento";
+
+      const medio = crearMedioMuseo(
+        año,
+        momento.archivo,
+        categoria
+      );
+
+      const lista = document.createElement("div");
+      lista.className = "mh-nombres";
+
+      momento.ganadores.forEach(ganador => {
+
+        const nombre = document.createElement("span");
+        nombre.className = "mh-nombre";
+        nombre.textContent = ganador.nombre;
+
+        lista.appendChild(nombre);
+
+      });
+
+      pieza.appendChild(medio);
+
+      if (momento.detalle) {
+        const detalle = document.createElement("p");
+        detalle.className = "mh-detalle";
+        detalle.textContent = momento.detalle;
+        pieza.appendChild(detalle);
+      }
+
+      pieza.appendChild(lista);
+
+      galeria.appendChild(pieza);
+
+    });
+
+    vitrina.append(titulo, galeria);
+    contenedor.appendChild(vitrina);
+
+  });
+
+}
+
+
+/* ==========================================
+   NAVEGACIÓN DEL MUSEO
+========================================== */
+
+function mostrarVistaMuseo(año = null) {
+
+  const vestibulo = document.getElementById("museoVestibulo");
+  const sala2024 = document.getElementById("museoSala2024");
+  const sala2025 = document.getElementById("museoSala2025");
+
+  vestibulo.hidden = año !== null;
+  sala2024.hidden = año !== 2024;
+  sala2025.hidden = año !== 2025;
+
+  document.getElementById("museo").scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+
+}
+
+document.querySelectorAll("[data-museo-abrir]")
+  .forEach(boton => {
+
+    boton.addEventListener("click", () => {
+      mostrarVistaMuseo(Number(boton.dataset.museoAbrir));
+    });
+
+  });
+
+document.querySelectorAll(".mh-volver")
+  .forEach(boton => {
+
+    boton.addEventListener("click", () => {
+      mostrarVistaMuseo();
+    });
+
+  });
+
+
+/* ==========================================
+   VISOR DE FOTOGRAFÍAS
+========================================== */
+
+const visorMuseo = document.createElement("dialog");
+
+visorMuseo.id = "mhVisorFoto";
+visorMuseo.className = "mh-visor-foto";
+
+visorMuseo.innerHTML = `
+  <button type="button" class="mh-cerrar-foto"
+          aria-label="Cerrar fotografía">✕</button>
+  <img id="mhImagenGrande" alt="">
+`;
+
+document.body.appendChild(visorMuseo);
+
+visorMuseo.querySelector(".mh-cerrar-foto")
+  .addEventListener("click", () => visorMuseo.close());
+
+visorMuseo.addEventListener("click", evento => {
+  if (evento.target === visorMuseo) {
+    visorMuseo.close();
+  }
+});
+
+
+/* CONSTRUIR LAS DOS SALAS */
+
+construirSalaMuseo(2024);
+construirSalaMuseo(2025);
+
+

@@ -1,12 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
 
 :root {
-  --bg: #1a0000;         /* Fondo general rojo oscuro */
-  --card: #330000;       /* Fondo de secciones */
-  --gold: #ffd700;       /* Dorado intenso */
-  --gold-light: #ffeb99; /* Dorado claro para degradados */
-  --text: #fff8e7;       /* Texto claro */
-  --muted: #ffcccc;      /* Texto secundario */
+  --bg: #031525;
+  --card: #08263d;
+  --gold: #8eeaff;
+  --gold-light: #d9f8ff;
+  --text: #f4fcff;
+  --muted: #b8dcea;
 }
 
 * {
@@ -17,7 +17,11 @@ body {
   margin: 0;
   font-family: 'Montserrat', sans-serif;
   color: var(--text);
-  background: url('fotos/FONDO JOSEMARI.png') no-repeat center center fixed;
+
+  background:
+    linear-gradient(rgba(2, 15, 27, 0.18), rgba(2, 15, 27, 0.38)),
+    url('fotos/fondo-polar.jpg') no-repeat center center fixed;
+
   background-size: cover;
 }
 
@@ -886,20 +890,29 @@ header.hero {
 }
 /* ====== LOGIN “GUAY” ====== */
 #login.seccion {
-  display: block;                 
+  display: block;
   overflow: hidden;
   position: relative;
   padding: 20px;
+
+  background: rgba(3, 30, 48, 0.72);
+  backdrop-filter: blur(3px);
+
+  border: 2px solid rgba(142, 234, 255, 0.85);
 }
 
 #login.seccion::before {
-  /* Vignette dorada suave */
   content: "";
   position: absolute;
   inset: -40% -10% auto -10%;
-  background: radial-gradient(60% 60% at 20% 0%,
-              rgba(255,215,0,.18), transparent 60%);
-  filter: blur(40px);
+
+  background: radial-gradient(
+    60% 60% at 20% 0%,
+    rgba(128, 225, 255, 0.32),
+    transparent 60%
+  );
+
+  filter: blur(45px);
   pointer-events: none;
 }
 
@@ -926,7 +939,7 @@ header.hero {
 /* Firefox */
 .login-media{
   scrollbar-width: thin;
-  scrollbar-color: #ffd700 rgba(255,255,255,.06);
+  scrollbar-color: #8eeaff rgba(255,255,255,.06);
 }
 
 
@@ -1022,16 +1035,37 @@ header.hero {
 
 /* Tarjeta de acceso glass */
 .login-card {
-  position: relative;
-  border-radius: 16px;
-  padding: 18px;
-  background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
-  border: 2px solid var(--gold);
-  box-shadow: 0 12px 30px rgba(0,0,0,.45), inset 0 0 0 1px rgba(255,255,255,.05);
-  backdrop-filter: blur(6px) saturate(130%);
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  justify-content: center;
+  align-items: stretch;
+  gap: 24px;
+
+  padding: clamp(40px, 6vw, 70px);
+  border-radius: 28px;
+
+  border: 2px solid rgba(142, 234, 255, 0.62);
+
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(202, 247, 255, 0.13),
+      rgba(7, 39, 62, 0.74) 42%,
+      rgba(2, 19, 32, 0.89) 100%
+    );
+
+  box-shadow:
+    0 25px 60px rgba(0, 17, 31, 0.5),
+    inset 0 0 28px rgba(178, 239, 255, 0.075),
+    0 0 30px rgba(80, 200, 255, 0.14);
+
+  backdrop-filter: blur(14px) saturate(130%);
+
+  min-height: 80vh;
+  max-width: 520px;
+  margin: auto;
+
+  transition: all 0.3s ease;
 }
 
 .login-badge {
@@ -1553,7 +1587,7 @@ header.hero{ position:relative; min-height:100vh; padding-block:0; }
   overflow:auto;
   padding:clamp(8px,1.5vw,16px);
   border-radius:20px;
-  border:1.5px solid rgba(228,178,0,.55);
+  border: 1.5px solid rgba(142, 234, 255, 0.65);
   background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
 }
 
@@ -1594,28 +1628,12 @@ header.hero{ position:relative; min-height:100vh; padding-block:0; }
   display:block;
 }
 
-/* --- LOGIN CARD MEJORADA --- */
-.login-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: stretch;
-  gap: 24px;
-  padding: clamp(40px, 6vw, 70px);
-  border-radius: 28px;
-  border: 2px solid rgba(255, 215, 0, 0.5);
-  background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.07), rgba(0, 0, 0, 0.15) 90%);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(10px);
-  min-height: 80vh;                     /* más grande y centrada verticalmente */
-  max-width: 520px;
-  margin: auto;
-  transition: all 0.3s ease;
-}
-
 .login-card:hover {
-  transform: scale(1.02);
-  box-shadow: 0 25px 60px rgba(255, 215, 0, 0.2);
+  transform: scale(1.015);
+
+  box-shadow:
+    0 28px 70px rgba(0, 17, 31, 0.58),
+    0 0 38px rgba(113, 222, 255, 0.26);
 }
 
 /* Encabezado (imagen + texto) */
@@ -1624,20 +1642,20 @@ header.hero{ position:relative; min-height:100vh; padding-block:0; }
   align-items: center;
   gap: 18px;
   padding-bottom: 12px;
-  border-bottom: 1.5px solid rgba(255, 215, 0, 0.35);
+  border-bottom: 1.5px solid rgba(142, 234, 255, 0.35);
 }
 
 .login-badge img {
   width: 65px;
   height: 65px;
   border-radius: 12px;
-  border: 2px solid gold;
-  box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+  border: 2px solid var(--gold);
+  box-shadow: 0 0 12px rgba(142, 234, 255, 0.4);
 }
 
 .login-badge .eyebrow {
   display: block;
-  color: gold;
+  color: var(--gold);
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 1.5px;
@@ -1669,33 +1687,67 @@ header.hero{ position:relative; min-height:100vh; padding-block:0; }
   font-size: 1.1rem;
   border-radius: 14px;
   padding: 0 16px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1.5px solid rgba(255, 215, 0, 0.3);
-  color: #fff;
+
+  background: rgba(215, 246, 255, 0.075);
+  border: 1.5px solid rgba(142, 234, 255, 0.36);
+  color: #ffffff;
+
   transition: 0.2s ease;
+}
+
+.field input::placeholder {
+  color: rgba(221, 246, 255, 0.58);
 }
 
 .field input:focus {
   outline: none;
-  border-color: gold;
-  box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
-  background: rgba(255, 255, 255, 0.12);
+  border-color: #8eeaff;
+
+  box-shadow:
+    0 0 0 3px rgba(142, 234, 255, 0.12),
+    0 0 18px rgba(142, 234, 255, 0.25);
+
+  background: rgba(215, 246, 255, 0.12);
 }
 
 /* Botón */
 .btn-login {
   height: 58px;
-  font-weight: 700;
+
+  background: linear-gradient(
+    90deg,
+    #46c9f3 0%,
+    #8eeaff 48%,
+    #e6fbff 100%
+  );
+
+  color: #031525;
+  border: none;
+
+  font-weight: 800;
   font-size: 1.1rem;
+
   border-radius: 14px;
-  letter-spacing: 0.5px;
-  box-shadow: 0 6px 16px rgba(255, 215, 0, 0.4);
+
+  box-shadow:
+    0 7px 20px rgba(87, 217, 255, 0.38);
+
   transition: all 0.25s ease;
 }
 
 .btn-login:hover {
   transform: scale(1.03);
-  box-shadow: 0 8px 20px rgba(255, 215, 0, 0.6);
+
+  background: linear-gradient(
+    90deg,
+    #9debff,
+    #ffffff
+  );
+
+  color: #02111c;
+
+  box-shadow:
+    0 10px 28px rgba(87, 217, 255, 0.55);
 }
 
 /* Pista inferior */
@@ -1807,17 +1859,24 @@ header.hero{ position:relative; min-height:100vh; padding-block:0; }
 
 /* === TÍTULO PRINCIPAL DEL LOGIN (Iniciar sesión) === */
 #login h2 {
-  text-align: center;                 /* centrado */
-  font-size: clamp(2.5rem, 5vw, 4rem); /* tamaño adaptable (grande en escritorio) */
-  font-weight: 800;                   /* negrita */
-  color: var(--gold);                 /* dorado principal */
-  text-shadow: 0 0 15px rgba(255, 215, 0, 0.6),
-               0 0 30px rgba(255, 215, 0, 0.4); /* brillo suave */
-  margin: 40px 0 30px;                /* espacio arriba y abajo */
-  letter-spacing: 1px;                /* más elegante */
-  background: linear-gradient(90deg, #ffd700, #ffae00);
+  text-align: center;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 800;
+  margin: 40px 0 30px;
+  letter-spacing: 1px;
+
+  background: linear-gradient(
+    180deg,
+    #ffffff 8%,
+    #c7f5ff 48%,
+    #5dd6fa 100%
+  );
+
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent; /* efecto degradado dorado */
+  -webkit-text-fill-color: transparent;
+
+  text-shadow:
+    0 0 18px rgba(126, 224, 255, 0.35);
 }
 /* === PERFIL USUARIO — AJUSTE FINAL DE TAMAÑO === */
 
@@ -2003,4 +2062,3592 @@ header.hero{ position:relative; min-height:100vh; padding-block:0; }
   body.tab-votacion #votacion .grid-nominados {
     grid-template-columns: repeat(2, 1fr) !important;
   }
+}
+
+/* =====================================================
+   PREMIOS JOSEMARI 2026 — LOGIN EDICIÓN POLAR
+===================================================== */
+
+#login.seccion {
+  min-height: 100vh;
+  padding: 38px clamp(20px, 4vw, 70px) 55px;
+
+  background:
+    linear-gradient(
+      rgba(2, 22, 38, 0.42),
+      rgba(2, 22, 38, 0.55)
+    );
+
+  border: none;
+  border-radius: 0;
+  margin: 0;
+
+  overflow: hidden;
+  position: relative;
+}
+
+
+/* ---------- CABECERA ---------- */
+
+.login-header {
+  position: relative;
+  z-index: 2;
+
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.login-edicion {
+  display: inline-block;
+
+  padding: 7px 16px;
+  margin-bottom: 10px;
+
+  border: 1px solid rgba(189, 242, 255, 0.7);
+  border-radius: 999px;
+
+  background: rgba(218, 248, 255, 0.09);
+
+  color: #bcefff;
+
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+#login .login-header h2 {
+  margin: 0;
+
+  font-size: clamp(2.6rem, 4.4vw, 4.2rem);
+  font-weight: 800;
+
+  background: linear-gradient(
+    180deg,
+    #ffffff,
+    #bcefff 55%,
+    #5fd4f7
+  );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  text-shadow:
+    0 0 22px rgba(103, 218, 255, 0.3);
+}
+
+.login-header p {
+  margin: 8px 0 0;
+
+  color: rgba(222, 247, 255, 0.8);
+
+  font-size: 1.05rem;
+}
+
+
+/* ---------- DISTRIBUCIÓN PC ---------- */
+
+.login-wrap {
+  width: min(1450px, 100%);
+  margin: 0 auto;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1.25fr)
+    minmax(380px, 0.75fr);
+
+  gap: clamp(35px, 5vw, 80px);
+
+  align-items: center;
+
+  min-height: auto;
+  padding: 0;
+}
+
+
+/* ---------- COLLAGE ---------- */
+
+.login-media {
+  height: auto;
+  min-height: 0;
+
+  padding: 14px;
+
+  border-radius: 26px;
+
+  border: 1px solid rgba(175, 237, 255, 0.65);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(205, 245, 255, 0.09),
+      rgba(4, 36, 57, 0.28)
+    );
+
+  box-shadow:
+    0 30px 70px rgba(0, 16, 30, 0.35),
+    inset 0 0 25px rgba(181, 239, 255, 0.06);
+
+  backdrop-filter: blur(5px);
+
+  overflow: hidden;
+}
+
+.login-media.masonry {
+  columns: 4;
+  column-gap: 14px;
+}
+
+
+/* ---------- FOTOS ---------- */
+
+.masonry .tile {
+  break-inside: avoid;
+
+  margin: 0 0 14px;
+
+  border-radius: 18px;
+
+  overflow: hidden;
+
+  border:
+    1px solid rgba(197, 244, 255, 0.18);
+
+  background: #061b2c;
+
+  box-shadow:
+    0 9px 22px rgba(0, 14, 26, 0.42);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.masonry .tile:hover {
+  transform: scale(1.035);
+
+  box-shadow:
+    0 12px 30px rgba(91, 213, 255, 0.25);
+}
+
+
+/* ---------- TARJETA LOGIN ---------- */
+
+.login-card {
+  width: 100%;
+  max-width: 460px;
+
+  min-height: auto;
+
+  margin: 0 auto;
+
+  padding: 42px 40px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 21px;
+
+  border-radius: 30px;
+
+  border:
+    1.5px solid rgba(168, 235, 255, 0.72);
+
+  background:
+    radial-gradient(
+      circle at top,
+      rgba(125, 224, 255, 0.16),
+      transparent 38%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(9, 55, 82, 0.82),
+      rgba(3, 26, 43, 0.92)
+    );
+
+  backdrop-filter: blur(18px);
+
+  box-shadow:
+    0 30px 70px rgba(0, 15, 27, 0.5),
+    inset 0 0 25px rgba(198, 245, 255, 0.07);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.login-card:hover {
+  transform: translateY(-22px);
+
+  box-shadow:
+    0 35px 80px rgba(0, 15, 27, 0.55),
+    0 0 32px rgba(112, 221, 255, 0.15);
+}
+
+
+/* ---------- ENCABEZADO TARJETA ---------- */
+
+.login-badge {
+  display: flex;
+  align-items: center;
+
+  gap: 16px;
+
+  padding-bottom: 18px;
+
+  border-bottom:
+    1px solid rgba(158, 230, 255, 0.32);
+}
+
+.login-badge img {
+  width: 68px;
+  height: 68px;
+
+  object-fit: cover;
+
+  border-radius: 16px;
+
+  border:
+    2px solid rgba(153, 232, 255, 0.8);
+
+  box-shadow:
+    0 0 18px rgba(91, 213, 255, 0.25);
+}
+
+.login-badge .eyebrow {
+  display: block;
+
+  color: #89e3ff;
+
+  letter-spacing: 1.5px;
+
+  font-size: 0.78rem;
+}
+
+.login-badge strong {
+  display: block;
+
+  margin-top: 3px;
+
+  color: white;
+
+  font-size: 1.75rem;
+  font-weight: 800;
+}
+
+.login-card-intro {
+  margin-top: -6px;
+
+  color: rgba(222, 247, 255, 0.7);
+
+  font-size: 0.9rem;
+}
+
+
+/* ---------- INPUTS ---------- */
+
+.field {
+  display: flex;
+  flex-direction: column;
+
+  gap: 8px;
+}
+
+.field span {
+  color: #e3f8ff;
+
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.field input {
+  width: 100%;
+  height: 58px;
+
+  padding: 0 17px;
+
+  border-radius: 15px;
+
+  border:
+    1px solid rgba(142, 234, 255, 0.38);
+
+  background:
+    rgba(214, 247, 255, 0.07);
+
+  color: #ffffff;
+
+  font-size: 1rem;
+
+  outline: none;
+}
+
+.field input::placeholder {
+  color: rgba(221, 246, 255, 0.55);
+}
+
+.field input:focus {
+  border-color: #8eeaff;
+
+  background:
+    rgba(214, 247, 255, 0.11);
+
+  box-shadow:
+    0 0 0 3px rgba(142, 234, 255, 0.09),
+    0 0 18px rgba(142, 234, 255, 0.2);
+}
+
+
+/* ---------- BOTÓN ---------- */
+
+.btn-login,
+.btn.gold.btn-login {
+  width: 100%;
+  height: 60px;
+
+  margin-top: 4px;
+
+  padding: 0;
+
+  border: none;
+  border-radius: 16px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #54d6fb,
+      #a9efff 55%,
+      #e2faff
+    );
+
+  color: #052237;
+
+  font-size: 1.05rem;
+  font-weight: 800;
+
+  box-shadow:
+    0 9px 25px rgba(80, 210, 250, 0.32);
+}
+
+.btn-login:hover,
+.btn.gold.btn-login:hover {
+  transform: translateY(-2px) scale(1.015);
+
+  color: #031525;
+
+  background:
+    linear-gradient(
+      90deg,
+      #88e7ff,
+      #ffffff
+    );
+
+  box-shadow:
+    0 12px 32px rgba(80, 210, 250, 0.48);
+}
+
+
+/* ---------- PARTE INFERIOR ---------- */
+
+.login-hint {
+  margin: 2px 0 0;
+
+  text-align: center;
+
+  color: rgba(221, 246, 255, 0.65);
+
+  font-size: 0.85rem;
+}
+
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 1100px) {
+
+  .login-wrap {
+    grid-template-columns:
+      minmax(0, 1.15fr)
+      minmax(340px, 0.85fr);
+
+    gap: 30px;
+  }
+
+  .login-media {
+    height: 580px;
+  }
+
+  .login-media.masonry {
+    columns: 3;
+  }
+
+  .login-card {
+    padding: 36px 30px;
+  }
+}
+
+
+/* =====================================================
+   MÓVIL
+===================================================== */
+
+@media (max-width: 900px) {
+
+  #login.seccion {
+    min-height: 100vh;
+
+    padding: 28px 20px 45px;
+  }
+
+  .login-header {
+    margin-bottom: 28px;
+  }
+
+  #login .login-header h2 {
+    font-size: clamp(2.2rem, 10vw, 3.5rem);
+  }
+
+  .login-wrap {
+    display: block;
+  }
+
+  .login-media {
+    display: none !important;
+  }
+
+  .login-card {
+    width: min(520px, 100%);
+
+    padding: 34px 26px;
+
+    border-radius: 26px;
+  }
+}
+
+
+/* =====================================================
+   MÓVILES PEQUEÑOS
+===================================================== */
+
+@media (max-width: 480px) {
+
+  #login.seccion {
+    padding: 22px 14px 35px;
+  }
+
+  .login-edicion {
+    font-size: 0.68rem;
+    letter-spacing: 1.5px;
+  }
+
+  #login .login-header h2 {
+    font-size: clamp(2rem, 11vw, 2.8rem);
+  }
+
+  .login-header p {
+    font-size: 0.9rem;
+  }
+
+  .login-card {
+    padding: 27px 18px;
+
+    gap: 18px;
+
+    border-radius: 22px;
+  }
+
+  .login-badge {
+    gap: 12px;
+  }
+
+  .login-badge img {
+    width: 56px;
+    height: 56px;
+  }
+
+  .login-badge strong {
+    font-size: 1.4rem;
+  }
+
+  .login-card-intro {
+    font-size: 0.82rem;
+  }
+
+  .field input {
+    height: 54px;
+
+    font-size: 0.95rem;
+  }
+
+  .btn-login,
+  .btn.gold.btn-login {
+    height: 56px;
+
+    font-size: 1rem;
+  }
+}
+
+
+/* ==========================================
+   JOSEMARI 2026 — INICIO POLAR
+========================================== */
+
+/* Fondo de la portada */
+header.hero {
+  background:
+    radial-gradient(
+      circle at 50% 20%,
+      rgba(75, 186, 231, 0.24),
+      transparent 50%
+    ),
+    linear-gradient(
+      160deg,
+      rgba(4, 36, 63, 0.88),
+      rgba(2, 19, 35, 0.94)
+    );
+
+  border: 1px solid rgba(151, 230, 255, 0.65);
+  border-radius: 24px;
+}
+
+/* Eliminar el brillo dorado antiguo */
+header.hero .shine {
+  background: radial-gradient(
+    circle,
+    rgba(125, 225, 255, 0.22),
+    transparent 65%
+  );
+}
+
+/* Insignia sobre el título */
+header.hero .badge {
+  border: 1px solid rgba(164, 237, 255, 0.75);
+  background: rgba(142, 234, 255, 0.1);
+  color: #c8f5ff;
+}
+
+/* Título principal */
+header.hero h1 {
+  color: #d8f8ff;
+  text-shadow:
+    0 0 18px rgba(113, 216, 255, 0.3);
+}
+
+/* Botones de Inicio */
+header.hero .btn {
+  border: 1px solid #a5efff;
+  border-radius: 14px;
+
+  background: rgba(7, 53, 82, 0.8);
+  color: #e9faff;
+
+  box-shadow: 0 6px 20px rgba(0, 20, 40, 0.3);
+}
+
+header.hero .btn.gold {
+  background: linear-gradient(90deg, #65d7f6, #def9ff);
+  color: #062338;
+}
+
+header.hero .btn:hover {
+  transform: translateY(-3px);
+  background: #d8f7ff;
+  color: #05243a;
+}
+
+/* Marcos de las fotos laterales */
+header.hero .hero-polaroid,
+header.hero .fotos-lateral .polaroid {
+  border-color: rgba(153, 235, 255, 0.8);
+  box-shadow: 0 8px 24px rgba(0, 15, 35, 0.4);
+}
+
+/* Barra de navegación */
+nav.top {
+  background: rgba(4, 28, 48, 0.94);
+  border-bottom: 1px solid rgba(142, 234, 255, 0.75);
+}
+
+/* Botones del menú */
+nav.top .nav-actions .btn {
+  background: rgba(12, 58, 85, 0.8);
+  border: 1px solid rgba(161, 235, 255, 0.7);
+  color: #edfaff;
+  border-radius: 12px;
+}
+
+nav.top .nav-actions .btn:hover {
+  background: #b8efff;
+  color: #06253b;
+  box-shadow: 0 0 16px rgba(142, 234, 255, 0.35);
+}
+
+/* Avatar del usuario */
+.perfil-usuario img {
+  border-color: #a5efff !important;
+  box-shadow: 0 0 20px rgba(130, 225, 255, 0.32);
+}
+
+
+
+
+
+
+/* =======================================================
+   PORTADA NUEVA — PREMIOS JOSEMARI 2026
+======================================================= */
+
+#inicio.hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+
+  overflow: hidden;
+  border-radius: 0;
+
+  background:
+    linear-gradient(
+      120deg,
+      rgba(3, 26, 49, 0.68),
+      rgba(4, 37, 65, 0.53)
+    ),
+    url("fotos/fondo-polar.jpg") center / cover no-repeat;
+}
+
+/* TIRAS DE FOTOS ARRIBA Y ABAJO */
+#inicio .hero-strip {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  padding: 16px 24px;
+  overflow: hidden;
+  background: linear-gradient(
+    90deg,
+    rgba(3, 19, 38, 0.78),
+    rgba(7, 42, 78, 0.58),
+    rgba(3, 19, 38, 0.78)
+  );
+  border-top: 1px solid rgba(170, 235, 255, 0.18);
+  border-bottom: 1px solid rgba(170, 235, 255, 0.18);
+}
+
+#inicio .hero-strip-top {
+  margin-top: 16px;
+}
+
+#inicio .hero-strip-bottom {
+  margin-bottom: 24px;
+}
+
+#inicio .hero-strip .hero-stage {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  width: max-content;
+}
+
+#inicio .hero-strip .hero-polaroid {
+  width: 120px;
+  height: 120px;
+  border-radius: 18px;
+  overflow: hidden;
+  flex: 0 0 auto;
+  border: 2px solid rgba(161, 230, 255, 0.55);
+  background: rgba(255,255,255,0.08);
+  box-shadow: 0 10px 26px rgba(0,0,0,0.28);
+}
+
+#inicio .hero-strip .hero-polaroid img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* CONTENEDOR CENTRAL */
+
+
+#inicio .hero-inner.inicio-showcase {
+  position: relative;
+  z-index: 2;
+
+  display: block;
+  flex: 1 0 auto;
+
+  width: min(1320px, calc(100% - 72px));
+  max-width: none;
+  min-width: 0;
+
+  margin: 0 auto;
+  padding: 42px 0 48px;
+  text-align: left;
+}
+
+#inicio .inicio-scene {
+  display: grid;
+
+  width: 100%;
+  min-width: 0;
+
+  grid-template-columns:
+    minmax(0, 0.95fr)
+    minmax(0, 1.05fr);
+
+  gap: clamp(28px, 3.5vw, 58px);
+  align-items: center;
+}
+
+#inicio .inicio-copy {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  text-align: left;
+}
+
+
+
+#inicio .inicio-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 1.5px solid rgba(170, 235, 255, 0.45);
+  color: #d9f8ff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+  margin-bottom: 24px;
+  background: rgba(255,255,255,0.06);
+}
+
+
+#inicio .inicio-title {
+  margin: 0 0 24px;
+
+  font-size: clamp(2.5rem, 3.8vw, 4.4rem);
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+
+  font-weight: 900;
+  color: #ffffff;
+  text-transform: uppercase;
+
+  text-shadow:
+    0 5px 25px rgba(54, 168, 220, 0.4);
+}
+
+/* Segunda línea del título */
+#inicio .inicio-title span {
+  color: #bcf1ff;
+  white-space: nowrap;
+}
+
+#inicio .inicio-subtitle {
+  margin: 0 0 20px;
+
+  color: #a3edff;
+  font-size: clamp(1.3rem, 2vw, 2.1rem);
+  line-height: 1.25;
+  font-weight: 800;
+}
+
+#inicio .inicio-desc {
+  max-width: 570px;
+  margin: 0 0 18px;
+
+  color: #e1f4fb;
+  font-size: clamp(0.94rem, 1.05vw, 1.07rem);
+  line-height: 1.7;
+}
+
+#inicio .inicio-mini {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #c2f1ff;
+}
+
+#inicio .inicio-ctas {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+
+/* IMAGEN PRINCIPAL */
+
+#inicio .inicio-stage {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+
+  align-items: center;
+  justify-content: center;
+}
+
+#inicio .inicio-poster-shell {
+  position: relative;
+
+  width: min(100%, 590px);
+  max-width: none;
+  padding: 0;
+
+  border: 0;
+  border-radius: 24px;
+  background: transparent;
+
+  box-shadow:
+    0 20px 65px rgba(0, 17, 31, 0.5),
+    0 0 42px rgba(145, 226, 255, 0.22);
+}
+
+#inicio .inicio-poster-glow {
+  position: absolute;
+  inset: -12px;
+  z-index: 0;
+
+  border: 1px solid rgba(201, 250, 255, 0.45);
+  border-radius: 32px;
+
+  background: rgba(183, 238, 255, 0.05);
+  pointer-events: none;
+}
+
+#inicio .inicio-poster {
+  position: relative;
+  z-index: 1;
+
+  display: block;
+  width: 100%;
+  height: auto;
+
+  border: 3px solid #d0f7ff;
+  border-radius: 24px;
+  object-fit: contain;
+}
+
+/* ELIMINAR COSAS SOBRANTES */
+#inicio .inicio-shortcuts,
+#inicio .penguin,
+#inicio .inicio-stage-caption {
+  display: none !important;
+}
+
+/* QUITAR LAS COLUMNAS LATERALES ANTIGUAS */
+#inicio .hero-marquee.izquierda,
+#inicio .hero-marquee.derecha {
+  display: none !important;
+}
+
+
+/* TABLET */
+
+@media (max-width: 1050px) {
+
+  #inicio .hero-inner.inicio-showcase {
+    width: min(760px, calc(100% - 40px));
+    padding: 34px 0 40px;
+  }
+
+  #inicio .inicio-scene {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+  }
+
+  #inicio .inicio-copy {
+    text-align: center;
+  }
+
+  #inicio .inicio-title {
+    font-size: clamp(2.7rem, 6.5vw, 4rem);
+  }
+
+  #inicio .inicio-title span {
+    white-space: normal;
+  }
+
+  #inicio .inicio-desc {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  #inicio .inicio-stage {
+    order: -1;
+  }
+
+  #inicio .inicio-poster-shell {
+    width: min(100%, 470px);
+  }
+}
+
+
+/* MÓVIL */
+
+@media (max-width: 600px) {
+
+  #inicio .hero-inner.inicio-showcase {
+    width: calc(100% - 32px);
+    padding: 28px 0 34px;
+  }
+
+  #inicio .inicio-stage {
+    order: 0;
+  }
+
+  #inicio .inicio-scene {
+    gap: 26px;
+  }
+
+  #inicio .inicio-title {
+    font-size: clamp(2rem, 8.8vw, 3.1rem);
+    letter-spacing: -0.035em;
+  }
+
+  #inicio .inicio-subtitle {
+    font-size: 1.36rem;
+  }
+
+  #inicio .inicio-desc {
+    font-size: 0.94rem;
+    line-height: 1.6;
+  }
+
+  #inicio .inicio-kicker {
+    margin-bottom: 16px;
+  }
+
+  #inicio .inicio-poster-shell {
+    width: min(100%, 390px);
+  }
+
+  #inicio .inicio-poster {
+    border-radius: 16px;
+  }
+
+  #inicio .hero-strip {
+    padding: 9px 0;
+  }
+}
+
+
+/* ==========================================
+   CINTAS HORIZONTALES — INICIO 2026
+========================================== */
+
+/* Las dos cintas */
+#inicio .hero-strip {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  padding: 14px 0;
+}
+
+/* Contenedor que se desplaza */
+#inicio .hero-strip .hero-stage {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0;
+  width: max-content;
+  padding: 0;
+  will-change: transform;
+}
+
+/* Dos copias idénticas de las fotografías */
+#inicio .hero-photo-group {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 14px;
+  padding-right: 14px;
+}
+
+/* Marcos de las fotografías */
+#inicio .hero-strip .hero-polaroid {
+  flex: 0 0 148px;
+  width: 148px;
+  height: 112px;
+  aspect-ratio: auto;
+  border-radius: 14px;
+  border: 2px solid rgba(185, 239, 255, 0.8);
+  overflow: hidden;
+  background: #08283e;
+  box-shadow: 0 6px 18px rgba(0, 12, 30, 0.4);
+  transform: none;
+}
+
+/* Imágenes sin deformaciones */
+#inicio .hero-strip .hero-polaroid img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ARRIBA: movimiento hacia la izquierda */
+#inicio .hero-strip-top .hero-stage {
+  animation: fotosHaciaIzquierda 65s linear infinite;
+}
+
+/* ABAJO: movimiento hacia la derecha */
+#inicio .hero-strip-bottom .hero-stage {
+  animation: fotosHaciaDerecha 65s linear infinite;
+}
+
+/* Animaciones infinitas */
+@keyframes fotosHaciaIzquierda {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes fotosHaciaDerecha {
+  from {
+    transform: translateX(-50%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Adaptación para móviles */
+@media (max-width: 768px) {
+  #inicio .hero-strip {
+    padding: 10px 0;
+  }
+
+  #inicio .hero-photo-group {
+    gap: 10px;
+    padding-right: 10px;
+  }
+
+  #inicio .hero-strip .hero-polaroid {
+    flex-basis: 100px;
+    width: 100px;
+    height: 80px;
+    border-radius: 10px;
+  }
+}
+
+/* Respetar la preferencia de movimiento reducido */
+@media (prefers-reduced-motion: reduce) {
+  #inicio .hero-strip .hero-stage {
+    animation: none;
+  }
+}
+
+
+/* PINGÜINOS — DECORACIÓN DE LA PORTADA */
+
+#inicio .pinguinos-decoracion {
+  position: relative;
+  z-index: 4;
+
+  display: block;
+  width: min(900px, 85%);
+  height: auto;
+
+  margin: -35px auto 0;
+
+  filter: drop-shadow(
+    0 12px 18px rgba(0, 20, 40, 0.3)
+  );
+}
+
+/* Adaptación para móvil */
+@media (max-width: 600px) {
+  #inicio .pinguinos-decoracion {
+    width: 100%;
+    margin: 5px auto 0;
+  }
+}
+
+
+/* ==========================================
+   PREMIOS JOSEMARI 2026 — NEVADA POLAR
+========================================== */
+
+/* Contenedor de nieve */
+#inicio {
+  position: relative;
+  isolation: isolate;
+}
+
+/* La nieve ocupa toda la portada */
+#inicio .nieve-polar {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Dos capas de copos */
+#inicio .nieve-capa {
+  position: absolute;
+  inset: -100% 0 0;
+  background-repeat: repeat;
+  animation-name: nieveCayendo;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+/* Copos pequeños y lejanos */
+#inicio .nieve-lejana {
+  background-image:
+    radial-gradient(2px 2px at 20px 30px,
+      rgba(255,255,255,0.7) 98%, transparent),
+    radial-gradient(2px 2px at 90px 110px,
+      rgba(255,255,255,0.5) 98%, transparent),
+    radial-gradient(1px 1px at 150px 65px,
+      rgba(255,255,255,0.8) 98%, transparent);
+
+  background-size: 210px 160px;
+  animation-duration: 30s;
+  opacity: 0.45;
+}
+
+/* Copos cercanos */
+#inicio .nieve-cercana {
+  background-image:
+    radial-gradient(3px 3px at 40px 50px,
+      rgba(255,255,255,0.9) 98%, transparent),
+    radial-gradient(2px 2px at 120px 140px,
+      rgba(255,255,255,0.7) 98%, transparent),
+    radial-gradient(3px 3px at 190px 90px,
+      rgba(255,255,255,0.8) 98%, transparent);
+
+  background-size: 260px 200px;
+  animation-duration: 19s;
+  opacity: 0.35;
+}
+
+/* Caída de la nieve */
+@keyframes nieveCayendo {
+  from {
+    transform: translateY(-25%);
+  }
+
+  to {
+    transform: translateY(25%);
+  }
+}
+
+/* ==========================================
+   BRILLO HELADO DEL CARTEL
+========================================== */
+
+#inicio .inicio-poster-shell {
+  transition:
+    transform 0.4s ease,
+    box-shadow 0.4s ease;
+
+  box-shadow:
+    0 15px 45px rgba(0, 15, 35, 0.4),
+    0 0 22px rgba(111, 221, 255, 0.25);
+}
+
+#inicio .inicio-poster-shell:hover {
+  transform: translateY(-5px);
+
+  box-shadow:
+    0 20px 55px rgba(0, 15, 35, 0.5),
+    0 0 42px rgba(135, 231, 255, 0.55);
+}
+
+/* Mantener accesible la web si el usuario
+   tiene reducidas las animaciones */
+@media (prefers-reduced-motion: reduce) {
+  #inicio .nieve-capa {
+    animation: none;
+  }
+
+  #inicio .inicio-poster-shell {
+    transition: none;
+  }
+}
+
+
+/* ==========================================
+   MENÚ RESPONSIVE — JOSEMARI 2026
+========================================== */
+
+/* En ordenador no aparece el botón hamburguesa */
+.menu-movil-btn {
+  display: none;
+}
+
+/* MENÚ EN MÓVIL Y TABLET PEQUEÑA */
+@media (max-width: 900px) {
+
+  nav.top .nav-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 12px;
+
+    width: 100%;
+    max-width: none;
+    min-height: 72px;
+    padding: 12px 16px;
+  }
+
+  nav.top .logo {
+    grid-column: 1;
+    grid-row: 1;
+
+    font-size: 1rem;
+    line-height: 1.3;
+  }
+
+  /* Botón para abrir y cerrar el menú */
+  nav.top .menu-movil-btn {
+    display: flex;
+    grid-column: 3;
+    grid-row: 1;
+
+    width: 44px;
+    height: 44px;
+
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #a5ecff;
+    border-radius: 12px;
+
+    background: rgba(95, 205, 245, 0.13);
+    color: #e0f8ff;
+
+    font-size: 1.65rem;
+    cursor: pointer;
+  }
+
+  nav.top .menu-movil-btn:hover {
+    background: rgba(95, 205, 245, 0.27);
+  }
+
+  /* Perfil junto al botón del menú */
+  nav.top .perfil-usuario {
+    grid-column: 2;
+    grid-row: 1;
+
+    transform: none;
+    min-width: 0;
+    gap: 8px;
+
+    font-size: 0.9rem;
+  }
+
+  nav.top .perfil-usuario img {
+    width: 42px !important;
+    height: 42px !important;
+    margin-left: 0 !important;
+  }
+
+  /* Ocultar los seis botones al principio */
+  nav.top .nav-actions {
+    display: none;
+    grid-column: 1 / -1;
+    grid-row: 2;
+
+    width: 100%;
+    min-width: 0;
+
+    padding: 12px 0 4px;
+    margin: 0;
+
+    border-top: 1px solid rgba(165, 236, 255, 0.3);
+  }
+
+  /* Aparecen al pulsar el botón hamburguesa */
+  nav.top .nav-actions.menu-abierto {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  nav.top .nav-actions .btn {
+    width: 100%;
+    min-width: 0;
+    min-height: 52px;
+    margin: 0;
+    padding: 12px 8px;
+
+    font-size: 0.85rem;
+    line-height: 1.3;
+    text-align: center;
+    white-space: normal;
+  }
+}
+
+/* Teléfonos muy estrechos */
+@media (max-width: 380px) {
+
+  nav.top .nav-inner {
+    gap: 8px;
+    padding: 10px;
+  }
+
+  nav.top .logo {
+    font-size: 0.85rem;
+  }
+
+  nav.top #nombreUsuario {
+    display: none;
+  }
+
+  nav.top .nav-actions .btn {
+    font-size: 0.78rem;
+  }
+}
+
+
+/* ==========================================
+   RETOQUES DEL MENÚ MÓVIL
+========================================== */
+
+@media (max-width: 600px) {
+
+  /* Barra superior más compacta */
+  nav.top .nav-inner {
+    min-height: 64px;
+    padding: 8px 12px;
+    gap: 8px;
+  }
+
+  /* Nombre de los premios */
+  nav.top .logo {
+    font-size: 0.9rem;
+    line-height: 1.2;
+    white-space: normal;
+  }
+
+  /* Nombre del usuario */
+  nav.top #nombreUsuario {
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+
+  /* Fotografía del usuario */
+  nav.top #avatarUsuario {
+    width: 36px !important;
+    height: 36px !important;
+    flex-shrink: 0;
+  }
+
+  /* Botón hamburguesa */
+  nav.top .menu-movil-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+
+}
+
+/* Teléfonos especialmente pequeños */
+@media (max-width: 420px) {
+
+  nav.top .logo {
+    font-size: 0.8rem;
+  }
+
+  nav.top #nombreUsuario {
+    display: none;
+  }
+
+}
+
+
+/* ==========================================
+   PORTADA MÁS COMPACTA EN MÓVIL
+========================================== */
+
+@media (max-width: 600px) {
+
+  /* Reducir los espacios de la portada */
+  #inicio .hero-inner.inicio-showcase {
+    padding-top: 24px;
+    padding-bottom: 16px;
+  }
+
+  /* Título principal */
+  #inicio .inicio-title {
+    font-size: clamp(2rem, 8vw, 3rem);
+    line-height: 1.05;
+    margin-bottom: 16px;
+  }
+
+  /* Subtítulo */
+  #inicio .inicio-subtitle {
+    font-size: clamp(1.2rem, 5vw, 1.6rem);
+    line-height: 1.25;
+    margin-bottom: 14px;
+  }
+
+  /* Descripción */
+  #inicio .inicio-desc {
+    font-size: 0.95rem;
+    line-height: 1.55;
+    margin-bottom: 12px;
+  }
+
+  /* Texto D.E.P. */
+  #inicio .inicio-mini {
+    margin-bottom: 10px;
+  }
+
+  /* Cartel oficial */
+  #inicio .inicio-stage {
+    margin-top: 12px;
+  }
+
+  /* Pingüinos decorativos */
+  #inicio .pinguinos-decoracion {
+    width: 100%;
+    max-width: 520px;
+    margin-top: 4px;
+  }
+
+}
+
+
+/* ==========================================
+   MENÚ POLAR — ORDENADOR
+========================================== */
+
+@media (min-width: 901px) {
+
+  /* Barra superior */
+  nav.top {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+
+    background: rgba(5, 29, 48, 0.94);
+    backdrop-filter: blur(18px);
+
+    border-bottom: 1px solid rgba(157, 233, 255, 0.5);
+
+    box-shadow:
+      0 6px 25px rgba(0, 17, 35, 0.3),
+      0 1px 15px rgba(113, 220, 255, 0.12);
+  }
+
+  /* Distribución horizontal */
+  nav.top .nav-inner {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    width: min(1500px, calc(100% - 40px));
+    max-width: none;
+    min-height: 90px;
+
+    gap: 24px;
+    margin: 0 auto;
+    padding: 12px 0;
+
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* Nombre de los premios */
+  nav.top .logo {
+    flex: 0 0 165px;
+
+    color: #d7f6ff;
+    font-size: 1rem;
+    font-weight: 800;
+    line-height: 1.35;
+
+    text-shadow: 0 0 16px rgba(115, 223, 255, 0.24);
+  }
+
+  /* Los seis botones */
+  nav.top .nav-actions {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+
+    gap: 9px;
+    min-width: 0;
+  }
+
+  nav.top .nav-actions .btn {
+    width: auto;
+    min-width: 0;
+    min-height: 46px;
+
+    padding: 10px 13px;
+    margin: 0;
+
+    border: 1px solid rgba(151, 225, 247, 0.4);
+    border-radius: 12px;
+
+    background: rgba(45, 112, 151, 0.16);
+
+    color: #e5f8ff;
+    font-family: inherit;
+    font-size: 0.81rem;
+    font-weight: 700;
+    line-height: 1.3;
+    text-align: center;
+
+    box-shadow: none;
+
+    transition:
+      background 0.25s ease,
+      border-color 0.25s ease,
+      box-shadow 0.25s ease,
+      transform 0.25s ease;
+  }
+
+  /* Efecto helado al pasar el ratón */
+  nav.top .nav-actions .btn:hover {
+    transform: translateY(-2px);
+
+    border-color: #b3efff;
+    background: rgba(111, 213, 251, 0.22);
+    color: #ffffff;
+
+    box-shadow:
+      0 0 17px rgba(112, 217, 255, 0.23);
+  }
+
+  /* Destacar el botón seleccionado */
+  nav.top .nav-actions .btn:focus-visible {
+    outline: 2px solid #b3efff;
+    outline-offset: 3px;
+  }
+
+  /* Usuario y avatar */
+  nav.top .perfil-usuario {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 12px;
+    min-width: 130px;
+  }
+
+  nav.top #nombreUsuario {
+    color: #bcefff;
+    font-size: 1rem;
+    font-weight: 800;
+  }
+
+  nav.top #avatarUsuario {
+    width: 48px !important;
+    height: 48px !important;
+
+    margin-left: 0 !important;
+
+    border: 2px solid #a6eaff !important;
+    border-radius: 50%;
+
+    box-shadow: 0 0 17px rgba(114, 221, 255, 0.3);
+  }
+
+  /* El botón hamburguesa solo existe en móvil */
+  nav.top .menu-movil-btn {
+    display: none;
+  }
+}
+
+/* Ordenadores algo más estrechos */
+@media (min-width: 901px) and (max-width: 1200px) {
+
+  nav.top .nav-inner {
+    gap: 12px;
+  }
+
+  nav.top .logo {
+    flex-basis: 115px;
+    font-size: 0.85rem;
+  }
+
+  nav.top .nav-actions {
+    gap: 5px;
+  }
+
+  nav.top .nav-actions .btn {
+    padding: 9px 7px;
+    font-size: 0.72rem;
+  }
+
+  nav.top .perfil-usuario {
+    min-width: 95px;
+  }
+
+  nav.top #nombreUsuario {
+    font-size: 0.8rem;
+  }
+}
+
+
+/* BOTÓN ACTIVO — MENÚ POLAR */
+
+nav.top .nav-actions .btn.nav-activo {
+  background: linear-gradient(
+    135deg,
+    #d8f8ff,
+    #8cddf7
+  );
+
+  color: #073049;
+
+  border-color: #eaffff;
+
+  box-shadow:
+    0 0 16px rgba(125, 224, 255, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+nav.top .nav-actions .btn.nav-activo:hover {
+  color: #073049;
+  background: #bceeff;
+}
+
+
+/* ==========================================
+   PARTICIPANTES — EDICIÓN POLAR 2026
+========================================== */
+
+#participantes {
+  max-width: 1200px;
+  margin: 28px auto;
+  padding: 28px;
+
+  background: rgba(5, 30, 51, 0.92);
+  border: 1px solid #a7eaff;
+  border-radius: 22px;
+
+  box-shadow: 0 0 35px rgba(82, 196, 245, 0.15);
+}
+
+#participantes h2 {
+  margin: 0 0 28px;
+  color: #d5f7ff;
+  text-align: center;
+  font-size: clamp(1.5rem, 3vw, 2.3rem);
+  text-shadow: 0 0 18px rgba(127, 224, 255, 0.4);
+}
+
+#participantes .grid-participantes {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+}
+
+/* TARJETAS HELADAS */
+
+#participantes .participante {
+  min-width: 0;
+  padding: 10px;
+
+  background: linear-gradient(
+    160deg,
+    rgba(44, 111, 150, 0.65),
+    rgba(7, 35, 60, 0.95)
+  );
+
+  border: 1px solid rgba(175, 235, 255, 0.7);
+  border-radius: 17px;
+  overflow: hidden;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.25),
+    0 8px 22px rgba(0, 15, 32, 0.3);
+
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease,
+    border-color 0.35s ease;
+}
+
+#participantes .participante:hover {
+  transform: translateY(-7px);
+  border-color: #ffffff;
+
+  box-shadow:
+    0 0 26px rgba(135, 227, 255, 0.5),
+    0 15px 35px rgba(0, 15, 32, 0.45);
+}
+
+/* CONTENEDOR DE LA FOTOGRAFÍA */
+
+#participantes .participante-foto {
+  position: relative;
+  width: 100%;
+  padding: 4px;
+  overflow: hidden;
+
+  border-radius: 12px;
+  background: linear-gradient(
+    135deg,
+    #e1faff,
+    #5dbadb,
+    #d5f7ff
+  );
+}
+
+/* FOTOGRAFÍA ORIGINAL */
+
+#participantes .participante-foto img {
+  display: block;
+  width: 100%;
+  height: 240px;
+  margin: 0;
+  object-fit: cover;
+
+  border: 0;
+  border-radius: 9px;
+
+  filter: saturate(0.9) contrast(1.05);
+  transition: filter 0.6s ease, transform 0.6s ease;
+}
+
+/* CRISTAL DE HIELO SOBRE LA FOTO */
+
+#participantes .participante-foto::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  z-index: 2;
+  pointer-events: none;
+
+  border-radius: 9px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(225, 250, 255, 0.32),
+      transparent 40%,
+      rgba(74, 181, 240, 0.18)
+    );
+
+  box-shadow:
+    inset 0 0 20px rgba(203, 246, 255, 0.5),
+    inset 0 0 0 2px rgba(235, 253, 255, 0.5);
+}
+
+/* ESCARCHA EN LOS BORDES */
+
+#participantes .participante-foto::after {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  z-index: 3;
+  pointer-events: none;
+
+  border-radius: 9px;
+
+  box-shadow:
+    inset 0 0 12px 3px rgba(236, 253, 255, 0.9),
+    inset 0 0 28px 8px rgba(104, 206, 255, 0.35);
+}
+
+/* ANIMACIÓN DE CONGELACIÓN AL PASAR EL RATÓN */
+
+#participantes .participante:hover
+.participante-foto img {
+  transform: scale(1.06);
+
+  filter:
+    saturate(0.55)
+    contrast(1.1)
+    brightness(1.05)
+    sepia(0.12)
+    hue-rotate(165deg);
+}
+
+#participantes .participante:hover
+.participante-foto::before {
+  background: rgba(157, 224, 255, 0.34);
+}
+
+#participantes .participante h3 {
+  margin: 14px 0 8px;
+  color: #b4edff;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+/* TABLET */
+
+@media (max-width: 1000px) {
+  #participantes .grid-participantes {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* MÓVIL */
+
+@media (max-width: 650px) {
+  #participantes {
+    padding: 16px 12px;
+    margin: 12px;
+  }
+
+  #participantes .grid-participantes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  #participantes .participante {
+    padding: 6px;
+  }
+
+  #participantes .participante-foto img {
+    height: 185px;
+  }
+
+  #participantes .participante h3 {
+    font-size: 0.85rem;
+  }
+}
+
+/* RESPETAR PREFERENCIAS DE MOVIMIENTO */
+
+@media (prefers-reduced-motion: reduce) {
+  #participantes .participante,
+  #participantes .participante-foto img {
+    transition: none;
+  }
+}
+
+
+/* ==========================================
+   CONGELACIÓN PROGRESIVA — PARTICIPANTES
+========================================== */
+
+/* Preparar las fotografías */
+#participantes .participante-foto {
+  position: relative;
+  isolation: isolate;
+}
+
+/* Capa de escarcha que se extiende
+   desde las cuatro esquinas */
+#participantes .participante-foto::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  z-index: 3;
+  pointer-events: none;
+
+  border-radius: 9px;
+
+  background:
+    radial-gradient(
+      circle at 0% 0%,
+      rgba(229, 250, 255, 0.94) 0%,
+      rgba(144, 220, 255, 0.64) 17%,
+      transparent 57%
+    ),
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(236, 253, 255, 0.9) 0%,
+      rgba(145, 219, 255, 0.58) 17%,
+      transparent 57%
+    ),
+    radial-gradient(
+      circle at 0% 100%,
+      rgba(235, 252, 255, 0.94) 0%,
+      rgba(123, 205, 255, 0.6) 17%,
+      transparent 57%
+    ),
+    radial-gradient(
+      circle at 100% 100%,
+      rgba(241, 254, 255, 0.93) 0%,
+      rgba(148, 221, 255, 0.59) 17%,
+      transparent 57%
+    );
+
+  /* Empezar con escarcha solo en los bordes */
+  -webkit-mask-image: radial-gradient(
+    ellipse at center,
+    transparent 64%,
+    black 100%
+  );
+
+  mask-image: radial-gradient(
+    ellipse at center,
+    transparent 64%,
+    black 100%
+  );
+
+  opacity: 0.72;
+
+  transition:
+    -webkit-mask-image 0.8s ease,
+    mask-image 0.8s ease,
+    opacity 0.8s ease;
+}
+
+/* Segunda capa: reflejo del hielo */
+#participantes .participante-foto::after {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  z-index: 4;
+  pointer-events: none;
+
+  border-radius: 9px;
+
+  background:
+    linear-gradient(
+      135deg,
+      transparent 28%,
+      rgba(221, 249, 255, 0.35) 42%,
+      rgba(255, 255, 255, 0.12) 50%,
+      transparent 65%
+    );
+
+  box-shadow:
+    inset 0 0 14px 3px rgba(237, 253, 255, 0.8),
+    inset 0 0 28px rgba(109, 213, 255, 0.3);
+
+  opacity: 0.65;
+
+  transition: opacity 0.8s ease;
+}
+
+/* Al pasar el ratón, el hielo invade la foto */
+@media (hover: hover) {
+
+  #participantes .participante:hover
+  .participante-foto::before {
+
+    -webkit-mask-image: radial-gradient(
+      ellipse at center,
+      black 100%,
+      black 100%
+    );
+
+    mask-image: radial-gradient(
+      ellipse at center,
+      black 100%,
+      black 100%
+    );
+
+    opacity: 0.83;
+  }
+
+  #participantes .participante:hover
+  .participante-foto::after {
+    opacity: 1;
+  }
+
+  /* La fotografía pierde color gradualmente */
+  #participantes .participante:hover
+  .participante-foto img {
+
+    transform: scale(1.035);
+
+    filter:
+      saturate(0.5)
+      contrast(1.1)
+      brightness(1.07)
+      sepia(0.1)
+      hue-rotate(165deg);
+  }
+}
+
+/* En móviles se conserva el marco helado,
+   sin depender del efecto hover */
+@media (hover: none) {
+
+  #participantes .participante-foto::before {
+    opacity: 0.48;
+  }
+
+  #participantes .participante-foto::after {
+    opacity: 0.65;
+  }
+}
+
+/* Accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+
+  #participantes .participante-foto::before,
+  #participantes .participante-foto::after,
+  #participantes .participante-foto img {
+    transition: none;
+  }
+}
+
+
+/* MODAL POLAR DE PARTICIPANTES */
+
+#modalParticipante .modal-palmares-contenido {
+  position: relative;
+  width: min(1000px, 94%);
+  max-width: 1000px;
+  max-height: 88vh;
+  overflow-y: auto;
+
+  margin: 5vh auto;
+  padding: 28px;
+
+  background: #092940;
+  border: 2px solid #a4eaff;
+  border-radius: 20px;
+
+  box-shadow: 0 0 45px rgba(95, 215, 255, 0.35);
+}
+
+#modalParticipante .modal-body {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  align-items: start;
+  gap: 30px;
+}
+
+#modalParticipante .modal-left img {
+  display: block;
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+
+  border: 3px solid #b1efff;
+  border-radius: 14px;
+  box-shadow: 0 0 20px rgba(126, 223, 255, 0.35);
+}
+
+#modalParticipante .modal-right {
+  min-width: 0;
+  padding-right: 28px;
+}
+
+#modalParticipante #modalNombre {
+  margin: 0 0 22px;
+  color: #e0f9ff;
+  font-size: 2rem;
+}
+
+#modalParticipante .palmares-title {
+  margin: 0 0 20px;
+  color: #ffdc78;
+  font-size: 1.4rem;
+}
+
+#modalParticipante .palmares-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+#modalParticipante .premio-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  padding: 12px;
+  background: rgba(126, 216, 255, 0.08);
+  border: 1px solid rgba(169, 236, 255, 0.4);
+  border-radius: 12px;
+}
+
+#modalParticipante .premio-item img {
+  width: 120px;
+  height: 76px;
+  object-fit: cover;
+
+  border: 2px solid #a9eaff;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+#modalParticipante .premio-item p {
+  margin: 0;
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+#modalParticipante .cerrar {
+  position: absolute;
+  top: 8px;
+  right: 18px;
+  float: none;
+  font-size: 44px;
+  color: #b3edff;
+  cursor: pointer;
+}
+
+/* MÓVIL */
+
+@media (max-width: 650px) {
+  #modalParticipante .modal-palmares-contenido {
+    padding: 18px;
+    margin: 3vh auto;
+    max-height: 94vh;
+  }
+
+  #modalParticipante .modal-body {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  #modalParticipante .modal-left img {
+    width: 100%;
+    height: 260px;
+  }
+
+  #modalParticipante .modal-right {
+    padding-right: 0;
+  }
+
+  #modalParticipante .premio-item img {
+    width: 90px;
+    height: 60px;
+  }
+}
+
+
+/* PALMARÉS: MINIATURAS DE LAS DIAPOSITIVAS */
+
+#modalParticipante .modal-palmares-contenido {
+  max-height: 88dvh;
+  overflow-y: auto;
+}
+
+#modalParticipante .premio-item {
+  min-height: 100px;
+}
+
+#modalParticipante .premio-item img {
+  width: 90px;
+  height: 120px;
+  object-fit: contain;
+  background: rgba(6, 28, 45, 0.6);
+}
+
+#modalParticipante .premio-item p {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 650px) {
+  #modalParticipante .premio-item img {
+    width: 65px;
+    height: 88px;
+  }
+
+  #modalParticipante .premio-item p {
+    font-size: 0.85rem;
+  }
+}
+
+
+/* ==========================================
+   PALMARÉS — TARJETAS MÁS COMPACTAS
+========================================== */
+
+#modalParticipante .palmares-list {
+  gap: 10px;
+}
+
+#modalParticipante .premio-item {
+  min-height: 0;
+  padding: 8px 12px;
+  gap: 15px;
+  overflow: visible;
+}
+
+#modalParticipante .premio-item img {
+  width: 65px;
+  height: 88px;
+  object-fit: contain;
+
+  border: 2px solid #b1efff;
+  border-radius: 8px;
+
+  background: rgba(5, 29, 48, 0.8);
+
+  flex-shrink: 0;
+}
+
+#modalParticipante .premio-item p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+/* Móvil */
+@media (max-width: 650px) {
+  #modalParticipante .premio-item {
+    padding: 8px;
+    gap: 10px;
+  }
+
+  #modalParticipante .premio-item img {
+    width: 55px;
+    height: 75px;
+  }
+
+  #modalParticipante .premio-item p {
+    font-size: 0.82rem;
+  }
+}
+
+
+/* ==========================================
+   PALMARÉS — ZOOM DE LAS DIAPOSITIVAS
+========================================== */
+
+#modalParticipante .premio-item {
+  position: relative;
+}
+
+#modalParticipante .premio-item img {
+  position: relative;
+  z-index: 1;
+
+  cursor: zoom-in;
+
+  transform-origin: left center;
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+/* Ampliar la miniatura */
+@media (hover: hover) {
+  #modalParticipante .premio-item img:hover {
+    z-index: 20;
+
+    transform: scale(2.2);
+
+    box-shadow:
+      0 10px 35px rgba(0, 0, 0, 0.65),
+      0 0 20px rgba(129, 226, 255, 0.6);
+  }
+
+  /* Traer delante la tarjeta seleccionada */
+  #modalParticipante .premio-item:hover {
+    z-index: 10;
+  }
+}
+
+/* Evitar animaciones si están desactivadas */
+@media (prefers-reduced-motion: reduce) {
+  #modalParticipante .premio-item img {
+    transition: none;
+  }
+}
+
+
+/* =====================================
+   MUSEO DEL HIELO — JOSEMARI III
+===================================== */
+
+#museo {
+  width: min(1400px, 96%);
+  max-width: none;
+  margin: 25px auto;
+  padding: 30px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(4, 30, 51, 0.95),
+      rgba(13, 68, 100, 0.92)
+    );
+
+  border: 1px solid #a6eaff;
+  border-radius: 26px;
+  box-shadow: 0 0 40px rgba(101, 208, 255, 0.18);
+}
+
+/* PORTADA */
+
+.museo-portada {
+  padding: 45px 20px;
+  margin-bottom: 50px;
+
+  text-align: center;
+
+  border: 1px solid rgba(172, 237, 255, 0.65);
+  border-radius: 22px;
+
+  background:
+    radial-gradient(
+      ellipse at top,
+      rgba(111, 213, 255, 0.24),
+      transparent 70%
+    ),
+    rgba(6, 36, 58, 0.8);
+}
+
+.museo-etiqueta {
+  color: #92e8ff;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 3px;
+}
+
+.museo-portada h2 {
+  margin: 18px 0;
+  font-size: clamp(2rem, 5vw, 4rem);
+  color: #e8faff;
+
+  text-shadow: 0 0 25px rgba(115, 223, 255, 0.65);
+}
+
+.museo-portada p {
+  max-width: 700px;
+  margin: 0 auto 22px;
+
+  color: #d2edfa;
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.museo-lema {
+  color: #9bdeef;
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+/* SALAS */
+
+.museo-sala {
+  margin-bottom: 65px;
+}
+
+.museo-sala-titulo {
+  margin-bottom: 25px;
+  padding-left: 18px;
+
+  border-left: 4px solid #9deaff;
+}
+
+.museo-sala-titulo span {
+  color: #83d8f7;
+  font-weight: 800;
+  letter-spacing: 2px;
+  font-size: 0.75rem;
+}
+
+.museo-sala-titulo h3 {
+  margin: 8px 0;
+  color: #e7faff;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+}
+
+.museo-sala-titulo p {
+  color: #abd9e9;
+  margin: 0;
+}
+
+/* VITRINAS */
+
+.museo-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 22px;
+}
+
+.museo-pieza {
+  min-width: 0;
+  padding: 14px;
+
+  background: linear-gradient(
+    145deg,
+    rgba(52, 117, 157, 0.45),
+    rgba(5, 29, 49, 0.9)
+  );
+
+  border: 1px solid rgba(175, 233, 255, 0.55);
+  border-radius: 18px;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.museo-pieza:hover {
+  transform: translateY(-7px);
+  border-color: #e5faff;
+
+  box-shadow:
+    0 15px 35px rgba(0, 15, 35, 0.35),
+    0 0 25px rgba(119, 222, 255, 0.3);
+}
+
+.museo-pieza-imagen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 285px;
+  overflow: hidden;
+
+  border: 3px solid rgba(190, 241, 255, 0.8);
+  border-radius: 12px;
+
+  background: rgba(2, 23, 38, 0.75);
+
+  box-shadow:
+    inset 0 0 22px rgba(123, 220, 255, 0.28);
+}
+
+.museo-pieza-imagen img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+
+  transition: transform 0.35s ease;
+}
+
+.museo-pieza:hover img {
+  transform: scale(1.05);
+}
+
+.museo-pieza h4 {
+  margin: 15px 0 7px;
+
+  color: #e6f9ff;
+  font-size: 1.05rem;
+  text-align: center;
+}
+
+.museo-pieza p {
+  margin: 0 0 8px;
+
+  color: #a9ddeb;
+  font-size: 0.85rem;
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* PRÓXIMA EXPOSICIÓN */
+
+.museo-proximamente {
+  padding: 40px 25px;
+
+  text-align: center;
+
+  border: 2px dashed rgba(156, 230, 255, 0.55);
+  border-radius: 20px;
+
+  background: rgba(111, 200, 242, 0.08);
+}
+
+.museo-proximamente span {
+  color: #8cdcf6;
+  letter-spacing: 2px;
+  font-size: 0.8rem;
+}
+
+.museo-proximamente h3 {
+  margin: 15px 0;
+  color: #e7faff;
+}
+
+.museo-proximamente p {
+  color: #b6dce8;
+}
+
+/* VISOR DE FOTOGRAFÍAS */
+
+.museo-visor {
+  width: min(750px, 95%);
+  max-height: 90dvh;
+  padding: 25px;
+
+  overflow-y: auto;
+
+  background: #07273f;
+  border: 2px solid #a8edff;
+  border-radius: 20px;
+
+  color: white;
+  text-align: center;
+
+  box-shadow: 0 0 50px rgba(120, 224, 255, 0.5);
+}
+
+.museo-visor::backdrop {
+  background: rgba(0, 12, 25, 0.88);
+  backdrop-filter: blur(8px);
+}
+
+.museo-visor img {
+  display: block;
+
+  max-width: 100%;
+  max-height: 70dvh;
+
+  margin: 0 auto;
+  object-fit: contain;
+}
+
+.museo-visor h3 {
+  color: #e1f8ff;
+  margin: 20px 0 0;
+}
+
+.museo-cerrar {
+  position: sticky;
+  top: 0;
+  float: right;
+  z-index: 5;
+
+  background: #14506e;
+  color: white;
+  border: 1px solid #a9eaff;
+
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+
+  cursor: pointer;
+}
+
+/* TABLET */
+
+@media (max-width: 950px) {
+  .museo-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* MÓVIL */
+
+@media (max-width: 600px) {
+
+  #museo {
+    width: 96%;
+    padding: 15px;
+  }
+
+  .museo-portada {
+    padding: 30px 12px;
+  }
+
+  .museo-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .museo-pieza {
+    padding: 7px;
+  }
+
+  .museo-pieza-imagen {
+    height: 190px;
+  }
+
+  .museo-pieza h4 {
+    font-size: 0.85rem;
+  }
+
+  .museo-pieza p {
+    font-size: 0.75rem;
+  }
+}
+
+
+/* ==========================================
+   MUSEO DEL HIELO — SALAS HISTÓRICAS
+========================================== */
+
+/* Ocultar las salas que no están abiertas */
+#museo .mh-vista[hidden] {
+  display: none !important;
+}
+
+/* PUERTAS DEL VESTÍBULO */
+
+#museo .mh-puertas {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+#museo .mh-puerta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+
+  min-height: 320px;
+  padding: 35px 20px;
+
+  background:
+    radial-gradient(
+      circle at 50% 15%,
+      rgba(147, 228, 255, 0.28),
+      transparent 65%
+    ),
+    linear-gradient(150deg, #1b5274, #08263f);
+
+  border: 2px solid #9be7ff;
+  border-radius: 24px;
+
+  color: #e9faff;
+  font-family: inherit;
+  text-align: center;
+  cursor: pointer;
+
+  box-shadow:
+    inset 0 0 25px rgba(135, 227, 255, 0.12),
+    0 12px 30px rgba(0, 17, 35, 0.3);
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+#museo .mh-puerta:hover {
+  transform: translateY(-7px);
+
+  box-shadow:
+    0 0 35px rgba(115, 219, 255, 0.45),
+    inset 0 0 35px rgba(145, 227, 255, 0.18);
+}
+
+#museo .mh-puerta-icono {
+  font-size: 4rem;
+  filter: drop-shadow(0 0 18px rgba(255, 213, 105, 0.4));
+}
+
+#museo .mh-puerta-etiqueta {
+  color: #99e5ff;
+  font-size: 0.8rem;
+  letter-spacing: 3px;
+  font-weight: 800;
+}
+
+#museo .mh-puerta strong {
+  color: #ffffff;
+  font-size: clamp(1.6rem, 3vw, 2.5rem);
+}
+
+#museo .mh-entrar {
+  margin-top: 14px;
+  padding: 12px 20px;
+
+  background: #b8efff;
+  color: #062c43;
+
+  border-radius: 12px;
+
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+/* BOTÓN DE REGRESO */
+
+#museo .mh-volver {
+  margin-bottom: 25px;
+  padding: 12px 20px;
+
+  background: rgba(133, 219, 255, 0.14);
+  color: #e4f9ff;
+
+  border: 1px solid #91dfff;
+  border-radius: 12px;
+
+  font-family: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+#museo .mh-volver:hover {
+  background: rgba(133, 219, 255, 0.28);
+}
+
+/* CABECERA DE CADA SALA */
+
+#museo .mh-cabecera {
+  margin-bottom: 38px;
+  padding: 35px 20px;
+
+  text-align: center;
+
+  background: rgba(96, 191, 232, 0.1);
+  border: 1px solid #7ed5f4;
+  border-radius: 20px;
+}
+
+#museo .mh-cabecera span {
+  color: #9ae8ff;
+  font-weight: 800;
+  letter-spacing: 3px;
+}
+
+#museo .mh-cabecera h2 {
+  margin: 14px 0;
+  color: #e9faff;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+}
+
+#museo .mh-cabecera p {
+  color: #b7e3f3;
+}
+
+#museo .mh-titulo {
+  margin: 36px 0 22px;
+  padding-bottom: 12px;
+
+  color: #e3f8ff;
+  font-size: 1.4rem;
+
+  border-bottom: 1px solid #669fba;
+}
+
+/* PROTAGONISTAS */
+
+#museo .mh-protagonistas {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+#museo .mh-protagonista {
+  padding: 16px;
+  text-align: center;
+
+  background: linear-gradient(#245879, #0a2d47);
+
+  border: 1px solid #a2e6fa;
+  border-radius: 18px;
+
+  box-shadow: 0 0 18px rgba(100, 203, 246, 0.12);
+}
+
+#museo .mh-protagonista img {
+  display: block;
+
+  width: 100%;
+  height: 195px;
+
+  margin-bottom: 14px;
+
+  object-fit: cover;
+  border: 3px solid #b7eeff;
+  border-radius: 12px;
+}
+
+#museo .mh-protagonista h4 {
+  margin: 0 0 8px;
+  color: #ffffff;
+  font-size: 1.2rem;
+}
+
+#museo .mh-protagonista p {
+  margin: 0;
+  color: #bae4f4;
+  line-height: 1.5;
+  font-size: 0.9rem;
+}
+
+/* CUADRO DE GANADORES */
+
+#museo .mh-ganadores {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+#museo .mh-ganador {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  padding: 18px;
+
+  background: rgba(15, 61, 88, 0.8);
+  border: 1px solid rgba(154, 226, 248, 0.55);
+  border-radius: 15px;
+}
+
+#museo .mh-ganador h4 {
+  margin: 0;
+  color: #e7faff;
+  font-size: 1.05rem;
+}
+
+#museo .mh-ganador-personas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+#museo .mh-ganador-persona {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+#museo .mh-ganador-persona img {
+  width: 42px;
+  height: 42px;
+
+  object-fit: cover;
+  border: 2px solid #a9eaff;
+  border-radius: 50%;
+}
+
+#museo .mh-ganador-persona span {
+  color: #c7f0ff;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+/* MÓVIL */
+
+@media (max-width: 700px) {
+
+  #museo .mh-puertas,
+  #museo .mh-protagonistas,
+  #museo .mh-ganadores {
+    grid-template-columns: 1fr;
+  }
+
+  #museo .mh-puerta {
+    min-height: 240px;
+  }
+
+  #museo .mh-protagonista img {
+    height: 220px;
+  }
+
+  #museo .mh-cabecera {
+    padding: 25px 12px;
+  }
+}
+
+
+/* ==========================================
+   MUSEO DEL HIELO — VITRINAS DEFINITIVAS
+========================================== */
+
+#museo .mh-introduccion {
+  margin: -8px 0 26px;
+  color: #a9def1;
+  font-size: 1rem;
+}
+
+#museo .mh-vitrinas {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+
+/* Cada categoría es una vitrina */
+#museo .mh-vitrina {
+  min-width: 0;
+  padding: 17px;
+
+  background: linear-gradient(
+    150deg,
+    rgba(38, 101, 139, 0.65),
+    rgba(6, 34, 55, 0.96)
+  );
+
+  border: 1px solid rgba(168, 234, 255, 0.7);
+  border-radius: 20px;
+
+  box-shadow:
+    inset 0 1px 0 rgba(232, 250, 255, 0.2),
+    0 10px 30px rgba(0, 17, 35, 0.25);
+}
+
+#museo .mh-vitrina h4 {
+  margin: 0 0 17px;
+  color: #e8faff;
+  font-size: 1.15rem;
+  text-align: center;
+}
+
+/* Galería interior */
+#museo .mh-galeria {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(100%, 145px), 1fr)
+  );
+
+  gap: 12px;
+}
+
+#museo .mh-momento {
+  min-width: 0;
+  padding: 8px;
+
+  background: rgba(4, 29, 47, 0.6);
+  border: 1px solid rgba(151, 227, 255, 0.45);
+  border-radius: 12px;
+}
+
+/* Marco de fotografía o vídeo */
+#museo .mh-medio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 220px;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(48, 115, 155, 0.35),
+      rgba(3, 23, 39, 0.95)
+    );
+
+  border: 2px solid #b6efff;
+  border-radius: 10px;
+
+  box-shadow:
+    0 0 17px rgba(105, 207, 255, 0.15),
+    inset 0 0 15px rgba(146, 226, 255, 0.12);
+}
+
+/* Fotografías */
+#museo .mh-medio img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+
+  background: rgba(2, 18, 32, 0.9);
+
+  cursor: zoom-in;
+
+  transition: transform 0.35s ease;
+}
+
+#museo .mh-medio img:hover {
+  transform: scale(1.06);
+}
+
+/* Vídeos */
+#museo .mh-medio video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Premios sin fotografía */
+#museo .mh-sin-foto {
+  color: #d3edff;
+  font-size: 3rem;
+}
+
+/* Detalle del momento */
+#museo .mh-detalle {
+  margin: 12px 0 7px;
+  color: #f8df9b;
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+/* Nombre de los ganadores */
+#museo .mh-nombres {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+
+  margin-top: 12px;
+}
+
+#museo .mh-nombre {
+  display: inline-block;
+  padding: 7px 10px;
+
+  color: #e8faff;
+  background: rgba(122, 210, 245, 0.18);
+
+  border: 1px solid rgba(171, 234, 255, 0.4);
+  border-radius: 9px;
+
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+/* Visor de fotografías */
+.mh-visor-foto {
+  position: fixed;
+  max-width: min(1000px, 95vw);
+  max-height: 90dvh;
+
+  padding: 16px;
+
+  background: #08283f;
+  border: 2px solid #b1eaff;
+  border-radius: 18px;
+}
+
+.mh-visor-foto::backdrop {
+  background: rgba(0, 13, 28, 0.9);
+  backdrop-filter: blur(7px);
+}
+
+.mh-visor-foto img {
+  display: block;
+  max-width: 100%;
+  max-height: 78dvh;
+  margin: 0 auto;
+  object-fit: contain;
+}
+
+.mh-cerrar-foto {
+  display: block;
+  margin: 0 0 12px auto;
+  padding: 8px 14px;
+
+  color: #eaffff;
+  background: #205775;
+
+  border: 1px solid #a8ecff;
+  border-radius: 10px;
+
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+/* Tablet */
+@media (max-width: 950px) {
+  #museo .mh-vitrinas {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Móvil */
+@media (max-width: 600px) {
+  #museo .mh-vitrina {
+    padding: 10px;
+  }
+
+  #museo .mh-galeria {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  #museo .mh-medio {
+    height: 165px;
+  }
+
+  #museo .mh-vitrina h4 {
+    font-size: 1rem;
+  }
+
+  #museo .mh-nombre {
+    font-size: 0.75rem;
+  }
+}
+
+/* Accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+  #museo .mh-medio img {
+    transition: none;
+  }
+}
+
+/* EVITAR QUE LAS VITRINAS SE ESTIREN
+   POR CULPA DE LA TARJETA DE AL LADO */
+
+#museo .mh-vitrinas {
+  align-items: start;
+}
+
+#museo .mh-vitrina {
+  align-self: start;
+}
+
+/* ==========================================
+   CATEGORÍAS 2026 — EDICIÓN POLAR
+========================================== */
+
+#categorias.categorias-2026 {
+  width: min(1400px, 96%);
+  max-width: none;
+
+  margin: 28px auto;
+  padding: 30px;
+
+  background:
+    linear-gradient(
+      155deg,
+      rgba(5, 31, 52, 0.96),
+      rgba(10, 70, 103, 0.90)
+    );
+
+  border: 1px solid #a3e9ff;
+  border-radius: 26px;
+
+  box-shadow:
+    0 0 38px rgba(102, 210, 255, 0.16);
+}
+
+
+/* CABECERA */
+
+#categorias .categorias-cabecera {
+  text-align: center;
+
+  margin-bottom: 35px;
+  padding: 35px 20px;
+
+  background:
+    radial-gradient(
+      circle at top,
+      rgba(113, 216, 255, 0.22),
+      transparent 70%
+    ),
+    rgba(5, 35, 58, 0.74);
+
+  border:
+    1px solid rgba(168, 235, 255, 0.55);
+
+  border-radius: 20px;
+}
+
+#categorias .categorias-kicker {
+  color: #8fe5ff;
+
+  font-size: 0.75rem;
+  font-weight: 900;
+
+  letter-spacing: 3px;
+}
+
+#categorias .categorias-cabecera h2 {
+  margin: 15px 0 10px;
+
+  color: #effcff;
+
+  font-size: clamp(2rem, 4vw, 3.5rem);
+
+  text-shadow:
+    0 0 25px rgba(121, 223, 255, 0.45);
+}
+
+#categorias .categorias-cabecera p {
+  max-width: 650px;
+
+  margin:
+    0 auto 20px;
+
+  color: #c1e9f6;
+
+  line-height: 1.65;
+}
+
+
+/* CONTADOR */
+
+#categorias .categorias-contador {
+  display: inline-flex;
+
+  align-items: center;
+  gap: 8px;
+
+  padding: 9px 15px;
+
+  color: #daf7ff;
+
+  background:
+    rgba(105, 207, 246, 0.13);
+
+  border:
+    1px solid rgba(156, 231, 255, 0.45);
+
+  border-radius: 999px;
+}
+
+#categorias .categorias-contador strong {
+  color: #ffffff;
+  font-size: 1.1rem;
+}
+
+
+/* GRID */
+
+#categorias .categorias-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 20px;
+}
+
+
+/* TARJETA */
+
+#categorias .categoria-polar {
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+
+  margin: 0;
+  padding: 10px;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      160deg,
+      rgba(46, 111, 150, 0.7),
+      rgba(5, 31, 52, 0.96)
+    );
+
+  border:
+    1px solid rgba(166, 232, 255, 0.66);
+
+  border-radius: 18px;
+
+  color: white;
+  font-family: inherit;
+
+  cursor: pointer;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.16),
+    0 9px 25px rgba(0, 16, 32, .26);
+
+  transition:
+    transform .3s ease,
+    border-color .3s ease,
+    box-shadow .3s ease;
+}
+
+#categorias .categoria-polar:hover {
+  transform: translateY(-7px);
+
+  border-color: #e1f8ff;
+
+  box-shadow:
+    0 14px 32px rgba(0, 15, 34, .4),
+    0 0 25px rgba(111, 217, 255, .28);
+}
+
+
+/* IMAGEN */
+
+#categorias .categoria-imagen {
+  position: relative;
+
+  width: 100%;
+  height: 240px;
+
+  overflow: hidden;
+
+  background:
+    rgba(2, 21, 36, .8);
+
+  border:
+    2px solid #a8eaff;
+
+  border-radius: 13px;
+}
+
+#categorias .categoria-imagen img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  transition:
+    transform .4s ease,
+    filter .4s ease;
+}
+
+
+/* CAPA HELADA */
+
+#categorias .categoria-imagen::after {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(206, 247, 255, .20),
+      transparent 35%,
+      rgba(85, 194, 242, .10)
+    );
+
+  box-shadow:
+    inset 0 0 17px rgba(206, 247, 255, .32);
+}
+
+#categorias .categoria-polar:hover img {
+  transform: scale(1.06);
+
+  filter:
+    brightness(1.05)
+    saturate(.90);
+}
+
+
+/* NOMBRE */
+
+#categorias .categoria-polar h3 {
+  margin: 14px 7px 9px;
+
+  color: #e5faff;
+
+  font-size: .98rem;
+  font-weight: 800;
+
+  line-height: 1.35;
+
+  text-align: center;
+}
+
+
+/* TABLET */
+
+@media (max-width: 1050px) {
+
+  #categorias .categorias-grid {
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+  }
+
+}
+
+
+/* TABLET PEQUEÑA */
+
+@media (max-width: 760px) {
+
+  #categorias .categorias-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  #categorias .categoria-imagen {
+    height: 210px;
+  }
+
+}
+
+
+/* MÓVIL */
+
+@media (max-width: 480px) {
+
+  #categorias.categorias-2026 {
+    width: 96%;
+    padding: 14px;
+  }
+
+  #categorias .categorias-cabecera {
+    padding: 26px 12px;
+  }
+
+  #categorias .categorias-grid {
+    gap: 10px;
+  }
+
+  #categorias .categoria-polar {
+    padding: 6px;
+  }
+
+  #categorias .categoria-imagen {
+    height: 170px;
+  }
+
+  #categorias .categoria-polar h3 {
+    font-size: .80rem;
+  }
+
+}
+
+/* ==========================================
+   MODAL POLAR — CATEGORÍAS
+========================================== */
+
+#modalCategoria .modal-categoria-polar {
+  width: min(1050px, 94%);
+  max-width: 1050px;
+  max-height: 88vh;
+
+  margin: 5vh auto;
+  padding: 24px;
+
+  overflow-y: auto;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(5, 33, 55, 0.98),
+      rgba(11, 69, 101, 0.96)
+    );
+
+  border: 2px solid #a9eaff;
+  border-radius: 22px;
+
+  box-shadow:
+    0 0 45px rgba(101, 216, 255, 0.35);
+}
+
+#modalCategoria .modal-categoria-body {
+  display: grid;
+  grid-template-columns: 360px minmax(0, 1fr);
+  gap: 30px;
+  align-items: start;
+}
+
+#modalCategoria .modal-categoria-imagen {
+  width: 100%;
+
+  border: 3px solid #b7efff;
+  border-radius: 16px;
+
+  overflow: hidden;
+
+  background: #041b2d;
+
+  box-shadow:
+    0 0 22px rgba(121, 221, 255, 0.25);
+}
+
+#modalCategoria .modal-categoria-imagen img {
+  display: block;
+
+  width: 100%;
+  height: auto;
+
+  object-fit: contain;
+}
+
+#modalCategoria .modal-categoria-info {
+  padding: 12px 20px 12px 0;
+}
+
+#modalCategoria .modal-categoria-kicker {
+  display: inline-block;
+
+  margin-bottom: 12px;
+
+  color: #93e5ff;
+
+  font-size: 0.75rem;
+  font-weight: 900;
+
+  letter-spacing: 2px;
+}
+
+#modalCategoria #modalTituloCategoria {
+  margin: 0 0 20px;
+
+  color: #ffffff;
+
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+
+  line-height: 1.1;
+
+  text-shadow:
+    0 0 18px rgba(119, 221, 255, 0.35);
+}
+
+#modalCategoria #modalDescripcionCategoria {
+  margin: 0;
+
+  color: #ccecf7;
+
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+#modalCategoria .modal-categoria-estado {
+  display: inline-block;
+
+  margin-top: 25px;
+  padding: 10px 14px;
+
+  color: #e3f9ff;
+
+  background:
+    rgba(111, 210, 248, 0.14);
+
+  border:
+    1px solid rgba(168, 235, 255, 0.45);
+
+  border-radius: 999px;
+
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+#modalCategoria .cerrar {
+  position: absolute;
+  top: 10px;
+  right: 18px;
+
+  color: #bcefff;
+
+  font-size: 42px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+
+/* MÓVIL */
+
+@media (max-width: 700px) {
+
+  #modalCategoria .modal-categoria-polar {
+    padding: 16px;
+  }
+
+  #modalCategoria .modal-categoria-body {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  #modalCategoria .modal-categoria-info {
+    padding: 0;
+  }
+
 }

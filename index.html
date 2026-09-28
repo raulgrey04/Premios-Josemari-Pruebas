@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>PREMIOS J&P 2025</title>
+  <title>PREMIOS JOSEMARI 2026</title>
 
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
@@ -14,50 +14,84 @@
 <body>
   <!-- LOGIN -->
   <section id="login" class="seccion" style="display:block;">
-    <h2>Iniciar sesión</h2>
 
-    <div class="login-wrap">
-      <!-- COLLAGE IZQUIERDO -->
-      <div id="loginCollage" class="login-media masonry"></div>
+  <div class="login-header">
+    <span class="login-edicion">EDICIÓN POLAR</span>
+    <h2>PREMIOS JOSEMARI 2026</h2>
+  </div>
 
-      <!-- TARJETA DE LOGIN -->
-      <div class="login-card">
-        <div class="login-badge">
-          <img src="fotos/ImagenJosemari.png" alt="Josemari Awards">
-          <div>
-            <span class="eyebrow">JOSEMARI 2025</span>
-            <strong>Bienvenido a Premios Josemari</strong>
-          </div>
+  <div class="login-wrap">
+
+    <!-- COLLAGE DE FOTOS -->
+    <div id="loginCollage" class="login-media masonry"></div>
+
+    <!-- TARJETA DE LOGIN -->
+    <div class="login-card">
+
+      <div class="login-badge">
+        <img src="fotos/foto_perfil.png" alt="Premios Josemari">
+
+        <div>
+          <span class="eyebrow">JOSEMARI 2026</span>
+          <strong>Bienvenido</strong>
         </div>
-
-        <label class="field">
-          <span>Usuario</span>
-          <input id="loginUser" type="text" placeholder="Usuario">
-        </label>
-
-        <label class="field">
-          <span>Contraseña</span>
-          <input id="loginPass" type="password" placeholder="Contraseña">
-        </label>
-
-        <button id="btnLogin" class="btn gold btn-login">Entrar</button>
-        <p id="loginError" class="login-error" style="display:none;">
-          ❌ Usuario o contraseña incorrectos
-        </p>
-
-        <p class="login-hint">Solo participantes invitados ✨</p>
       </div>
+
+      <div class="login-card-intro">
+        Acceso exclusivo para participantes
+      </div>
+
+      <label class="field">
+        <span>Usuario</span>
+        <input id="loginUser" type="text" placeholder="Usuario">
+      </label>
+
+      <label class="field">
+        <span>Contraseña</span>
+        <input id="loginPass" type="password" placeholder="Contraseña">
+      </label>
+
+      <button id="btnLogin" class="btn gold btn-login">
+        Entrar
+      </button>
+
+      <p id="loginError" class="login-error" style="display:none;">
+        ❌ Usuario o contraseña incorrectos
+      </p>
+
+      <p class="login-hint">
+        ❄ Solo participantes invitados ❄
+      </p>
+
     </div>
-  </section>
+
+  </div>
+
+</section>
 
   <!-- CONTENIDO DE LA APP (oculto hasta login) -->
   <div id="appContent" style="display:none;">
     <nav class="top">
       <div class="nav-inner">
-        <div class="logo">Josemari Awards 2025</div>
-        <div class="nav-actions">
+        
+        <div class="logo">Josemari Awards 2026</div>
+
+        <!-- BOTÓN DEL MENÚ MÓVIL -->
+        <button
+          id="btnMenuMovil"
+          class="menu-movil-btn"
+          type="button"
+          aria-label="Abrir menú"
+          aria-expanded="false"
+          aria-controls="menuPrincipal"
+        >
+          ☰
+        </button>
+
+        <div class="nav-actions" id="menuPrincipal">
           <button class="btn" onclick="mostrarSeccion('inicio')">Inicio</button>
           <button class="btn" onclick="mostrarSeccion('participantes')">Participantes</button>
+          <button class="btn" onclick="mostrarSeccion('museo')">Museo</button>
           <button class="btn" onclick="mostrarSeccion('categorias')">Categorías</button>
           <button class="btn" onclick="mostrarSeccion('votacion')">Votar</button>
           <button class="btn" onclick="mostrarSeccion('votacion-nominados')">Votación nominados</button>
@@ -79,60 +113,338 @@
     </nav>
 
     <header class="hero seccion" id="inicio">
-      <div class="shine"></div>
-
-      <div class="hero-marquee izquierda" aria-hidden="true">
-        <div class="hero-stage"></div>
-      </div>
-
-      <div class="hero-inner">
-        <div class="hero-texto">
-          <span class="badge">JOSEMARI 2025</span>
-          <h1>Bienvenido a los Premios Josemari 2025</h1>
-          <p class="subtitle">!Web oficial de los premios josemari 2025, ya esta abierta la votación final, echale un ojo a las categorias y a los participantes de este año y vota, cada voto es decisivo, asi que a por ello!</p>
-          <div class="cta">
-            <button class="btn gold" onclick="mostrarSeccion('categorias')">Ver categorías</button>
-            <button class="btn" onclick="mostrarSeccion('participantes')">Ver participantes</button>
-          </div>
+      <!-- NIEVE ANIMADA -->
+      <div class="nieve-polar" aria-hidden="true">
+  <div class="nieve-capa nieve-lejana"></div>
+  <div class="nieve-capa nieve-cercana"></div>
         </div>
+        <div class="shine">
 
-        <div class="hero-imagen">
-          <img src="fotos/ImagenJosemari.png" alt="Imagen de inicio">
-        </div>
       </div>
 
-      <div class="hero-marquee derecha" aria-hidden="true">
-        <div class="hero-stage"></div>
-      </div>
-    </header>
+  <!-- TIRA SUPERIOR DE FOTOS -->
+  <div class="hero-strip hero-strip-top" aria-hidden="true">
+    <div class="hero-stage"></div>
   </div>
 
+  <div class="hero-inner inicio-showcase">
+    <div class="inicio-scene">
+
+      <!-- TEXTO IZQUIERDA -->
+      <div class="inicio-copy">
+        <span class="inicio-kicker">❄ EDICIÓN POLAR · 2026</span>
+
+        <h1 class="inicio-title">
+          PREMIOS<br>
+          <span>JOSEMARI III</span>
+        </h1>
+
+        <h2 class="inicio-subtitle">
+          Bienvenidos a lo mismo de siempre.
+        </h2>
+
+        <p class="inicio-desc">
+          Una nueva expedición al hielo. Vuelven los nominados, los momentazos,
+          las categorías míticas y muchas sorpresas. Descubre quién participa,
+          explora los premios y prepárate para votar en la gala más fría
+          de la historia de los Josemari.
+        </p>
+
+        <p class="inicio-mini">
+          D.E.P. Roberms y Fermoriv.
+        </p>
+
+        
+      </div>
+
+      <!-- IMAGEN PRINCIPAL DERECHA -->
+      <div class="inicio-stage">
+        <div class="inicio-poster-shell">
+          <div class="inicio-poster-glow"></div>
+          <img
+            src="fotos/cartel_oficial.png"
+            alt="Premios Josemari 2026"
+            class="inicio-poster"
+          >
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <img src="fotos/pingüinos.png" alt="Pingüinos llevando premios" class="pinguinos-decoracion">
+
+  <!-- TIRA INFERIOR DE FOTOS -->
+  <div class="hero-strip hero-strip-bottom" aria-hidden="true">
+    <div class="hero-stage"></div>
+  </div>
+</header>
+
+
 <main>
-    <!-- PARTICIPANTES -->
-    <section id="participantes" class="seccion">
-      <h2>Participantes</h2>
-      <div class="grid-participantes">
-        <div class="participante"><img src="fotos/asieras.jpeg" alt="Asieras"><h3>Asieras</h3></div>
-        <div class="participante"><img src="fotos/rulillas.jpeg" alt="Rulillas"><h3>Rulillas</h3></div>
-        <div class="participante"><img src="fotos/dario.jpeg" alt="Darawayas"><h3>Darawayas</h3></div>
-        <div class="participante"><img src="fotos/ivanp.jpeg" alt="Ivanpechotes"><h3>Ivanpechotes</h3></div>
-        <div class="participante"><img src="fotos/dani.jpeg" alt="Danigg"><h3>DaniGG</h3></div>
-        <div class="participante"><img src="fotos/Lucia.jpeg" alt="Lusilu"><h3>Lusilu</h3></div>
-        <div class="participante"><img src="fotos/ines.jpeg" alt="Almansa"><h3>Almansa</h3></div>
-        <div class="participante"><img src="fotos/rober.jpeg" alt="Robertuki"><h3>Robertuki</h3></div>
-        <div class="participante"><img src="fotos/marco.jpeg" alt="Toñaco"><h3>Toñaco</h3></div>
-        <div class="participante"><img src="fotos/manu.jpeg" alt="Manolo"><h3>Manolo</h3></div>
-        <div class="participante"><img src="fotos/mario.jpeg" alt="Kastor"><h3>Kastor</h3></div>
-        <div class="participante"><img src="fotos/maria.jpeg" alt="Maria"><h3>Maria</h3></div>
-        <div class="participante"><img src="fotos/gamepro.jpeg" alt="Gamepro"><h3>Gamepro</h3></div>
-        <div class="participante"><img src="fotos/fervico.jpeg" alt="El Enano"><h3>El Enano</h3></div>
-        <div class="participante"><img src="fotos/Poru.jpeg" alt="Poru"><h3>Poru</h3></div>
-        <div class="participante"><img src="fotos/iker.jpeg" alt="Ikardo"><h3>Ikardo</h3></div>
-        <div class="participante"><img src="fotos/Fermoriv.jpeg" alt="Fermoriv"><h3>Fermoriv</h3></div>
-        <div class="participante"><img src="fotos/labrada.jpeg" alt="Lab el Viejo"><h3>Lab el Viejo</h3></div>
-<!-- Modal para mostrar participante -->
-</div>
+
+<!-- PARTICIPANTES -->
+<section id="participantes" class="seccion">
+
+  <h2>❄ LOS 16 PINGÜINOS ❄</h2>
+
+  <div class="grid-participantes">
+
+    <!-- 1. ASIERAS -->
+    <div class="participante">
+      <div class="participante-foto">
+        <img src="fotos/asieras.jpeg" alt="Asieras">
+      </div>
+      <h3>Asieras</h3>
+    </div>
+
+    <!-- 2. RULILLAS -->
+    <div class="participante">
+      <div class="participante-foto">
+        <img src="fotos/rulillas.jpeg" alt="Rulillas">
+      </div>
+      <h3>Rulillas</h3>
+    </div>
+
+    <!-- 3. DARAWAYAS -->
+    <div class="participante">
+      <div class="participante-foto">
+        <img src="fotos/dario.jpeg" alt="Darawayas">
+      </div>
+      <h3>Darawayas</h3>
+    </div>
+
+    <!-- 4. IVANPECHOTES -->
+    <div class="participante">
+      <div class="participante-foto">
+        <img src="fotos/ivanp.jpeg" alt="Ivanpechotes">
+      </div>
+      <h3>Ivanpechotes</h3>
+    </div>
+
+    <!-- 5. DANIGG -->
+    <div class="participante">
+      <div class="participante-foto">
+        <img src="fotos/dani.jpeg" alt="DaniGG">
+      </div>
+      <h3>DaniGG</h3>
+    </div>
+
+    <!-- 6. LUSILU -->
+    <div class="participante">
+      <div class="participante-foto">
+        <img src="fotos/Lucia.jpeg" alt="Lusilu">
+      </div>
+      <h3>Lusilu</h3>
+    </div>
+
+    <!-- 7. ALMANSA -->
+    <div class="participante">
+      <div class="participante-foto">
+        <img src="fotos/ines.jpeg" alt="Almansa">
+      </div>
+      <h3>Almansa</h3>
+    </div>
+
+    <!-- 8. TOÑACO -->
+    <div class="participante">
+      <div class="participante-foto">
+        <img src="fotos/marco.jpeg" alt="Toñaco">
+      </div>
+      <h3>Toñaco</h3>
+    </div>
+
+    <!-- 9. MANOLO -->
+    <div class="participante">
+      <div class="participante-foto">
+        <img src="fotos/manu.jpeg" alt="Manolo">
+      </div>
+      <h3>Manolo</h3>
+    </div>
+
+    <!-- 10. KASTOR -->
+    <div class="participante">
+      <div class="participante-foto">
+        <img src="fotos/mario.jpeg" alt="Kastor">
+      </div>
+      <h3>Kastor</h3>
+    </div>
+
+    <!-- 11. MARIA -->
+    <div class="participante">
+      <div class="participante-foto">
+        <img src="fotos/maria.jpeg" alt="Maria">
+      </div>
+      <h3>Maria</h3>
+    </div>
+
+    <!-- 12. GAMEPRO -->
+    <div class="participante">
+      <div class="participante-foto">
+        <img src="fotos/gamepro.jpeg" alt="Gamepro">
+      </div>
+      <h3>Gamepro</h3>
+    </div>
+
+    <!-- 13. EL ENANO -->
+    <div class="participante">
+      <div class="participante-foto">
+        <img src="fotos/fervico.jpeg" alt="El Enano">
+      </div>
+      <h3>El Enano</h3>
+    </div>
+
+    <!-- 14. PORU -->
+    <div class="participante">
+      <div class="participante-foto">
+        <img src="fotos/Poru.jpeg" alt="Poru">
+      </div>
+      <h3>Poru</h3>
+    </div>
+
+    <!-- 15. IKARDO -->
+    <div class="participante">
+      <div class="participante-foto">
+        <img src="fotos/iker.jpeg" alt="Ikardo">
+      </div>
+      <h3>Ikardo</h3>
+    </div>
+
+    <!-- 16. LAB EL VIEJO -->
+    <div class="participante">
+      <div class="participante-foto">
+        <img src="fotos/labrada.jpeg" alt="Lab el Viejo">
+      </div>
+      <h3>Lab el Viejo</h3>
+    </div>
+
+  </div>
+
 </section>
+
+
+
+<!-- =====================================
+     MUSEO DEL HIELO
+===================================== -->
+
+<section id="museo" class="seccion museo-hielo">
+
+  <!-- VESTÍBULO -->
+  <div id="museoVestibulo" class="mh-vista">
+
+    <div class="museo-portada">
+      <span class="museo-etiqueta">
+        ❄ ARCHIVO HISTÓRICO ❄
+      </span>
+
+      <h2>EL MUSEO DEL HIELO</h2>
+
+      <p>
+        Dos galas, muchas autistadas y muchos momentos que quedaran para la historia
+      </p>
+
+      <span class="museo-lema">
+        Lo que pasa en los Josemari, se queda congelado.
+      </span>
+    </div>
+
+    <!-- PUERTAS DE LAS SALAS -->
+    <div class="mh-puertas">
+
+      <button
+        class="mh-puerta"
+        type="button"
+        data-museo-abrir="2024"
+      >
+        <span class="mh-puerta-icono">🏆</span>
+        <span class="mh-puerta-etiqueta">SALA I</span>
+        <strong>JOSEMARI I</strong>
+        <span>2024 · El origen de la leyenda</span>
+        <span class="mh-entrar">ENTRAR EN LA SALA →</span>
+      </button>
+
+      <button
+        class="mh-puerta"
+        type="button"
+        data-museo-abrir="2025"
+      >
+        <span class="mh-puerta-icono">🏆</span>
+        <span class="mh-puerta-etiqueta">SALA II</span>
+        <strong>JOSEMARI II</strong>
+        <span>2025 · La historia continúa</span>
+        <span class="mh-entrar">ENTRAR EN LA SALA →</span>
+      </button>
+
+    </div>
+
+    <!-- TERCERA SALA -->
+    <div class="museo-proximamente">
+
+      <span>🧊 PRÓXIMA EXPOSICIÓN</span>
+
+      <h3>LAS RELIQUIAS PROHIBIDAS</h3>
+
+      <p>
+        Memes históricos, fotografías, vídeos
+        y momentos que jamás deberían olvidarse.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- SALA 2024 -->
+  <div id="museoSala2024" class="mh-vista" hidden>
+
+    <button class="mh-volver" type="button">
+      ← Volver al museo
+    </button>
+
+    <div class="mh-cabecera">
+      <span>🏆 SALA I · 2024</span>
+      <h2>PREMIOS JOSEMARI I</h2>
+      <p>Donde comenzó la leyenda.</p>
+    </div>
+
+
+    <h3 class="mh-titulo">🏛️ EXPOSICIÓN HISTÓRICA · 2024</h3>
+      <p class="mh-introduccion">
+        Las fotografías y los ganadores de la primera edición.
+      </p>
+
+    <div id="museoGanadores2024" class="mh-vitrinas"></div>
+
+  </div>
+
+
+  <!-- SALA 2025 -->
+  <div id="museoSala2025" class="mh-vista" hidden>
+
+    <button class="mh-volver" type="button">
+      ← Volver al museo
+    </button>
+
+    <div class="mh-cabecera">
+      <span>🏆 SALA II · 2025</span>
+      <h2>PREMIOS JOSEMARI II</h2>
+      <p>La segunda expedición de los Josemari.</p>
+    </div>
+
+
+    <h3 class="mh-titulo">🏛️ EXPOSICIÓN HISTÓRICA · 2025</h3>
+      <p class="mh-introduccion">
+        Los momentos que hicieron historia en los Josemari II.
+      </p>
+
+    <div id="museoGanadores2025" class="mh-vitrinas"></div>
+
+  </div>
+
+</section>
+
+
 
   <section id="tu-votacion" class="seccion" style="display:none;">
   <h2>Tu votación</h2>
@@ -158,18 +470,44 @@
 </section>
 
 
-<!-- Modal fuera de la sección -->
+
+<!-- MODAL DE PARTICIPANTE: PALMARÉS -->
+
 <div id="modalParticipante" class="modal">
-    <div class="modal-contenido">
-      <span class="cerrar">&times;</span>
-      <div class="modal-body">
-        <img id="modalImagen" src="" alt="">
-        <div class="modal-texto">
-          <p id="modalDescripcion"></p>
-        </div>
+
+  <div class="modal-contenido modal-palmares-contenido">
+
+    <span class="cerrar">&times;</span>
+
+    <div class="modal-body">
+
+      <!-- IZQUIERDA: FOTOGRAFÍA -->
+      <div class="modal-left">
+        <img id="modalImagen" src="" alt="Participante">
       </div>
+
+      <!-- DERECHA: NOMBRE Y PALMARÉS -->
+      <div class="modal-right">
+
+        <h2 id="modalNombre"></h2>
+
+        <h3 class="palmares-title">🏆 PALMARÉS</h3>
+
+        <div id="modalPalmares" class="palmares-list">
+          <!-- Aquí aparecerán sus premios -->
+        </div>
+
+        <!-- Conservamos este elemento para no romper
+             el JavaScript anterior -->
+        <p id="modalDescripcion" hidden></p>
+
+      </div>
+
     </div>
+
   </div>
+
+</div>
   <!-- Lightbox de vídeo -->
 <!-- Lightbox de vídeo (UNO solo) -->
 <div id="videoLightbox" class="video-modal" hidden
@@ -187,141 +525,490 @@
     <img id="lightboxImage" alt="">
   </div>
 </div>
-<!-- CATEGORÍAS -->
-<section id="categorias" class="seccion">
-  <h2>Categorías</h2>
-  <div class="grid-participantes">
-    <div class="categoria" data-descripcion="Boracho del Año: La persona que mas se ha puesto hasta el culo en todo el año, nose si tanto como en la foto porque vaya cogorza lleva mi colegon el reparte melones, asi da gusto, esta categoria es para los valientes y para los que le echan cojones ostia.">
-      <img src="fotos/borracho.jpeg" alt="Borracho del año">
-      <h3> Borracho del año</h3>
+<!-- =====================================
+     CATEGORÍAS 2026
+===================================== -->
+
+<!-- =====================================
+     CATEGORÍAS 2026
+===================================== -->
+
+<section id="categorias" class="seccion categorias-2026">
+
+  <div class="categorias-cabecera">
+
+    <span class="categorias-kicker">
+      ❄ PREMIOS JOSEMARI III ❄
+    </span>
+
+    <h2>CATEGORÍAS 2026</h2>
+
+    <p>
+      Estas son las categorías confirmadas de la tercera edición.
+      Próximamente se añadirán las categorías restantes.
+    </p>
+
+    <div class="categorias-contador">
+      <strong>26</strong>
+      <span>categorías confirmadas</span>
     </div>
-    <div class="categoria" data-descripcion="Fiestero del Año: el tio que mas ha salido de fiesta este año, y el que se haga de notar, no vale salir de fiesta y estar como un puto palo de madera, tienes que ir igual de encocao como el puto Jero Pajero.">
-      <img src="fotos/fiestero.jpeg" alt="Fiestero del año">
-      <h3> Fiestero del año</h3>
-    </div>
-    <div class="categoria" data-descripcion="Viajero del Año: esa persona que no para de viajar en todo el puto año, viajero del año es el que mas viaja en genaral, aun que sean destinos cortos o no muy conocidos,no porque haya ido a un destino super tocho ya es viajero, no tenemos registros de todos asi que se considera el que más viajes haya hecho.">
-      <img src="fotos/viajero.jpeg" alt="Viejero del año">
-      <h3> Viajero del año</h3>
-    </div>
-    <div class="categoria" data-descripcion="Palabra/Frase del Año: La palabra o frase que mas hemos dicho en este año, vale cualquier cosa, eso si la tenemos que haber dicho mucho o que haya destacado en un momentazo.">
-      <img src="fotos/palabra.jpeg" alt="Palabra del año">
-      <h3> Palabra/Frase del año</h3>
-    </div>
-    <div class="categoria" data-descripcion="Trio/Cuarteto del año: Ese trio o cuarteto que mas tiempo ha estado juntos, que creas que no se separan ni para atras o que hacen muy buen trio o cuarteto(no en sentido sexual), si no que pegan mucho o tienen muy buena quimica, un ejemplo claro de trio o un cuarteto es el de la foto, uf que pechotes, solo para entendidos jjj.">
-      <img src="fotos/trio.jpeg" alt="Trio/Cuarteto del año">
-      <h3> Trio/Cuarteto del año</h3>
-    </div>
-    <div class="categoria" data-descripcion="Mejor Personaje fuera de JYP: La persona fuera del grupo que nos ha dado risas y buenos momentos y que creais que ha destacado potencialmente a lo largo del año.">
-      <img src="fotos/mpersonaje.jpeg" alt="Mejor Personaje fuera de JyP">
-      <h3> Mejor Personaje fuera de JyP</h3>
-    </div>
-    <div class="categoria" data-descripcion="Fiesta del Año: poco que decir de esta categoria, la fiesta mas prime del año, que mas cosas recuerdes, que mejor te lo hayas pasado.">
-      <img src="fotos/fiesta.jpeg" alt="Fiesta del año">
-      <h3> Fiesta del año</h3>
-    </div>
-    <div class="categoria" data-descripcion="Autistada del Año: Esa persona que ha hecho una autistada historica en este año.">
-      <img src="fotos/autistada.jpg" alt="Autistada del año">
-      <h3> Autistada del año</h3>
-    </div>
-    <div class="categoria" data-descripcion="Broma del Año: esta categoria se refiere a la broma mas original o a la mas graciosa de este año, pobre Javichu como se las llevaba puesta.">
-      <img src="fotos/broma.jpeg" alt="Broma del año">
-      <h3> Broma del año</h3>
-    </div>
-    <div class="categoria" data-descripcion="Foto del Año: categoria muy parecida a video del año, es la foto mas historica de este año, que la veas y digas ostia puta que locura.">
-      <img src="fotos/foto.jpeg" alt="Foto del año">
-      <h3> Foto del año</h3>
-    </div>
-    <div class="categoria" data-descripcion="Video del Año: El video mas iconico de este año, gracioso, deprimente, espeluznante.... el ganador será el protagonista del video, no el que lo graba a no ser que sea un caso especial.">
-      <img src="fotos/video.jpeg" alt="Video del año">
-      <h3> Video del año</h3>
-    </div>
-    <div class="categoria" data-descripcion="Mote del Año: El mote mas carismatico de este año a una persona del grupo el año pasado nos deleitaron con multiples motes y esta categoria estuvo muy igualada, chichotas pocoyo, toputropu....">
-      <img src="fotos/mote.jpeg" alt="Mote del año">
-      <h3> Mote del año</h3>
-    </div>
-    <div class="categoria" data-descripcion="Más Guarro: La persona mas salida del grupo, el que cuenta mas barabridades de sexo o que se quiere tirar a todas o a todos.">
-      <img src="fotos/guarrete.jpeg" alt="Guarrete del año">
-      <h3> Guarrete del año</h3>
-    </div>
-    <div class="categoria" data-descripcion="Fail del Año: El momento en el que fue pinchada historica o la liaeste parda, pero que luego nos descojonamos todos.">
-      <img src="fotos/fail.jpeg" alt="Fail del año">
-      <h3> Fail del año</h3>
-    </div>
-    <div class="categoria" data-descripcion="Mejor momento del Año: El momento mas divertido o mas historico del año y que todos recordamos con felicidad y con epicidad.">
-      <img src="fotos/m_momento.jpeg" alt="Mejor momento del año">
-      <h3> Mejor momento del año</h3>
-    </div>
-    <div class="categoria" data-descripcion="Meme del Año: Una de las nuevas categorias donde la gracia es ver quien ha hecho el mejor meme, ya puede ser el Make it meme o alguna gilipollez que consideremos como meme del año.">
-      <img src="fotos/meme.jpeg" alt="Meme del año">
-      <h3> Meme del año</h3>
-    </div>
-    <div class="categoria" data-descripcion="Brainrot del Año: Esta categoria es una de esas de las cuales pues hay bastantes dudas, aqui hay que evaluar los 18 brainrot que hizo  la cuenta y tienes que evaluar su audio y su diseño.">
-      <img src="fotos/brainhot.jpeg" alt="Braihot del año">
-      <h3> Braihot del año</h3>
-    </div>
-    <div class="categoria" data-descripcion="Correa del Año: Poco que decir de esta categoria, la persona mas atada por la novia o el novio jjj.">
-      <img src="fotos/correon.jpeg" alt="Correon del año">
-      <h3> Correon del año</h3>
-    </div>
-    <div class="categoria" data-descripcion="Objeto del Año: Ese objeto que ha sido recordado como una leyenda, o ha sido historico en un momento dado.">
-      <img src="fotos/objeto.jpg" alt="Objeto del año">
-      <h3> Objeto del año</h3>
-    </div>
-    <div class="categoria" data-descripcion="Llorón del Año: Esa persona que se queja por todo, que todo le parece mal, que siempre protesta por todo y que llora mas que Vinicius jugando al furbo.">
-      <img src="fotos/lloron.jpeg" alt="Llorón del año">
-      <h3> Llorón del año</h3>
-    </div>
-    <div class="categoria" data-descripcion="El que Mejor Viste del Año: El tio con el mejor oufit durante todo el año, es una categoria algo subjetiva, ya que cada uno tiene su estilo de vestir, aqui se premia al que siempre vaya guapete.">
-      <img src="fotos/mejorviste.jpeg" alt="El que mejor viste del año">
-      <h3> El que mejor viste del año</h3>
-    </div>
-    <div class="categoria" data-descripcion="Peor momento del año: El momento que peor lo hemos pasado, tipo que lo hemos sufrido hasta el final, pero luego lo recuerdes y de risa.">
-      <img src="fotos/p_momento.jpeg" alt="Peor momento del año">
-      <h3> Peor momento del año</h3>
-    </div>
-    <div class="categoria" data-descripcion="Papi/Mami del Año: La persona que se preocupa por todos, que organiza los viajes, la mas responsable, el mas moderado, ese es nuestro Papito">
-      <img src="fotos/papi.jpg" alt="Papi/Mami del año">
-      <h3> Papi/Mami del año</h3>
-    </div>
-    <div class="categoria" data-descripcion="Picado/a del Año: Poco que decir de esta categoria, el tio o la tia que mas se pica o mas se enfada en todos los sitios ya sea futbol, fortnite o el Hellow Kitty Online.">
-      <img src="fotos/competititivo.png" alt="Picado/a del año">
-      <h3> Picado/a del año</h3>
-    </div>
-    <div class="categoria" data-descripcion="Mensaje del Año: Los mensajes mas iconicos del grupo, ya sean graciosos, que den verguenza o pena ">
-      <img src="fotos/mensaje.jpeg" alt="Mensaje del año">
-      <h3> Mensaje del año</h3>
-    </div>
-    <div class="categoria" data-descripcion="Soltero del año: La persona que más sola ha estado este año es decir la que no se ha comido ningún rosco, esta categoria es para los soldados caidos en combate">
-      <img src="fotos/soltero.jpeg" alt="Solteros del año">
-      <h3> Soltero del año</h3>
-    </div>    <div class="categoria" data-descripcion="Baile del año: la perosna mas bailonga del grupo el que haya hecho el mejor baile de este año es el merecedor del premio al Baile del año">
-      <img src="fotos/Baile.jpeg" alt="Baile del año">
-      <h3> Baile del año</h3>
-    </div>    <div class="categoria" data-descripcion="Decepción del Año: Persona que no ha estado mucho durante el año, ha fallado en más cosas o ha estado en su peor momento, esta categoria sirve para aumentar tu animo y que seas el prime el año que viene asi que si ganas, animate y esfuezate más JOPUTA.">
-      <img src="fotos/decepcion.jpeg" alt="Decepción del año">
-      <h3> Decepción del año</h3>
-    </div>    <div class="categoria" data-descripcion="Revelación del Año: La persona que no se esperaba nada de ella este año pero ha dado el Boom y ha subido escalones en el Ranking y ahora es de las cabras">
-      <img src="fotos/revelacion.png" alt="Revelación del año">
-      <h3> Revelación del año</h3>
-    </div>    <div class="categoria" data-descripcion="MVP:Y como no la joya de la corona, la guinda del pastel, MVP DEL AÑO, la persona que ha estado en todo, ha hecho más cosas y ha estado con todo el mundo, esta es la categoria principal de estos premios y hay que estar muy prime para llevarsela.">
-      <img src="fotos/mvp.png" alt="MVP del año">
-      <h3> MVP del año</h3>
-    </div>
+
   </div>
+
+
+  <div id="gridCategorias2026" class="categorias-grid">
+
+
+    <!-- 01 AUTISTADA -->
+    <button
+      class="categoria categoria-polar"
+      data-descripcion="Premio al momento más absurdo, surrealista o completamente innecesario que haya ocurrido durante el año. Algo que no tenía ningún sentido y, aun así, pasó."
+    >
+      <div class="categoria-imagen">
+        <img
+          src="fotos/autistada.png"
+          alt="Autistada del Año"
+        >
+      </div>
+
+      <h3>Autistada del Año</h3>
+    </button>
+
+
+    <!-- 02 BORRACHERA -->
+    <button
+      class="categoria categoria-polar"
+      data-descripcion="Premio a la persona que haya protagonizado la borrachera más histórica del año. Una noche de esas que al día siguiente necesitan explicaciones."
+    >
+      <div class="categoria-imagen">
+        <img
+          src="fotos/borrachera.png"
+          alt="Borrachera del Año"
+        >
+      </div>
+
+      <h3>Borrachera del Año</h3>
+    </button>
+
+
+    <!-- 03 BROMA -->
+    <button
+      class="categoria categoria-polar"
+      data-descripcion="Premio a la broma más histórica del año. Esa que hizo reír a prácticamente todo el mundo… probablemente excepto a la víctima."
+    >
+      <div class="categoria-imagen">
+        <img
+          src="fotos/broma.png"
+          alt="Broma del Año"
+        >
+      </div>
+
+      <h3>Broma del Año</h3>
+    </button>
+
+
+    <!-- 04 DECEPCIÓN -->
+    <button
+      class="categoria categoria-polar"
+      data-descripcion="Premio a la persona que más haya decepcionado durante el año. Prometía mucho, esperábamos grandes cosas… y algo salió regular."
+    >
+      <div class="categoria-imagen">
+        <img
+          src="fotos/decepcion.png"
+          alt="Decepción del Año"
+        >
+      </div>
+
+      <h3>Decepción del Año</h3>
+    </button>
+
+
+    <!-- 05 ENEMIGO -->
+    <button
+      class="categoria categoria-polar"
+      data-descripcion="Premio a la persona que más hate ha recibido por parte del grupo durante este año. El rival oficial, voluntaria o involuntariamente."
+    >
+      <div class="categoria-imagen">
+        <img
+          src="fotos/enemigo.png"
+          alt="Enemigo de CT del Año"
+        >
+      </div>
+
+      <h3>Enemigo de CT del Año</h3>
+    </button>
+
+
+    <!-- 06 FAIL -->
+    <button
+      class="categoria categoria-polar"
+      data-descripcion="Premio a ese momento en el que algo salió espectacularmente mal. Una actuación que seguramente nadie quiera repetir, pero que todos recordaremos."
+    >
+      <div class="categoria-imagen">
+        <img
+          src="fotos/fail.png"
+          alt="Fail del Año"
+        >
+      </div>
+
+      <h3>Fail del Año</h3>
+    </button>
+
+
+    <!-- 07 FIESTA -->
+    <button
+      class="categoria categoria-polar"
+      data-descripcion="Premio a la mejor fiesta en la que hayamos estado durante el año. Por ambiente, momentazos, historias posteriores o porque simplemente fue imposible superarla."
+    >
+      <div class="categoria-imagen">
+        <img
+          src="fotos/fiesta.png"
+          alt="Fiesta del Año"
+        >
+      </div>
+
+      <h3>Fiesta del Año</h3>
+    </button>
+
+
+    <!-- 08 FIESTERO -->
+    <button
+      class="categoria categoria-polar"
+      data-descripcion="Premio a la persona que más vive por y para la fiesta. No basta con salir mucho: hay que hacerse notar, aguantar y dejar momentos para el recuerdo."
+    >
+      <div class="categoria-imagen">
+        <img
+          src="fotos/fiestero.png"
+          alt="Fiestero del Año"
+        >
+      </div>
+
+      <h3>Fiestero del Año</h3>
+    </button>
+
+
+    <!-- 09 FOTO -->
+    <button
+      class="categoria categoria-polar"
+      data-descripcion="Premio a la mejor fotografía tomada durante el año. Puede ser por lo épica, lo graciosa, lo inesperada o porque simplemente captura un momento perfecto."
+    >
+      <div class="categoria-imagen">
+        <img
+          src="fotos/foto.png"
+          alt="Foto del Año"
+        >
+      </div>
+
+      <h3>Foto del Año</h3>
+    </button>
+
+
+    <!-- 10 LLORÓN -->
+    <button
+      class="categoria categoria-polar"
+      data-descripcion="Premio a la persona que más se ha quejado durante el año. Todo le molesta, todo es injusto y siempre existe algún motivo nuevo para protestar."
+    >
+      <div class="categoria-imagen">
+        <img
+          src="fotos/lloron.png"
+          alt="Llorón del Año"
+        >
+      </div>
+
+      <h3>Llorón del Año</h3>
+    </button>
+
+
+    <!-- 11 MEJOR MOMENTO -->
+    <button
+      class="categoria categoria-polar"
+      data-descripcion="Premio al momento más épico, especial o inolvidable de todo el año. El acontecimiento que representa lo mejor de estos últimos doce meses."
+    >
+      <div class="categoria-imagen">
+        <img
+          src="fotos/mejormomento.png"
+          alt="Mejor Momento del Año"
+        >
+      </div>
+
+      <h3>Mejor Momento del Año</h3>
+    </button>
+
+
+    <!-- 12 MEJOR PADELISTA -->
+    <button
+      class="categoria categoria-polar"
+      data-descripcion="Premio a la persona que mejor haya jugado al pádel durante este año. Aquí cuentan el nivel, los partidazos y quién ha demostrado ser el menos paquete con una pala en la mano."
+    >
+      <div class="categoria-imagen">
+        <img
+          src="fotos/mejorpadelista.png"
+          alt="Mejor Padelista del Año"
+        >
+      </div>
+
+      <h3>Mejor Padelista del Año</h3>
+    </button>
+
+
+    <!-- 13 MENSAJE -->
+    <button
+      class="categoria categoria-polar"
+      data-descripcion="Premio al mensaje más divertido, inesperado, original o simplemente histórico que haya aparecido por el grupo durante el año."
+    >
+      <div class="categoria-imagen">
+        <img
+          src="fotos/mensaje.png"
+          alt="Mensaje del Año"
+        >
+      </div>
+
+      <h3>Mensaje del Año</h3>
+    </button>
+
+
+    <!-- 14 MOTE -->
+    <button
+      class="categoria categoria-polar"
+      data-descripcion="Premio al mejor mote creado durante el año. Cuanto más absurdo, pegadizo y utilizado haya terminado siendo, mejor."
+    >
+      <div class="categoria-imagen">
+        <img
+          src="fotos/mote.png"
+          alt="Mote del Año"
+        >
+      </div>
+
+      <h3>Mote del Año</h3>
+    </button>
+
+
+    <!-- 15 MVP -->
+    <button
+      class="categoria categoria-polar"
+      data-descripcion="El premio gordo. Se lo lleva la persona que mejor año haya tenido en general: por momentazos, presencia, historias y aportación al grupo."
+    >
+      <div class="categoria-imagen">
+        <img
+          src="fotos/mvp.png"
+          alt="MVP del Año"
+        >
+      </div>
+
+      <h3>MVP del Año</h3>
+    </button>
+
+
+    <!-- 16 OBJETO -->
+    <button
+      class="categoria categoria-polar"
+      data-descripcion="Premio al objeto que, por algún motivo, haya terminado teniendo más protagonismo del que debería. Carismático, mítico o simplemente inexplicable."
+    >
+      <div class="categoria-imagen">
+        <img
+          src="fotos/objeto.png"
+          alt="Objeto del Año"
+        >
+      </div>
+
+      <h3>Objeto del Año</h3>
+    </button>
+
+
+    <!-- 17 OUTFIT -->
+    <button
+      class="categoria categoria-polar"
+      data-descripcion="Premio al mejor conjunto que haya llevado una persona en un día concreto. Elegancia, originalidad o simplemente un outfit imposible de olvidar."
+    >
+      <div class="categoria-imagen">
+        <img
+          src="fotos/outfit.png"
+          alt="Outfit del Año"
+        >
+      </div>
+
+      <h3>Outfit del Año</h3>
+    </button>
+
+
+    <!-- 18 PALABRA / FRASE -->
+    <button
+      class="categoria categoria-polar"
+      data-descripcion="Premio a esa palabra o frase que hemos repetido hasta destrozarla durante todo el año y que ya forma parte del vocabulario oficial del grupo."
+    >
+      <div class="categoria-imagen">
+        <img
+          src="fotos/palabra.png"
+          alt="Palabra o Frase del Año"
+        >
+      </div>
+
+      <h3>Palabra/Frase del Año</h3>
+    </button>
+
+
+    <!-- 19 PEOR MOMENTO -->
+    <button
+      class="categoria categoria-polar"
+      data-descripcion="Premio al momento más desastroso, incómodo o lamentable del año. El típico momento que todos preferiríamos borrar de la historia."
+    >
+      <div class="categoria-imagen">
+        <img
+          src="fotos/peormomento.png"
+          alt="Peor Momento del Año"
+        >
+      </div>
+
+      <h3>Peor Momento del Año</h3>
+    </button>
+
+
+    <!-- 20 PEOR PLAYUS -->
+    <button
+      class="categoria categoria-polar"
+      data-descripcion="Premio a la persona que peor haya jugado al Playus este año. Fallos inexplicables, decisiones cuestionables y actuaciones que deberían estudiarse."
+    >
+      <div class="categoria-imagen">
+        <img
+          src="fotos/peorplayus.png"
+          alt="Peor Playus del Año"
+        >
+      </div>
+
+      <h3>Peor Playus del Año</h3>
+    </button>
+
+
+    <!-- 21 PERSONAJE FUERA DE CT -->
+    <button
+      class="categoria categoria-polar"
+      data-descripcion="Premio a esa persona que no forma parte del grupo pero que, aun así, nos ha regalado algunos de los mejores momentos del año."
+    >
+      <div class="categoria-imagen">
+        <img
+          src="fotos/personaje.png"
+          alt="Mejor Personaje Fuera de CT del Año"
+        >
+      </div>
+
+      <h3>Mejor Personaje Fuera de CT del Año</h3>
+    </button>
+
+
+    <!-- 22 PRINCESO -->
+    <button
+      class="categoria categoria-polar"
+      data-descripcion="Premio a la persona que más correa ha tenido este año. Da exactamente igual que tenga pareja o no: aquí se valoran los hechos."
+    >
+      <div class="categoria-imagen">
+        <img
+          src="fotos/princeso.png"
+          alt="Princeso del Año"
+        >
+      </div>
+
+      <h3>Princeso del Año</h3>
+    </button>
+
+
+    <!-- 23 REVELACIÓN -->
+    <button
+      class="categoria categoria-polar"
+      data-descripcion="Premio a la persona que más haya sorprendido para bien durante este año. Alguien de quien quizá no esperábamos tanto y que acabó dando muchísimo juego."
+    >
+      <div class="categoria-imagen">
+        <img
+          src="fotos/revelacion.png"
+          alt="Revelación del Año"
+        >
+      </div>
+
+      <h3>Revelación del Año</h3>
+    </button>
+
+
+    <!-- 24 STICKER -->
+    <button
+      class="categoria categoria-polar"
+      data-descripcion="Premio al sticker más mítico del año: el más utilizado, el más gracioso o ese que aparece en cualquier conversación sin importar el contexto."
+    >
+      <div class="categoria-imagen">
+        <img
+          src="fotos/sticker.png"
+          alt="Sticker del Año"
+        >
+      </div>
+
+      <h3>Sticker del Año</h3>
+    </button>
+
+
+    <!-- 25 VIAJERO -->
+    <button
+      class="categoria categoria-polar"
+      data-descripcion="Premio a la persona que más haya viajado durante el año, ya sea por cantidad de viajes, lugares visitados o por no saber estarse quieta en casa."
+    >
+      <div class="categoria-imagen">
+        <img
+          src="fotos/viajero.png"
+          alt="Viajero del Año"
+        >
+      </div>
+
+      <h3>Viajero del Año</h3>
+    </button>
+
+
+    <!-- 26 VÍDEO -->
+    <button
+      class="categoria categoria-polar"
+      data-descripcion="Premio al vídeo más épico, divertido o histórico grabado durante este año. Ese archivo que merece sobrevivir para futuras generaciones."
+    >
+      <div class="categoria-imagen">
+        <img
+          src="fotos/video.png"
+          alt="Vídeo del Año"
+        >
+      </div>
+
+      <h3>Vídeo del Año</h3>
+    </button>
+
+
+  </div>
+
 </section>
 
 
-
-<!-- Modal para mostrar categoría -->
 <div id="modalCategoria" class="modal">
-  <div class="modal-contenido">
+  <div class="modal-contenido modal-categoria-polar">
+
     <span class="cerrar">&times;</span>
-    <div class="modal-body">
-      <img id="modalImagenCategoria" src="" alt="">
-      <div class="modal-texto">
-        <p id="modalDescripcionCategoria"></p>
+
+    <div class="modal-body modal-categoria-body">
+
+      <div class="modal-categoria-imagen">
+        <img id="modalImagenCategoria" src="" alt="">
       </div>
+
+      <div class="modal-categoria-info">
+
+        <span class="modal-categoria-kicker">
+          ❄ CATEGORÍA 2026
+        </span>
+
+        <h2 id="modalTituloCategoria"></h2>
+
+        <p id="modalDescripcionCategoria"></p>
+
+        <div class="modal-categoria-estado">
+          Nominaciones próximamente
+        </div>
+
+      </div>
+
     </div>
+
   </div>
 </div>
 
@@ -374,8 +1061,11 @@
     
   </main>
   <footer>
-    © Premios Josemari 2025 — Hecho por Iceman.
+    © Premios Josemari 2026 — Hecho por Iceman.
   </footer>
+
+  </div><!-- /appContent -->
+
 
   <!-- MUY IMPORTANTE: CARGAR COMO MÓDULO -->
   <script type="module" src="script.js"></script>
