@@ -3136,7 +3136,7 @@ const imagenesMuseo = {
 
   2025: {
     "Autistada del Año": "autistada",
-    "Baile del Año": "Baile",
+    "Baile del Año": "baile",
     "Braihot del Año": "brainhot",
     "Borracho del Año": "borracho",
     "Correón del Año": "correa",
@@ -3295,7 +3295,7 @@ function crearMedioMuseo(año, archivo, titulo) {
   const esVideo =
     (año === 2024 && archivo === "video") ||
     (año === 2025 &&
-      ["Baile","brainhot", "meme", "videos"].includes(archivo));
+      ["baile","brainhot", "meme", "videos"].includes(archivo));
 
   if (esVideo) {
 
