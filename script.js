@@ -499,10 +499,9 @@ window.closeVideoLightboxHard = function () {
 
       const imagen = document.createElement("img");
       imagen.src = src;
-      imagen.addEventListener("error", () => {
-  console.error("❌ FOTO QUE NO CARGA:", src);
-      });
-
+      imagen.alt = "";
+      imagen.loading = "lazy";
+      imagen.decoding = "async";
       marco.appendChild(imagen);
       grupo.appendChild(marco);
     });

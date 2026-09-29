@@ -5651,3 +5651,18 @@ nav.top .nav-actions .btn.nav-activo:hover {
   }
 
 }
+
+/* ==========================================
+   CORRECCIÓN DESBORDAMIENTO HORIZONTAL
+========================================== */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
