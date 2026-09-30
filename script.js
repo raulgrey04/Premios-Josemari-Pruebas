@@ -1351,7 +1351,7 @@ pintarVotacion();
    ENVÍO A FIRESTORE (POR LOTE)
 ============================================ */
 
-document.getElementById("enviarVotacion").addEventListener("click", async () => {
+document.getElementById("enviarVotacion")?.addEventListener("click", async () => {
   const usuario = localStorage.getItem("usuarioLogueado");
   if (!usuario) {
     alert("Debes iniciar sesión para votar.");
