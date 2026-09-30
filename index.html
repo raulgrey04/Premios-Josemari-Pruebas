@@ -88,21 +88,41 @@
           ☰
         </button>
 
-        <div class="nav-actions" id="menuPrincipal">
-          <button class="btn" onclick="mostrarSeccion('inicio')">Inicio</button>
-          <button class="btn" onclick="mostrarSeccion('participantes')">Participantes</button>
-          <button class="btn" onclick="mostrarSeccion('museo')">Museo</button>
-          <button class="btn" onclick="mostrarSeccion('categorias')">Categorías</button>
-          <button class="btn" onclick="mostrarSeccion('votacion')">Votar</button>
-          <button class="btn" onclick="mostrarSeccion('votacion-nominados')">Votación nominados</button>
- <!--
-<button id="btnResultados" onclick="mostrarSeccion('resultados')" class="btn">
-  Resultados
-</button>
--->
+<div class="nav-actions" id="menuPrincipal">
 
-          <button class="btn" onclick="mostrarSeccion('tu-votacion')">Tu votación</button>
-        </div>
+  <button class="btn" onclick="mostrarSeccion('inicio')">
+    Inicio
+  </button>
+
+  <button class="btn" onclick="mostrarSeccion('participantes')">
+    Participantes
+  </button>
+
+  <button class="btn" onclick="mostrarSeccion('museo')">
+    Museo
+  </button>
+
+  <button class="btn" onclick="mostrarSeccion('categorias')">
+    Categorías
+  </button>
+
+  <button class="btn" onclick="mostrarSeccion('votacion-nominados')">
+    Nominaciones
+  </button>
+
+  <button class="btn" onclick="mostrarSeccion('votacion')">
+    Votación Final
+  </button>
+
+  <button class="btn" onclick="mostrarSeccion('tu-votacion')">
+    Mis votos
+  </button>
+
+  <button class="btn" onclick="mostrarSeccion('casino-polar')">
+    Casino Polar
+  </button>
+
+</div>
 
         <div id="perfilUsuario" class="perfil-usuario" style="display:none;">
           <span id="nombreUsuario"></span>
@@ -378,19 +398,7 @@
 
     </div>
 
-    <!-- TERCERA SALA -->
-    <div class="museo-proximamente">
 
-      <span>🧊 PRÓXIMA EXPOSICIÓN</span>
-
-      <h3>LAS RELIQUIAS PROHIBIDAS</h3>
-
-      <p>
-        Memes históricos, fotografías, vídeos
-        y momentos que jamás deberían olvidarse.
-      </p>
-
-    </div>
 
   </div>
 
@@ -442,32 +450,7 @@
 
   </div>
 
-</section>
-
-
-
-  <section id="tu-votacion" class="seccion" style="display:none;">
-  <h2>Tu votación</h2>
-  <p id="tuVotacion-subtitle" style="opacity:.8;"></p>
-
-  <div id="tuVotacion-contenido">
-    <h3>Votación simple</h3>
-    <div id="tuVotacion-simple"></div>
-
-    <h3 style="margin-top:24px;">Tus nominaciones por categoría</h3>
-    <div id="tuVotacion-nominaciones"></div>
-  </div>
-
-  <div id="tuVotacion-empty" style="display:none; padding:20px; background:#111; border:1px solid #333; border-radius:8px;">
-    Aún no has registrado votos ni nominaciones.
-  </div>
-
-  <div style="margin-top:20px;">
-    <button class="btn" onclick="mostrarSeccion('votacion')">Ir a votar</button>
-    <button class="btn" onclick="mostrarSeccion('votacion-nominados')">Ir a nominaciones</button>
-    <button class="btn" id="tuVotacion-refresh">Refrescar</button>
-  </div>
-</section>
+  </section>
 
 
 
@@ -1013,49 +996,185 @@
 </div>
 
 
-<section id="votacion" class="seccion">
 
-
-  <!-- CONTENIDO ORIGINAL (oculto temporalmente) -->
-  <div class="contenido-votacion"style="display:none">
-    <h2>Votación</h2>
-    <p>Selecciona un ganador por categoría (4 nominados por categoría).</p>
-    <div id="votacionWrapper"></div>
-    <button id="enviarVotacion" class="btn gold" style="margin-top:20px;">Enviar votación</button>
-  </div>
-</section>
-
-
+<!-- =====================================
+     NOMINACIONES
+===================================== -->
 
 <section id="votacion-nominados" class="seccion" style="display:none;">
-  <div class="bloqueo-aviso">
-    🕒 Las nominaciones ya han terminado.  
-    <br> Gracias por votar.
+
+  <div class="seccion-proximamente">
+
+    <div class="proximamente-icono">❄️</div>
+
+    <span class="proximamente-kicker">
+      PREMIOS JOSEMARI III
+    </span>
+
+    <h2>Nominaciones</h2>
+
+    <h3>
+      Las nominaciones todavía no están abiertas
+    </h3>
+
+    <p>
+      Cuando comience oficialmente la fase de nominaciones,
+      podrás elegir aquí a tus candidatos para cada categoría
+      de los Premios Josemari III.
+    </p>
+
+    <div class="proximamente-estado">
+      🔒 PRÓXIMAMENTE
+    </div>
+
   </div>
 
-  <!-- CONTENIDO ORIGINAL -->
-  <div class="contenido-votacion-nominados">
-    <div id="nominadosWrapper"></div>
-    <button id="enviarTodasNominaciones" class="btn gold">Enviar todas las nominaciones</button>
-  </div>
 </section>
 
-    
-<section id="resultados" class="seccion" style="display:none;">
-  <h2>Resultados de las votaciones</h2>
 
-  <!-- 👇 Sin login; mostramos directamente el contenido -->
-  <div id="resultados-contenido" style="display:block;">
-    <h3>Resultados por categoría</h3>
-    <div id="tabla-resultados"></div>
+<!-- =====================================
+     VOTACIÓN FINAL
+===================================== -->
 
-    <!-- Botones de gestión -->
-    <button id="borrarVotos" class="btn red" style="margin-top:15px;">Borrar todos los votos</button>
-    <button id="borrarNominaciones" class="btn red" style="margin-top:15px;">Borrar todas las nominaciones</button>
-    <button id="restaurarVotaciones" class="btn gold" style="margin-top:15px;">Restaurar votaciones</button>
+<section id="votacion" class="seccion" style="display:none;">
+
+  <div class="seccion-proximamente">
+
+    <div class="proximamente-icono">🏆</div>
+
+    <span class="proximamente-kicker">
+      PREMIOS JOSEMARI III
+    </span>
+
+    <h2>Votación Final</h2>
+
+    <h3>
+      La votación final todavía no ha comenzado
+    </h3>
+
+    <p>
+      Cuando se conozcan los nominados definitivos,
+      podrás votar aquí a los ganadores de cada categoría.
+    </p>
+
+    <div class="proximamente-estado">
+      🔒 PRÓXIMAMENTE
+    </div>
+
   </div>
+
 </section>
 
+
+<!-- =====================================
+     MIS VOTOS
+===================================== -->
+
+<section id="tu-votacion" class="seccion" style="display:none;">
+
+  <div class="seccion-proximamente">
+
+    <div class="proximamente-icono">🧊</div>
+
+    <span class="proximamente-kicker">
+      PREMIOS JOSEMARI III
+    </span>
+
+    <h2>Mis votos</h2>
+
+    <h3>
+      Todavía no hay votos que consultar
+    </h3>
+
+    <p>
+      Tus nominaciones y tus votos aparecerán aquí cuando
+      comiencen oficialmente las votaciones de esta edición.
+    </p>
+
+    <div class="proximamente-estado">
+      🔒 PRÓXIMAMENTE
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================
+     CASINO POLAR
+===================================== -->
+
+<section id="casino-polar" class="seccion" style="display:none;">
+
+  <div class="casino-polar-portada">
+
+    <span class="casino-kicker">
+      ❄ PREMIOS JOSEMARI III ❄
+    </span>
+
+    <h2>CASINO POLAR</h2>
+
+    <p class="casino-intro">
+      La zona de juegos de los Premios Josemari III.
+      Nuevos juegos se irán desbloqueando antes y durante la gala.
+    </p>
+
+    <div class="casino-grid">
+
+      <article class="casino-card">
+
+        <div class="casino-icono">🎱</div>
+
+        <span class="casino-etiqueta">
+          JUEGO DE GALA
+        </span>
+
+        <h3>Bingo Polar</h3>
+
+        <p>
+          Cada participante tendrá su propio cartón con situaciones
+          que podrán ocurrir durante la gala. Cuando sucedan,
+          se irán completando las casillas.
+        </p>
+
+        <div class="casino-estado">
+          🔒 PRÓXIMAMENTE
+        </div>
+
+      </article>
+
+
+      <article class="casino-card">
+
+        <div class="casino-icono">🔮</div>
+
+        <span class="casino-etiqueta">
+          PREDICCIONES
+        </span>
+
+        <h3>Quiniela Polar</h3>
+
+        <p>
+          Cuando estén todos los nominados podrás predecir
+          quién ganará cada categoría. Al acabar la gala veremos
+          quién ha acertado más.
+        </p>
+
+        <div class="casino-estado">
+          🔒 PRÓXIMAMENTE
+        </div>
+
+      </article>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
+ 
     
 
     
