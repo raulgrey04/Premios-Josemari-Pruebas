@@ -5989,3 +5989,463 @@ body {
 
 }
 
+/* ==========================================
+   CONTADOR GALA — COMPACTO
+========================================== */
+
+.contador-gala-minimal {
+  margin: 6px 0 0 auto;
+  width: fit-content;
+
+  padding: 7px 12px;
+
+  color: #dff8ff;
+  background: rgba(4, 37, 61, 0.55);
+
+  border: 1px solid rgba(160, 230, 255, 0.35);
+  border-radius: 999px;
+
+  font-size: 0.72rem;
+  font-weight: 700;
+
+  backdrop-filter: blur(8px);
+}
+
+.contador-gala-minimal span[id] {
+  color: #ffffff;
+  font-weight: 900;
+}
+
+@media (max-width: 600px) {
+  .contador-gala-minimal {
+    margin: 10px auto 0;
+    font-size: 0.65rem;
+  }
+}
+
+/* ==========================================
+   EASTER EGGS
+========================================== */
+
+.easter-counter {
+  position: fixed;
+  right: 18px;
+  top: 110px;
+  z-index: 9999;
+
+  padding: 8px 12px;
+
+  color: #dff8ff;
+  background: rgba(4, 37, 61, 0.78);
+
+  border: 1px solid rgba(160, 230, 255, 0.35);
+  border-radius: 999px;
+
+  font-size: 0.72rem;
+  font-weight: 800;
+
+  backdrop-filter: blur(8px);
+}
+
+.easter-mensaje {
+  position: fixed;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+
+  z-index: 10000;
+
+  padding: 12px 18px;
+
+  color: white;
+  background: rgba(5, 34, 55, 0.96);
+
+  border: 1px solid rgba(156, 231, 255, 0.65);
+  border-radius: 14px;
+
+  box-shadow: 0 10px 30px rgba(0,0,0,.3);
+
+  font-size: 0.85rem;
+  font-weight: 800;
+
+  opacity: 0;
+  pointer-events: none;
+
+  transition: opacity .25s ease, transform .25s ease;
+}
+
+.easter-mensaje.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-6px);
+}
+
+@media (max-width: 600px) {
+  .easter-counter {
+    top: 12px;
+    right: 8px;
+
+    font-size: 0.58rem;
+    padding: 6px 9px;
+
+    opacity: 0.92;
+
+    transform: scale(0.92);
+    transform-origin: top right;
+  }
+}
+
+/* ==========================================
+   EASTER EGG 2 — CARTEL
+========================================== */
+
+.inicio-poster.easter-cartel-activo {
+  animation: cartelSecreto 0.7s ease;
+}
+
+@keyframes cartelSecreto {
+
+  0% {
+    transform: rotate(0deg) scale(1);
+    filter: brightness(1);
+  }
+
+  20% {
+    transform: rotate(-2deg) scale(1.02);
+    filter: brightness(1.25);
+  }
+
+  40% {
+    transform: rotate(2deg) scale(1.03);
+  }
+
+  60% {
+    transform: rotate(-1.5deg) scale(1.02);
+  }
+
+  80% {
+    transform: rotate(1deg) scale(1.01);
+  }
+
+  100% {
+    transform: rotate(0deg) scale(1);
+    filter: brightness(1);
+  }
+
+}
+
+/* ==========================================
+   EASTER EGG 3 — MODO JOSEMARI
+========================================== */
+
+body.modo-josemari-secreto #inicio {
+  animation: modoJosemariBrillo 1s ease-in-out infinite alternate;
+}
+
+body.modo-josemari-secreto .nieve-polar {
+  opacity: 1;
+}
+
+body.modo-josemari-secreto .nieve-capa {
+  animation-duration: 5s !important;
+}
+
+body.modo-josemari-secreto .inicio-poster-shell {
+  box-shadow:
+    0 0 25px rgba(143, 231, 255, 0.8),
+    0 0 55px rgba(143, 231, 255, 0.45),
+    0 0 90px rgba(143, 231, 255, 0.2);
+}
+
+@keyframes modoJosemariBrillo {
+  from {
+    filter: brightness(1);
+  }
+
+  to {
+    filter: brightness(1.12);
+  }
+}
+
+/* ==========================================
+   EASTER EGG 4 — PINGÜINOS
+========================================== */
+
+.pinguinos-decoracion.easter-pinguinos-activo {
+  animation: pinguinosSaltando 0.8s ease;
+}
+
+@keyframes pinguinosSaltando {
+
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  20% {
+    transform: translateY(-12px) rotate(-2deg);
+  }
+
+  40% {
+    transform: translateY(0) rotate(2deg);
+  }
+
+  60% {
+    transform: translateY(-7px) rotate(-1deg);
+  }
+
+  80% {
+    transform: translateY(0) rotate(1deg);
+  }
+
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+}
+
+/* ==========================================
+   EASTER EGG 5 — FINAL
+========================================== */
+
+body.easter-final-activo #inicio {
+  animation:
+    finalJosemariBrillo
+    0.8s ease-in-out infinite alternate;
+}
+
+body.easter-final-activo .inicio-poster-shell {
+  transform: scale(1.03);
+
+  box-shadow:
+    0 0 30px rgba(151, 232, 255, 0.9),
+    0 0 70px rgba(151, 232, 255, 0.55),
+    0 0 120px rgba(151, 232, 255, 0.25);
+}
+
+body.easter-final-activo .pinguinos-decoracion {
+  animation:
+    pinguinosFinal
+    0.7s ease-in-out infinite alternate;
+}
+
+body.easter-final-activo .nieve-capa {
+  animation-duration: 3s !important;
+}
+
+@keyframes finalJosemariBrillo {
+  from {
+    filter: brightness(1);
+  }
+
+  to {
+    filter: brightness(1.15);
+  }
+}
+
+@keyframes pinguinosFinal {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(-8px);
+  }
+}
+
+/* ==========================================
+   PÁGINA EASTER EGGS
+========================================== */
+
+.easter-page {
+  width: min(900px, 92%);
+  margin: 40px auto;
+  padding: 34px;
+
+  background:
+    radial-gradient(
+      circle at top,
+      rgba(104, 216, 255, 0.14),
+      transparent 55%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(5, 35, 58, 0.98),
+      rgba(3, 57, 86, 0.96)
+    );
+
+  border: 1px solid rgba(153, 231, 255, 0.55);
+  border-radius: 28px;
+
+  box-shadow:
+    0 20px 55px rgba(0, 10, 25, 0.35),
+    0 0 30px rgba(78, 201, 255, 0.12);
+}
+
+.easter-page-kicker {
+  display: block;
+  text-align: center;
+
+  color: #8de4ff;
+
+  font-size: .75rem;
+  font-weight: 900;
+  letter-spacing: 2.5px;
+}
+
+.easter-page h2 {
+  margin: 8px 0 10px;
+
+  color: #fff;
+
+  text-align: center;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+}
+
+.easter-page-intro {
+  max-width: 620px;
+
+  margin: 0 auto 24px;
+
+  color: #c5e7f1;
+
+  text-align: center;
+  line-height: 1.6;
+}
+
+.easter-page-progreso {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+
+  gap: 8px;
+
+  margin-bottom: 26px;
+}
+
+.easter-page-progreso strong {
+  color: #fff;
+  font-size: 1.6rem;
+}
+
+.easter-page-progreso span {
+  color: #8fdff8;
+  font-size: .8rem;
+  font-weight: 800;
+}
+
+.easter-lista {
+  display: grid;
+  gap: 12px;
+}
+
+.easter-card {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+
+  gap: 16px;
+
+  padding: 16px 18px;
+
+  background: rgba(12, 70, 96, 0.55);
+
+  border: 1px solid rgba(151, 226, 255, 0.3);
+  border-radius: 16px;
+
+  transition:
+    transform .2s ease,
+    border-color .2s ease,
+    background .2s ease;
+}
+
+.easter-card.encontrado {
+  background: rgba(42, 117, 137, 0.38);
+  border-color: rgba(166, 239, 255, 0.72);
+}
+
+.easter-card.encontrado:hover {
+  transform: translateY(-2px);
+}
+
+.easter-card-icono {
+  font-size: 1.7rem;
+}
+
+.easter-card-numero {
+  color: #7fdcf6;
+
+  font-size: .62rem;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+}
+
+.easter-card h3 {
+  margin: 2px 0;
+
+  color: #fff;
+  font-size: 1rem;
+}
+
+.easter-card p {
+  margin: 0;
+
+  color: #a9cbd6;
+  font-size: .78rem;
+}
+
+.easter-card-estado {
+  padding: 6px 9px;
+
+  color: #dff8ff;
+  background: rgba(126, 220, 250, .08);
+
+  border: 1px solid rgba(145, 225, 255, .3);
+  border-radius: 999px;
+
+  font-size: .7rem;
+  font-weight: 900;
+}
+
+.easter-recompensa {
+  margin-top: 26px;
+  padding: 24px;
+
+  text-align: center;
+
+  background: rgba(125, 220, 250, .1);
+
+  border: 1px solid rgba(173, 239, 255, .65);
+  border-radius: 18px;
+}
+
+.easter-recompensa > span {
+  font-size: 2.5rem;
+}
+
+.easter-recompensa h3 {
+  margin: 8px 0 4px;
+
+  color: white;
+}
+
+.easter-recompensa p {
+  margin: 0;
+  color: #bfe5ef;
+}
+
+@media (max-width: 600px) {
+
+  .easter-page {
+    margin: 25px auto;
+    padding: 24px 15px;
+  }
+
+  .easter-card {
+    grid-template-columns: auto 1fr;
+  }
+
+  .easter-card-estado {
+    grid-column: 2;
+    width: fit-content;
+  }
+
+}

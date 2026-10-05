@@ -67,7 +67,13 @@
 
   </div>
 
+  <div id="easterEggCounter" class="easter-counter">
+  🥚 0/5 encontrados
+  </div>
+
 </section>
+
+
 
   <!-- CONTENIDO DE LA APP (oculto hasta login) -->
   <div id="appContent" style="display:none;">
@@ -120,6 +126,10 @@
 
   <button class="btn" onclick="mostrarSeccion('casino-polar')">
     Casino Polar
+  </button>
+
+  <button class="btn" onclick="mostrarSeccion('easter-eggs')">
+    Easter Eggs
   </button>
 
 </div>
@@ -177,6 +187,8 @@
         
       </div>
 
+  
+
       <!-- IMAGEN PRINCIPAL DERECHA -->
       <div class="inicio-stage">
         <div class="inicio-poster-shell">
@@ -190,7 +202,19 @@
       </div>
 
     </div>
+
+    <div class="contador-gala-minimal">
+  <span class="contador-gala-texto">
+    ❄ Gala prevista · 26 o 27 de diciembre ·
+  </span>
+
+  <span id="contadorDias">00</span>d
+  <span id="contadorHoras">00</span>h
+  <span id="contadorMinutos">00</span>m
+  <span id="contadorSegundos">00</span>s
+</div>
   </div>
+
 
   <img src="fotos/pingüinos.png" alt="Pingüinos llevando premios" class="pinguinos-decoracion">
 
@@ -1166,6 +1190,110 @@
 
       </article>
 
+    </div>
+
+  </div>
+
+</section>
+
+<!-- =====================================
+     EASTER EGGS
+===================================== -->
+
+<section id="easter-eggs" class="seccion" style="display:none;">
+
+  <div class="easter-page">
+
+    <span class="easter-page-kicker">
+      🥚 ARCHIVO SECRETO JOSEMARI 🥚
+    </span>
+
+    <h2>EASTER EGGS</h2>
+
+    <p class="easter-page-intro">
+      Hay secretos escondidos por toda la web.
+      Encuéntralos todos para completar el Archivo Secreto Josemari.
+    </p>
+
+    <div class="easter-page-progreso">
+      <strong id="easterTotalEncontrados">0/5</strong>
+      <span>secretos encontrados</span>
+    </div>
+
+    <div class="easter-lista">
+
+      <article class="easter-card" data-easter="logo">
+        <div class="easter-card-icono">🔒</div>
+
+        <div>
+          <span class="easter-card-numero">EASTER EGG 01</span>
+          <h3>???</h3>
+          <p>Secreto todavía sin descubrir.</p>
+        </div>
+
+        <span class="easter-card-estado">0/1</span>
+      </article>
+
+
+      <article class="easter-card" data-easter="cartel">
+        <div class="easter-card-icono">🔒</div>
+
+        <div>
+          <span class="easter-card-numero">EASTER EGG 02</span>
+          <h3>???</h3>
+          <p>Secreto todavía sin descubrir.</p>
+        </div>
+
+        <span class="easter-card-estado">0/1</span>
+      </article>
+
+
+      <article class="easter-card" data-easter="codigo-josemari">
+        <div class="easter-card-icono">🔒</div>
+
+        <div>
+          <span class="easter-card-numero">EASTER EGG 03</span>
+          <h3>???</h3>
+          <p>Secreto todavía sin descubrir.</p>
+        </div>
+
+        <span class="easter-card-estado">0/1</span>
+      </article>
+
+
+      <article class="easter-card" data-easter="pinguinos">
+        <div class="easter-card-icono">🔒</div>
+
+        <div>
+          <span class="easter-card-numero">EASTER EGG 04</span>
+          <h3>???</h3>
+          <p>Secreto todavía sin descubrir.</p>
+        </div>
+
+        <span class="easter-card-estado">0/1</span>
+      </article>
+
+
+      <article class="easter-card" data-easter="secuencia-menu">
+        <div class="easter-card-icono">🔒</div>
+
+        <div>
+          <span class="easter-card-numero">EASTER EGG 05</span>
+          <h3>???</h3>
+          <p>Secreto todavía sin descubrir.</p>
+        </div>
+
+        <span class="easter-card-estado">0/1</span>
+      </article>
+
+    </div>
+
+    <div id="easterRecompensaFinal" class="easter-recompensa" hidden>
+      <span>🏆</span>
+      <h3>ARCHIVO SECRETO COMPLETADO</h3>
+      <p>
+        Has encontrado todos los secretos de los Premios Josemari III.
+      </p>
     </div>
 
   </div>

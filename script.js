@@ -3560,4 +3560,721 @@ visorMuseo.addEventListener("click", evento => {
 construirSalaMuseo(2024);
 construirSalaMuseo(2025);
 
+/* ==========================================
+   CONTADOR HASTA LA GALA
+========================================== */
+
+(() => {
+
+  const dias = document.getElementById("contadorDias");
+  const horas = document.getElementById("contadorHoras");
+  const minutos = document.getElementById("contadorMinutos");
+  const segundos = document.getElementById("contadorSegundos");
+
+  if (!dias || !horas || !minutos || !segundos) return;
+
+  // Fecha provisional de la gala
+  const fechaGala = new Date("2026-12-26T20:00:00");
+
+  function actualizarContador() {
+
+    const ahora = new Date();
+
+    let diferencia =
+      fechaGala.getTime() - ahora.getTime();
+
+    if (diferencia <= 0) {
+
+      dias.textContent = "00";
+      horas.textContent = "00";
+      minutos.textContent = "00";
+      segundos.textContent = "00";
+
+      return;
+    }
+
+    const d = Math.floor(
+      diferencia / (1000 * 60 * 60 * 24)
+    );
+
+    diferencia %= (1000 * 60 * 60 * 24);
+
+    const h = Math.floor(
+      diferencia / (1000 * 60 * 60)
+    );
+
+    diferencia %= (1000 * 60 * 60);
+
+    const m = Math.floor(
+      diferencia / (1000 * 60)
+    );
+
+    diferencia %= (1000 * 60);
+
+    const s = Math.floor(
+      diferencia / 1000
+    );
+
+    dias.textContent = String(d).padStart(2, "0");
+    horas.textContent = String(h).padStart(2, "0");
+    minutos.textContent = String(m).padStart(2, "0");
+    segundos.textContent = String(s).padStart(2, "0");
+  }
+
+  actualizarContador();
+
+  setInterval(
+    actualizarContador,
+    1000
+  );
+
+})();
+
+/* ==========================================
+   SISTEMA DE EASTER EGGS
+========================================== */
+
+(() => {
+
+  const TOTAL_EASTER_EGGS = 5;
+
+  let encontrados = JSON.parse(
+    localStorage.getItem("easterEggsJosemari") || "[]"
+  );
+
+  const contador =
+    document.getElementById("easterEggCounter");
+
+
+  /* ==========================================
+     ACTUALIZAR PÁGINA EASTER EGGS
+  ========================================== */
+
+  function actualizarPaginaEasterEggs() {
+
+    const datos = {
+
+      "logo": {
+        nombre: "Bienvenido al hielo",
+        descripcion:
+          "Has descubierto uno de los secretos de la expedición."
+      },
+
+      "cartel": {
+        nombre: "El cartel se ha descongelado",
+        descripcion:
+          "Algo extraño escondía el cartel oficial."
+      },
+
+      "codigo-josemari": {
+        nombre: "Código Josemari",
+        descripcion:
+          "Has activado el protocolo secreto Josemari."
+      },
+
+      "pinguinos": {
+        nombre: "Expedición Polar",
+        descripcion:
+          "Los pingüinos escondían más de lo que parecía."
+      },
+
+      "secuencia-menu": {
+        nombre: "Ruta secreta",
+        descripcion:
+          "Has completado la ruta oculta de los Josemari."
+      }
+
+    };
+
+
+    document
+      .querySelectorAll(".easter-card")
+      .forEach(card => {
+
+        const id = card.dataset.easter;
+
+        const encontrado =
+          encontrados.includes(id);
+
+        const icono =
+          card.querySelector(".easter-card-icono");
+
+        const titulo =
+          card.querySelector("h3");
+
+        const descripcion =
+          card.querySelector("p");
+
+        const estado =
+          card.querySelector(".easter-card-estado");
+
+
+        if (encontrado) {
+
+          card.classList.add("encontrado");
+
+          icono.textContent = "🥚";
+          titulo.textContent = datos[id].nombre;
+          descripcion.textContent =
+            datos[id].descripcion;
+
+          estado.textContent = "1/1 ✅";
+
+        } else {
+
+          card.classList.remove("encontrado");
+
+          icono.textContent = "🔒";
+          titulo.textContent = "???";
+
+          descripcion.textContent =
+            "Secreto todavía sin descubrir.";
+
+          estado.textContent = "0/1";
+
+        }
+
+      });
+
+
+    const total =
+      document.getElementById(
+        "easterTotalEncontrados"
+      );
+
+    if (total) {
+      total.textContent =
+        `${encontrados.length}/${TOTAL_EASTER_EGGS}`;
+    }
+
+
+    const recompensa =
+      document.getElementById(
+        "easterRecompensaFinal"
+      );
+
+    if (recompensa) {
+
+      recompensa.hidden =
+        encontrados.length !==
+        TOTAL_EASTER_EGGS;
+
+    }
+
+  }
+
+
+  /* ==========================================
+     ACTUALIZAR CONTADOR
+  ========================================== */
+
+  function actualizarContador() {
+
+    if (contador) {
+
+      contador.textContent =
+        `🥚 ${encontrados.length}/${TOTAL_EASTER_EGGS} encontrados`;
+
+    }
+
+    actualizarPaginaEasterEggs();
+
+  }
+
+
+  /* ==========================================
+     MENSAJE DE EASTER EGG
+  ========================================== */
+
+  function mostrarMensaje(texto) {
+
+    let mensaje =
+      document.querySelector(".easter-mensaje");
+
+    if (!mensaje) {
+
+      mensaje =
+        document.createElement("div");
+
+      mensaje.className =
+        "easter-mensaje";
+
+      document.body.appendChild(mensaje);
+
+    }
+
+    mensaje.textContent = texto;
+
+    mensaje.classList.add("visible");
+
+    setTimeout(() => {
+
+      mensaje.classList.remove("visible");
+
+    }, 2600);
+
+  }
+
+
+  /* ==========================================
+     REGISTRAR EASTER EGG
+  ========================================== */
+
+  function encontrarEasterEgg(id, nombre) {
+
+    if (encontrados.includes(id)) {
+
+      mostrarMensaje(
+        `🥚 Ya habías encontrado: ${nombre}`
+      );
+
+      return;
+
+    }
+
+    encontrados.push(id);
+
+    localStorage.setItem(
+      "easterEggsJosemari",
+      JSON.stringify(encontrados)
+    );
+
+    actualizarContador();
+
+    mostrarMensaje(
+      `🥚 Easter egg encontrado: ${nombre}`
+    );
+
+  }
+
+
+  /* ==========================================
+     ESTADO INICIAL
+  ========================================== */
+
+  actualizarContador();
+
+
+  /* ==========================================
+     CONTADOR → ABRIR PÁGINA EASTER EGGS
+  ========================================== */
+
+  if (contador) {
+
+    contador.style.cursor = "pointer";
+
+    contador.addEventListener("click", () => {
+
+      window.mostrarSeccion?.(
+        "easter-eggs"
+      );
+
+    });
+
+  }
+
+
+  /* ==========================================
+     EASTER EGG 1 — LOGO
+     5 CLICS RÁPIDOS
+  ========================================== */
+
+  const logo =
+    document.querySelector(
+      "nav.top .logo"
+    );
+
+  if (logo) {
+
+    let clicksLogo = 0;
+    let temporizadorLogo;
+
+    logo.style.cursor = "pointer";
+
+    logo.addEventListener("click", () => {
+
+      clicksLogo++;
+
+      clearTimeout(
+        temporizadorLogo
+      );
+
+      temporizadorLogo =
+        setTimeout(() => {
+
+          clicksLogo = 0;
+
+        }, 1800);
+
+
+      if (clicksLogo >= 5) {
+
+        clicksLogo = 0;
+
+        encontrarEasterEgg(
+          "logo",
+          "Bienvenido al hielo"
+        );
+
+      }
+
+    });
+
+  }
+
+
+  /* ==========================================
+     EASTER EGG 2 — CARTEL
+     DOBLE CLIC
+  ========================================== */
+
+  const cartel =
+    document.querySelector(
+      ".inicio-poster"
+    );
+
+  if (cartel) {
+
+    cartel.style.cursor = "pointer";
+
+    cartel.addEventListener(
+      "dblclick",
+      () => {
+
+        cartel.classList.remove(
+          "easter-cartel-activo"
+        );
+
+        void cartel.offsetWidth;
+
+        cartel.classList.add(
+          "easter-cartel-activo"
+        );
+
+        encontrarEasterEgg(
+          "cartel",
+          "El cartel se ha descongelado"
+        );
+
+        setTimeout(() => {
+
+          cartel.classList.remove(
+            "easter-cartel-activo"
+          );
+
+        }, 800);
+
+      }
+    );
+
+  }
+
+
+  /* ==========================================
+     EASTER EGG 3 — CÓDIGO JOSEMARI
+  ========================================== */
+
+  let codigoEscrito = "";
+
+  const CODIGO_SECRETO =
+    "JOSEMARI";
+
+  document.addEventListener(
+    "keydown",
+    evento => {
+
+      const etiqueta =
+        evento.target.tagName;
+
+      if (
+        etiqueta === "INPUT" ||
+        etiqueta === "TEXTAREA"
+      ) {
+        return;
+      }
+
+      codigoEscrito +=
+        evento.key.toUpperCase();
+
+      codigoEscrito =
+        codigoEscrito.slice(
+          -CODIGO_SECRETO.length
+        );
+
+
+      if (
+        codigoEscrito ===
+        CODIGO_SECRETO
+      ) {
+
+        encontrarEasterEgg(
+          "codigo-josemari",
+          "Código Josemari activado"
+        );
+
+        document.body.classList.add(
+          "modo-josemari-secreto"
+        );
+
+        setTimeout(() => {
+
+          document.body.classList.remove(
+            "modo-josemari-secreto"
+          );
+
+        }, 5000);
+
+        codigoEscrito = "";
+
+      }
+
+    }
+  );
+
+
+  /* ==========================================
+     EASTER EGG 3 — ALTERNATIVA MÓVIL
+     PULSACIÓN LARGA EN EL CONTADOR
+  ========================================== */
+
+  if (contador) {
+
+    let pulsacionLarga;
+    let fuePulsacionLarga = false;
+
+
+    const activarModoJosemari = () => {
+
+      fuePulsacionLarga = true;
+
+      encontrarEasterEgg(
+        "codigo-josemari",
+        "Código Josemari activado"
+      );
+
+      document.body.classList.add(
+        "modo-josemari-secreto"
+      );
+
+      setTimeout(() => {
+
+        document.body.classList.remove(
+          "modo-josemari-secreto"
+        );
+
+      }, 5000);
+
+    };
+
+
+    contador.addEventListener(
+      "pointerdown",
+      () => {
+
+        fuePulsacionLarga = false;
+
+        pulsacionLarga =
+          setTimeout(() => {
+
+            activarModoJosemari();
+
+          }, 2000);
+
+      }
+    );
+
+
+    contador.addEventListener(
+      "pointerup",
+      () => {
+
+        clearTimeout(
+          pulsacionLarga
+        );
+
+      }
+    );
+
+
+    contador.addEventListener(
+      "pointerleave",
+      () => {
+
+        clearTimeout(
+          pulsacionLarga
+        );
+
+      }
+    );
+
+
+    contador.addEventListener(
+      "pointercancel",
+      () => {
+
+        clearTimeout(
+          pulsacionLarga
+        );
+
+      }
+    );
+
+  }
+
+
+  /* ==========================================
+     EASTER EGG 4 — PINGÜINOS
+     3 CLICS
+  ========================================== */
+
+  const pinguinos =
+    document.querySelector(
+      ".pinguinos-decoracion"
+    );
+
+  if (pinguinos) {
+
+    let clicksPinguinos = 0;
+    let temporizadorPinguinos;
+
+    pinguinos.style.cursor =
+      "pointer";
+
+
+    pinguinos.addEventListener(
+      "click",
+      () => {
+
+        clicksPinguinos++;
+
+        clearTimeout(
+          temporizadorPinguinos
+        );
+
+        temporizadorPinguinos =
+          setTimeout(() => {
+
+            clicksPinguinos = 0;
+
+          }, 1600);
+
+
+        if (
+          clicksPinguinos >= 3
+        ) {
+
+          clicksPinguinos = 0;
+
+          pinguinos.classList.remove(
+            "easter-pinguinos-activo"
+          );
+
+          void pinguinos.offsetWidth;
+
+          pinguinos.classList.add(
+            "easter-pinguinos-activo"
+          );
+
+          encontrarEasterEgg(
+            "pinguinos",
+            "Expedición Polar"
+          );
+
+          setTimeout(() => {
+
+            pinguinos.classList.remove(
+              "easter-pinguinos-activo"
+            );
+
+          }, 900);
+
+        }
+
+      }
+    );
+
+  }
+
+
+  /* ==========================================
+     EASTER EGG 5 — SECUENCIA DEL MENÚ
+  ========================================== */
+
+  const SECUENCIA_SECRETA = [
+    "Inicio",
+    "Museo",
+    "Participantes",
+    "Casino Polar",
+    "Inicio"
+  ];
+
+  let progresoSecuencia = 0;
+
+
+  document.querySelectorAll(
+    "nav.top .nav-actions .btn"
+  ).forEach(boton => {
+
+    boton.addEventListener(
+      "click",
+      () => {
+
+        const textoBoton =
+          boton.textContent.trim();
+
+        const esperado =
+          SECUENCIA_SECRETA[
+            progresoSecuencia
+          ];
+
+
+        if (
+          textoBoton === esperado
+        ) {
+
+          progresoSecuencia++;
+
+          if (
+            progresoSecuencia ===
+            SECUENCIA_SECRETA.length
+          ) {
+
+            progresoSecuencia = 0;
+
+            encontrarEasterEgg(
+              "secuencia-menu",
+              "Ruta secreta completada"
+            );
+
+            document.body.classList.add(
+              "easter-final-activo"
+            );
+
+            setTimeout(() => {
+
+              document.body.classList.remove(
+                "easter-final-activo"
+              );
+
+            }, 5000);
+
+          }
+
+        } else {
+
+          progresoSecuencia =
+            textoBoton ===
+            SECUENCIA_SECRETA[0]
+              ? 1
+              : 0;
+
+        }
+
+      }
+    );
+
+  });
+
+
+})();
 
