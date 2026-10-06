@@ -304,10 +304,13 @@ document.getElementById("perfilUsuario")?.addEventListener("click", () => {
    NAVEGACIÓN ENTRE SECCIONES
 ============================ */
 function mostrarSeccion(seccion) {
+
+
   if (!puedeVerSeccion(seccion)) {
   mostrarSeccion("inicio");
   return;
 }
+
   const necesitaLogin = !["login","inicio","participantes","categorias"].includes(seccion);
   const user = localStorage.getItem("usuarioLogueado");
 
@@ -530,8 +533,13 @@ window.closeVideoLightboxHard = function () {
   }
 
   function iniciarCintas() {
+
+    // Elegimos 36 fotos aleatorias de las 85 disponibles
+    const fotosElegidas =
+      mezclar(TODAS_LAS_FOTOS).slice(0, 36);
+
     const { arriba, abajo } =
-      repartirFotos(TODAS_LAS_FOTOS);
+      repartirFotos(fotosElegidas);
 
     crearCinta(".hero-strip-top", arriba);
     crearCinta(".hero-strip-bottom", abajo);
