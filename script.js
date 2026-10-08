@@ -4,12 +4,14 @@
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
 import {
-  getFirestore, collection, addDoc, serverTimestamp, getDocs, query, where,
+  getFirestore, collection, collectionGroup, addDoc, serverTimestamp, getDocs, query, where,
   getDoc, setDoc, updateDoc, doc, deleteDoc, writeBatch, limit
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 import {
   getAuth,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -167,6 +169,7 @@ function controlarAccesoResultados() {
 
 // Cambiar a true cuando se abran las secciones.
 const CATEGORIAS_ABIERTAS = false;
+const NOMINACIONES_ABIERTAS = false;
 const VOTACIONES_ABIERTAS = false;
 
 // Nombres exactos del login.
@@ -182,8 +185,8 @@ function controlarSeccionesCerradas() {
 
   const accesos = {
     categorias: CATEGORIAS_ABIERTAS,
+    "votacion-nominados": NOMINACIONES_ABIERTAS,
     votacion: VOTACIONES_ABIERTAS,
-    "votacion-nominados": VOTACIONES_ABIERTAS,
     "tu-votacion": VOTACIONES_ABIERTAS
   };
 
@@ -210,13 +213,20 @@ function controlarSeccionesCerradas() {
 function puedeVerSeccion(seccion) {
   if (esOrganizador()) return true;
 
+  if (seccion === "resultados") {
+  return false;
+}
+
   if (seccion === "categorias") {
     return CATEGORIAS_ABIERTAS;
   }
 
+  if (seccion === "votacion-nominados") {
+    return NOMINACIONES_ABIERTAS;
+  }
+
   if ([
     "votacion",
-    "votacion-nominados",
     "tu-votacion"
   ].includes(seccion)) {
     return VOTACIONES_ABIERTAS;
@@ -281,7 +291,14 @@ function resetUrlAndScroll() {
 /* ============================
    LOGOUT
 ============================ */
-function logout() {
+async function logout() {
+
+  try {
+    await signOut(auth);
+  } catch (error) {
+    console.error("Error cerrando sesión:", error);
+  }
+
   localStorage.removeItem("usuarioLogueado");
 
   document.getElementById("perfilUsuario").style.display = "none";
@@ -346,11 +363,23 @@ function mostrarSeccion(seccion) {
 /* ============================
    SESIÓN RECORDADA
 ============================ */
-window.addEventListener("DOMContentLoaded", async () => {
-  const user = localStorage.getItem("usuarioLogueado");
+onAuthStateChanged(auth, async (firebaseUser) => {
 
-  if (user && loginMap[user]) {
-    mostrarPerfil(user);
+  if (firebaseUser) {
+
+    const nombre = Object.keys(loginMap).find(
+      nombre => loginMap[nombre].email === firebaseUser.email
+    );
+
+    if (!nombre) {
+      await signOut(auth);
+      localStorage.removeItem("usuarioLogueado");
+      return;
+    }
+
+    localStorage.setItem("usuarioLogueado", nombre);
+
+    mostrarPerfil(nombre);
     controlarAccesoResultados();
     controlarSeccionesCerradas();
 
@@ -359,16 +388,14 @@ window.addEventListener("DOMContentLoaded", async () => {
 
     mostrarSeccion("inicio");
 
-    if (window.actualizarEstadoBotonNominaciones) {
-      await window.actualizarEstadoBotonNominaciones();
-    }
-    if (window.actualizarEstadoBotonVotacion) {
-      await window.actualizarEstadoBotonVotacion();
-    }
   } else {
+
+    localStorage.removeItem("usuarioLogueado");
+
     document.getElementById("login").style.display = "block";
     document.getElementById("appContent").style.display = "none";
   }
+
 });
 
 
@@ -594,12 +621,21 @@ async function aumentarCiclo() {
 ============================================ */
 window.mostrarSeccion = async function (seccion) {
 
+  // Bloqueo de secciones cerradas
+  if (!puedeVerSeccion(seccion)) {
+    seccion = "inicio";
+  }
+
   // Bloqueo por login
   const necesitaLogin = !["login","inicio","participantes","categorias"]
     .includes(seccion);
+
   const user = localStorage.getItem("usuarioLogueado");
 
-  if (necesitaLogin && !user) seccion = "login";
+  if (necesitaLogin && !user) {
+    seccion = "login";
+  }
+
 
   // Ocultar todas y mostrar la seleccionada
   document.querySelectorAll(".seccion").forEach(sec => sec.style.display = "none");
@@ -610,8 +646,11 @@ window.mostrarSeccion = async function (seccion) {
   window.scrollTo({ top: 0, behavior: "smooth" });
 
   // NOMINACIONES POR LOTES
-  if (seccion === "votacion-nominados") {
-    renderNominadosPorLotes();
+    if (seccion === "votacion-nominados") {
+
+      await sincronizarLoteActivo();
+
+      renderNominadosPorLotes();
 
     if (window.actualizarEstadoBotonNominaciones)
       await window.actualizarEstadoBotonNominaciones();
@@ -710,52 +749,84 @@ async function cargarTuVotacion() {
 
 
     /* ============================================
-       2) NOMINACIONES — CICLO ACTUAL
-    ============================================= */
-    const ciclo = await getCicloActual();
-    const qN = query(
-      collection(db, "nominaciones"),
-      where("usuario", "==", user),
-      where("ciclo", "==", ciclo)
+   2) NOMINACIONES — JOSEMARI III 2026
+============================================= */
+
+const firebaseUser = auth.currentUser;
+
+if (!firebaseUser) {
+  boxNom.innerHTML = "<p>No has enviado nominaciones aún.</p>";
+} else {
+
+  const uid = firebaseUser.uid;
+  const porCat = {};
+
+  // Leer individualmente los 6 lotes del usuario.
+  // Así funciona con las reglas actuales de Firestore.
+  for (let lote = 1; lote <= 6; lote++) {
+
+    const referencia = doc(
+      db,
+      "nominaciones_2026",
+      uid,
+      "lotes",
+      `lote_${lote}`
     );
 
-    const snapN = await getDocs(qN);
+    const snap = await getDoc(referencia);
 
-    if (snapN.empty) {
-      boxNom.innerHTML = "<p>No has enviado nominaciones aún.</p>";
-    } else {
-      const frag = document.createDocumentFragment();
-      const porCat = {};
+    if (!snap.exists()) continue;
 
-      snapN.forEach(d => {
-        const data = d.data() || {};
-        const cat  = data.categoria || "Sin categoría";
-        porCat[cat] = Array.isArray(data.nominados) ? data.nominados : [];
-      });
+    const data = snap.data() || {};
+    const votos = data.votos || {};
 
-      Object.entries(porCat)
-        .sort(([a],[b]) => a.localeCompare(b))
-        .forEach(([categoria, nominados]) => {
-          const wrap = document.createElement("div");
-          const h4   = document.createElement("h4");
-          h4.textContent = categoria;
+    Object.entries(votos).forEach(([categoria, nominados]) => {
+      porCat[categoria] = Array.isArray(nominados)
+        ? nominados
+        : [];
+    });
+  }
 
-          const ul = document.createElement("ul");
-          (nominados.length ? nominados : ["(sin nombres)"])
-            .forEach(n => {
-              const li = document.createElement("li");
-              li.textContent = n;
-              ul.appendChild(li);
-            });
+  if (Object.keys(porCat).length === 0) {
 
-          wrap.appendChild(h4);
-          wrap.appendChild(ul);
-          frag.appendChild(wrap);
+    boxNom.innerHTML =
+      "<p>No has enviado nominaciones aún.</p>";
+
+  } else {
+
+    const frag = document.createDocumentFragment();
+
+    Object.entries(porCat)
+      .sort(([a], [b]) => a.localeCompare(b, "es"))
+      .forEach(([categoria, nominados]) => {
+
+        const wrap = document.createElement("div");
+
+        const h4 = document.createElement("h4");
+        h4.textContent = categoria;
+
+        const ul = document.createElement("ul");
+
+        (nominados.length
+          ? nominados
+          : ["(sin nombres)"]
+        ).forEach(n => {
+
+          const li = document.createElement("li");
+          li.textContent = n;
+          ul.appendChild(li);
+
         });
 
-      boxNom.innerHTML = "";
-      boxNom.appendChild(frag);
-    }
+        wrap.appendChild(h4);
+        wrap.appendChild(ul);
+        frag.appendChild(wrap);
+      });
+
+    boxNom.innerHTML = "";
+    boxNom.appendChild(frag);
+  }
+}
 
 
     /* ============================================
@@ -793,47 +864,47 @@ window.cargarTuVotacion = cargarTuVotacion;
 const DEFAULT_PLACA = "fotos/placa-default.png";
 
 const categoryImages = {
-  // Lote 1
-  "Viajero/a del año": "fotos/viajero.jpeg",
-  "Picado/a del año": "fotos/competititivo.png",
-  "Guarrete del año": "fotos/guarrete.jpeg",
-  "Papi/Mami del año": "fotos/papi.jpg",
-  "Meme del año": "fotos/meme.jpeg",
 
-  // Lote 2
-  "Brainhot del año": "fotos/brainhot.jpeg",
-  "Correon del año": "fotos/correon.jpeg",
-  "Trio/Cuarteto del año": "fotos/trio.jpeg",
-  "Soltero del año": "fotos/soltero.jpeg",
-  "El que mejor viste del año": "fotos/mejorviste.jpeg",
-
-  // Lote 3
+  // DÍA 1
+  "Mejor jugador de pádel del año": "fotos/mejorpadelista.png",
+  "Peor Playus del año": "fotos/peorplayus.png",
+  "Viajero del año": "fotos/viajero.jpeg",
   "Llorón del año": "fotos/lloron.jpeg",
-  "Fiestero/a del año": "fotos/fiestero.jpeg",
-  "Borracho/a del año": "fotos/borracho.jpeg",
-  "Mejor Personaje fuera de JyP del año": "fotos/mpersonaje.jpeg",
-  "Peor momento del año": "fotos/p_momento.jpeg",
 
-  // Lote 4
+  // DÍA 2
+  "Fiestero del año": "fotos/fiestero.jpeg",
+  "Borrachera del año": "fotos/borracho.jpeg",
+  "Picado del año": "fotos/picado.png",
+  "Princeso del año": "fotos/princeso.png",
+
+  // DÍA 3
+  "Huella Digital": "fotos/huella.png",
   "Mensaje del año": "fotos/mensaje.jpeg",
-  "Mote del año": "fotos/mote.jpeg",
-  "Palabra/Frase del año": "fotos/palabra.jpeg",
+  "Sticker del año": "fotos/sticker.png",
+  "Outfit del año": "fotos/outfit.png",
   "Objeto del año": "fotos/objeto.jpg",
-  "Baile del año": "fotos/Baile.jpeg",
 
-  // Lote 5
-  "Autistada del año": "fotos/autistada.jpg",
-  "Fail del año": "fotos/fail.jpeg",
+  // DÍA 4
+  "Mejor personaje fuera de CT del año": "fotos/personaje.png",
+  "Enemigo del año": "fotos/enemigo.png",
+  "Palabra/Frase del año": "fotos/palabra.jpeg",
+  "Mote del año": "fotos/mote.jpeg",
   "Broma del año": "fotos/broma.jpeg",
+
+  // DÍA 5
+  "Fail del año": "fotos/fail.jpeg",
+  "Autistada del año": "fotos/autistada.jpg",
+  "Fiesta del año": "fotos/fiesta.jpeg",
   "Foto del año": "fotos/foto.jpeg",
   "Video del año": "fotos/video.jpeg",
 
-  // Lote 6
-  "Fiesta del año": "fotos/fiesta.jpeg",
+  // DÍA 6
+  "Peor momento del año": "fotos/p_momento.jpeg",
+  "Revelación del año": "fotos/revelacion.png",
   "Mejor momento del año": "fotos/m_momento.jpeg",
   "Decepción del año": "fotos/decepcion.jpeg",
-  "Revelación del año": "fotos/revelacion.png",
   "MVP del año": "fotos/mvp.png"
+
 };
 
 
@@ -1361,12 +1432,12 @@ pintarVotacion();
 
 document.getElementById("enviarVotacion")?.addEventListener("click", async () => {
   const usuario = localStorage.getItem("usuarioLogueado");
+
   if (!usuario) {
     alert("Debes iniciar sesión para votar.");
     mostrarSeccion("login");
     return;
   }
-
   // Categorías del lote actual que están ACTIVAS (tienen finalistas definidos)
   const loteActual = getLoteVotacionActual();
   const indice = loteActual - 1;
@@ -1413,250 +1484,12 @@ document.getElementById("enviarVotacion")?.addEventListener("click", async () =>
 });
 
 /* =======================================================
-   NOMINADOS ESPECIALES POR CATEGORÍA
-   (Si existe la categoría aquí, reemplaza a los participantes)
+   NOMINADOS ESPECIALES 2026
+   Aquí iremos metiendo las categorías que NO usen
+   automáticamente a todos los participantes.
 ======================================================= */
 
-const NOMINADOS_ESPECIALES = {
-  "Brainhot del año": [
-    { nombre: "Fermorini quesini", video: "fotos/brainhot/fermo.mp4", poster: "fotos/brainhot/fermo.jpeg" },
-    { nombre: "Fervico il inano", video: "fotos/brainhot/fer.mp4", poster: "fotos/brainhot/fer.jpeg" },
-    { nombre: "Geimpro e geimpra", video: "fotos/brainhot/gamepro.mp4", poster: "fotos/brainhot/gamepro.jpeg" },
-    { nombre: "Ivanpi qui ivanpi", video: "fotos/brainhot/ivanp.mp4", poster: "fotos/brainhot/ivanp.jpeg" },
-    { nombre: "Rulas e rulossino", video: "fotos/brainhot/rulas.mp4", poster: "fotos/brainhot/rulas.jpeg" },
-    { nombre: "Poru ropu tropu sopu popu", video: "fotos/brainhot/poru.mp4", poster: "fotos/brainhot/poru.jpeg" },
-    { nombre: "Pam Darió", video: "fotos/brainhot/dario.mp4", poster: "fotos/brainhot/dario.jpeg" },
-    { nombre: "Pocoyo yopoco marcotu", video: "fotos/brainhot/marco.mp4", poster: "fotos/brainhot/marco.jpeg" },
-    { nombre: "Manuelerini Panterini", video: "fotos/brainhot/manu.mp4", poster: "fotos/brainhot/manu.jpeg" },
-    { nombre: "Danielo el bombardero", video: "fotos/brainhot/dani.mp4", poster: "fotos/brainhot/dani.jpeg" },
-    { nombre: "Quinito quinatu", video: "fotos/brainhot/iker.mp4", poster: "fotos/brainhot/iker.jpeg" },
-    { nombre: "Parralero Roberta", video: "fotos/brainhot/rober.mp4", poster: "fotos/brainhot/rober.jpeg" },
-    { nombre: "Abuelero abueloso", video: "fotos/brainhot/labrada.mp4", poster: "fotos/brainhot/labrada.jpeg" },
-    { nombre: "Lúcia lusosos con Sergio Ramosos", video: "fotos/brainhot/lucia.mp4", poster: "fotos/brainhot/lucia.jpeg" },
-    { nombre: "Castora castori", video: "fotos/brainhot/asier.mp4", poster: "fotos/brainhot/asier.jpeg" },
-    { nombre: "Baggete Mariete letrete", video: "fotos/brainhot/maria.mp4", poster: "fotos/brainhot/maria.jpeg" },
-    { nombre: "Caminote Inesote", video: "fotos/brainhot/ines.mp4", poster: "fotos/brainhot/ines.jpeg" },
-    { nombre: "Garbanzino chiquitino", video: "fotos/brainhot/mario.mp4", poster: "fotos/brainhot/mario.jpeg" }
-  ], 
-  
-  "Mejor Personaje fuera de JyP del año": [
-    { nombre: "Diegote", foto: "fotos/perosnajes/diego.jpeg" },
-    { nombre: "Iceman", foto: "fotos/perosnajes/iceman.jpeg" },
-    { nombre: "Bólido", foto: "fotos/perosnajes/bolido.jpeg" },
-    { nombre: "Cangurín", foto: "fotos/perosnajes/cangurin.jpeg" },
-    { nombre: "Unai el guay", foto: "fotos/perosnajes/unai.jpeg" },
-    { nombre: "Javichu", foto: "fotos/perosnajes/javichu.jpeg" },
-    { nombre: "Mariodi", foto: "fotos/perosnajes/mariodi.jpeg" },
-    { nombre: "Juan Noblejas", foto: "fotos/perosnajes/juan.jpeg" },
-    { nombre: "Pepito", foto: "fotos/perosnajes/pepito.jpeg" },
-    { nombre: "Nuria", foto: "fotos/perosnajes/nuria.jpeg" }
-  ],
-
-  "Fiesta del año": [
-    { nombre: "Factory de Enero", foto: "fotos/fiesta/factory.jpeg" },
-    { nombre: "Carnavales", foto: "fotos/fiesta/carnaval.jpeg" },
-    { nombre: "Feria de Abril", foto: "fotos/fiesta/abril.jpeg" },
-    { nombre: "Magma", foto: "fotos/fiesta/magma.jpeg" },
-    { nombre: "Proyecto x", foto: "fotos/fiesta/proyecto x.jpeg" },
-    { nombre: "Zurra", foto: "fotos/fiesta/zurra.jpeg" },
-    { nombre: "Pandorga", foto: "fotos/fiesta/pandorga.jpeg" },
-    { nombre: "Ferias Peruanas", foto: "fotos/fiesta/peruana.jpeg" },
-    { nombre: "Ferias de Ciu", foto: "fotos/fiesta/ciu.jpeg" },
-    { nombre: "Hallowen", foto: "fotos/fiesta/Hallowen.jpeg" }
-  ],
-
-  "Objeto del año": [
-    { nombre: "Tequifresi", foto: "fotos/objeto/tequifresi.jpeg" },
-    { nombre: "Cia", foto: "fotos/objeto/cia.jpeg" },
-    { nombre: "Shisha X", foto: "fotos/objeto/sisa.jpeg" },
-    { nombre: "Pelusa", foto: "fotos/objeto/pelusa.jpeg" },
-    { nombre: "Bandera Peruana ", foto: "fotos/objeto/peruana.jpeg" },
-    { nombre: "Ana Rosa", foto: "fotos/objeto/anarosa.jpeg" },
-    { nombre: "Ositopro", foto: "fotos/objeto/ositopro.jpeg" },
-    { nombre: "Pantalones Bob esponja", foto: "fotos/objeto/pantalonesb.jpeg" },
-    { nombre: "Salami", foto: "fotos/objeto/salami.png" },
-    { nombre: "Nunca Follo", foto: "fotos/objeto/follo.jpeg" }
-  ],
-
-  "Palabra/Frase del año": [
-    { nombre: "Sirulo", foto: "fotos/palabra/sirulo.jpeg" },
-    { nombre: "Esa peñaaaa", foto: "fotos/palabra/peña.jpeg" },
-    { nombre: "Vamos no me jodas", foto: "fotos/palabra/vamos.jpeg" },
-    { nombre: "Subnormal!", foto: "fotos/palabra/subnormal.jpeg" },
-    { nombre: "Tengo miedo a que se me caigan las patatas", foto: "fotos/palabra/patatas.jpeg" },
-    { nombre: "Bomba", foto: "fotos/palabra/bomba.jpeg" },
-    { nombre: "Virgen", foto: "fotos/palabra/virgen.jpeg" },
-    { nombre: "Prohibido divieto ", foto: "fotos/palabra/prohibido.jpeg" },
-    { nombre: "Que si que vamos a por ti ", foto: "fotos/palabra/vamosti.jpeg" },
-    { nombre: "Yets", foto: "fotos/palabra/yets.jpeg" }
-  ],
-
-  "Video del año": [
-    { nombre: "La correa de mi primo", video: "videos/correa.mp4", poster: "videos/posters/correa.jpeg" },
-    { nombre: "El desfase de Noblejas", video: "videos/juan.mp4", poster: "videos/posters/juan.jpeg" },
-    { nombre: "Castor alimentando a Castor", video: "videos/castor.mp4", poster: "videos/posters/castor.jpeg" },
-    { nombre: "La muerte de Ana Rosa", video: "videos/iker.mp4", poster: "videos/posters/iker.jpeg" },
-    { nombre: "lluvia de conos", video: "videos/conos.mp4", poster: "videos/posters/lluvia.jpeg" },
-    { nombre: "El Vampiricantropo", video: "videos/ines.mp4", poster: "videos/posters/ines.jpeg" },
-    { nombre: "Osito gominola", video: "videos/ivanp.mp4", poster: "videos/posters/ivanp.jpeg" },
-    { nombre: "Sexo,Vagina", video: "videos/iker2.mp4", poster: "videos/posters/iker2.jpeg" },
-    { nombre: "DJVentosa en accion", video: "videos/marcoNuria.mp4", poster: "videos/posters/marcoNuria.jpeg" },
-    { nombre: "Musica Random", video: "videos/random.mp4", poster: "videos/posters/random.jpg" },
-
-  ],
-
-  "Foto del año": [
-    { nombre: "Porno X", foto: "fotos/fotos/marconuria.jpeg" },
-    { nombre: "Dario tortuga", foto: "fotos/fotos/darioo.jpeg" },
-    { nombre: "Cafeteros", foto: "fotos/fotos/peruanos.jpeg" },
-    { nombre: "Hey Jude", foto: "fotos/fotos/londresb.jpeg" },
-    { nombre: "El beso de judas", foto: "fotos/fotos/ferlab.jpeg" },
-    { nombre: "Orgía", foto: "fotos/fotos/carnaval.jpeg" },
-    { nombre: "Paleto Bob esponja", foto: "fotos/fotos/bob.jpeg" },
-    { nombre: "Parrales salvando a Ana Rosa", foto: "fotos/fotos/parrales.jpeg" },
-    { nombre: "Ana Rosa 2.0", foto: "fotos/fotos/ivanpetetas.jpeg" },
-    { nombre: "Desvirgando a Rulas", foto: "fotos/fotos/rulasprimer.jpeg" },
-  ],
-
-  "Mote del año": [
-    { nombre: "Gamepollo", foto: "fotos/mote/gamepollo.jpeg" },
-    { nombre: "Cafetera", foto: "fotos/mote/cafetera.jpeg" },
-    { nombre: "Pereira", foto: "fotos/mote/pereira.jpeg" },
-    { nombre: "Dj ventosa ", foto: "fotos/mote/djventosa.jpeg" },
-    { nombre: "Fish and Chips", foto: "fotos/mote/fish.jpeg" },
-    { nombre: "Pajaroto", foto: "fotos/mote/pajaroto.jpeg" },
-    { nombre: "Fermoro", foto: "fotos/mote/fermoro.jpeg" },
-  ],
-
-    "Fail del año": [
-    { nombre: "Matalascañas", foto: "fotos/fail/matalascañas.jpeg" },
-    { nombre: "Altavoces Proyecto X ", foto: "fotos/fail/Altavoces.jpeg" },
-    { nombre: "Pisos en Alicante", foto: "fotos/fail/alicante.jpeg" },
-    { nombre: "Tele por la ventana ", foto: "fotos/fail/tele.jpeg" },
-    { nombre: "Mesa de Fervico", foto: "fotos/fail/mesa.jpeg" },
-    { nombre: "Caca a Asier", foto: "fotos/fail/caca.jpeg" },
-    { nombre: "muerte de la Chifurgo", foto: "fotos/fail/chifurgo.jpeg" },
-    { nombre: "Sxgarra vacila a Mario", foto: "fotos/fail/jugui.jpeg" },
-    { nombre: "Ivanpe vs Tomate", foto: "fotos/fail/tomate.jpeg" },
-  ],
-
-      "Meme del año": [
-    { nombre: "Dario Vascas", foto: "fotos/meme/dario.jpeg" },
-    { nombre: "Palomo", foto: "fotos/meme/palomo.jpeg" },
-    { nombre: "Fer en las tetorras", video: "fotos/meme/fer.mp4", poster: "fotos/meme/fervico.jpeg" },
-    { nombre: "Patata en la alcazaba", foto: "fotos/meme/patata.jpeg" },
-    { nombre: "Ivanp Gustabo", video: "fotos/meme/ivanp.mp4", poster: "fotos/meme/ivanpe.jpeg" },
-    { nombre: "Artupa en cas", foto: "fotos/meme/artupa.jpeg" },
-    { nombre: "Pelusa", foto: "fotos/meme/pelusa.jpeg" },
-    { nombre: "8", foto: "fotos/meme/8.jpeg" },
-    { nombre: "Diamantes", foto: "fotos/meme/diamantes.jpeg" },
-    { nombre: "Gusano saca lenguas", video: "fotos/meme/lengua.mp4", poster: "fotos/meme/lengua.jpg" }
-  ],
-
-        "Baile del año": [
-    { nombre: "Gamepro por la banda", video: "fotos/bailes/gamepro.mp4", poster: "fotos/bailes/gamepro.jpeg" },
-    { nombre: "Ivanp x Mozos", video: "fotos/bailes/ivanp.mp4", poster: "fotos/bailes/ivanp.jpeg" },
-    { nombre: "Asier Bailando con un negro", video: "fotos/bailes/asier.mp4", poster: "fotos/bailes/asier.jpeg" },
-    { nombre: "Rulas bailongo", video: "fotos/bailes/rulas.mp4", poster: "fotos/bailes/rulas.jpeg" },
-    { nombre: "Dani perchero", video: "fotos/bailes/dani.mp4", poster: "fotos/bailes/dani.jpeg" },
-    { nombre: "Shiny", video: "fotos/bailes/lucia.mp4", poster: "fotos/bailes/lucia.jpeg" },
-    { nombre: "Los encocaos", video: "fotos/bailes/iker.mp4", poster: "fotos/bailes/iker.jpeg" },
-    { nombre: "El mambo de Labrada", video: "fotos/bailes/labrada.mp4", poster: "fotos/bailes/labrada.jpeg" },
-    { nombre: "Señorita Surferita", video: "fotos/bailes/Surferita.mp4", poster: "fotos/bailes/Surferita.jpeg" },
-    { nombre: "Baile en el camino", video: "fotos/bailes/mariobaile.mp4", poster: "fotos/bailes/mariobaile.jpeg" },
-
-],
-
-"Mensaje del año": [
-    { nombre: "El encuestas", foto: "fotos/mensaje/labrada.jpeg" },
-    { nombre: "Dani Dictador", foto: "fotos/mensaje/dani.jpeg" },
-    { nombre: "Erasmus", foto: "fotos/mensaje/maria.jpeg" },
-    { nombre: "Haberlo preguntado mañana", foto: "fotos/mensaje/labmanu.jpeg" },
-    { nombre: "Santiago destruido", foto: "fotos/mensaje/marco.jpeg" },
-    { nombre: "Hotel hayaway apartemt five", foto: "fotos/mensaje/rober.jpeg" },
-    { nombre: "Fermoriv solitario", foto: "fotos/mensaje/fermo.jpeg" },
-    { nombre: "El celoso", foto: "fotos/mensaje/gamepro.jpeg" },
-    { nombre: "Subjetividad ", foto: "fotos/mensaje/poru.jpeg" },
-    { nombre: "Kastor picada ", foto: "fotos/mensaje/mario.jpeg" },
-    
-
-  ],
-
-  "Trio/Cuarteto del año": [
-    { nombre: "Pibas", foto: "fotos/Trio/pibas.jpeg" },
-    { nombre: "Fervico, Dario, Poru(EL trio salchichon)", foto: "fotos/Trio/salchichon.jpeg" },
-    { nombre: "Labrada, Lucia y Gamepro(Los gofreros)", foto: "fotos/Trio/gofres.jpeg" },
-    { nombre: "Rulas, Asier y Marco(Los veterinarios)", foto: "fotos/Trio/primes.jpeg" },
-    { nombre: "Fervico, Ivanp y Maria(Jueguen quien Jueguen)", foto: "fotos/Trio/jueguen.jpeg" },
-    { nombre: "Rober,Fermo y Marco(Los enfermeros)", foto: "fotos/Trio/enfermeros.jpeg" },
-    { nombre: "Dani,Iker,Asier y Gamepro(Los tomelloseros)", foto: "fotos/Trio/tomelloseros.jpeg" },
-    { nombre: "Fervico, Labrada y Ivanp(Los paninis)", foto: "fotos/Trio/panini.jpeg" },
-    { nombre: "Labrada, Lucia, Rober y Rulas(Procesioneros)", foto: "fotos/Trio/procesioneros.jpeg" },
-
-  ],
-
-    "Soltero del año": [
-    { nombre: "Fermoriv", foto: "fotos/soltero/fermo.jpeg" },
-    { nombre: "Rulas", foto: "fotos/soltero/rulas.jpeg" },    
-    { nombre: "Darío", foto: "fotos/soltero/dario.jpeg" },
-    { nombre: "Fervico", foto: "fotos/soltero/fer.jpeg" },
-    { nombre: "Marco", foto: "fotos/soltero/marco.jpeg" },
-    { nombre: "Iker", foto: "fotos/soltero/iker.jpeg" },
-    { nombre: "Poru", foto: "fotos/soltero/poru.jpeg" },
-  ],
-
-      "Correon del año": [
-    { nombre: "La correa de Rober", foto: "fotos/correon/rober.jpeg" },
-    { nombre: "La correa de Asier", foto: "fotos/correon/asier.jpeg" },
-    { nombre: "La correa de Gamepro", foto: "fotos/correon/gamepro.jpeg" },
-    { nombre: "La correa de Manu", foto: "fotos/correon/manu.jpeg" },
-    { nombre: "La correa de Dani", foto: "fotos/correon/dani.jpeg" },
-    { nombre: "La correa de Mario", foto: "fotos/correon/mario.jpeg" },
-    { nombre: "La correa de Labrada", foto: "fotos/correon/labrada.jpeg" },
-    { nombre: "La correa de Ivanp", foto: "fotos/correon/ivanp.jpeg" },
-
-  ],
-        "Broma del año": [
-    { nombre: "Oye Siri", foto: "fotos/broma/lucia.jpeg" },
-    { nombre: "Patatas contra la cama de labrada", foto: "fotos/broma/patata.jpeg" },
-    { nombre: "Grabaciones cagada", foto: "fotos/broma/lab.jpeg" },
-    { nombre: "Lanzamiento de Objetos a piscina", foto: "fotos/broma/lanzamiento.jpeg" },
-    { nombre: "Cono a Javichu vol 2", foto: "fotos/broma/cono.jpeg" },
-    { nombre: "Rotura de camisetas", foto: "fotos/broma/camisetas.jpeg" }
-
-  ],
-
-          "Mejor momento del año": [
-    { nombre: "Marco Pagando", foto: "fotos/m_momento/marco.jpeg" },
-    { nombre: "Sala vip chino Juan", foto: "fotos/m_momento/chino.jpeg" },
-    { nombre: "Dj Rulas sesión", foto: "fotos/m_momento/djrulas.jpeg" },
-    { nombre: "Carrera con tio borracho", foto: "fotos/m_momento/carrera.jpeg" },
-    { nombre: "Rulas vs Ivanp", foto: "fotos/m_momento/ivanp.jpeg" },
-    { nombre: "Previa Alicante", foto: "fotos/m_momento/rulas.jpeg" },
-    { nombre: "Mandanga style carnaval", foto: "fotos/m_momento/mandanga.jpeg" },
-
-  ],
-          "Autistada del año": [
-    { nombre: "Foto de Perfil fervico", foto: "fotos/autistada/foto.jpeg" },
-    { nombre: "Robo de botellas X", foto: "fotos/autistada/yoryo.jpeg" },
-    { nombre: "Ludopatia capibara", foto: "fotos/autistada/ludopatia.jpeg" },
-    { nombre: "Reformas Poru y Enano", foto: "fotos/autistada/reformas.jpeg" },
-    { nombre: "Rulas en aviones", foto: "fotos/autistada/rulas.jpeg" },
-  ],
-
-            "Peor momento del año": [
-    { nombre: "La muerte de Dani en la tortuga", foto: "fotos/p_momento/dani.jpeg" },
-    { nombre: "La caseta de la esperanza(Feria de Abril)", foto: "fotos/p_momento/esperanza.jpeg" },
-    { nombre: "Vecina casi nos denuncia(Londres)", foto: "fotos/p_momento/londres.jpeg" },
-     { nombre: "La cola de magma", foto: "fotos/p_momento/magma.jpeg" },
-     { nombre: "Fermoriv en Carnavales", foto: "fotos/p_momento/fermo.jpeg" },
-    { nombre: "El desastre de la yedra", foto: "fotos/p_momento/ivanp.jpeg" },
-    { nombre: "Navidades en Muletas", foto: "fotos/p_momento/rulasmuletas.jpeg" },
-  ],
-
-
-};
-
+const NOMINADOS_ESPECIALES = {};
 
 /* ============================================
    MÁXIMO DE SELECCIÓN POR CATEGORÍA
@@ -1722,7 +1555,7 @@ function crearApartadoNominaciones(idLista, categoriaNombre) {
 
     /* Botón lupa SOLO para “Mensaje del año” */
 // 🔍 Botón lupa para IMÁGENES de "Mensaje del año" y "Foto del año" (votación final)
-if (!nom.video && (categoria === "Mensaje del año" || categoria === "Foto del año") && nom.foto) {
+if (!video && (categoriaNombre === "Mensaje del año" || categoriaNombre === "Foto del año") && foto) {
       const btn = document.createElement("div");
       btn.className = "btn-zoom";
       btn.setAttribute("role", "button");
@@ -2017,60 +1850,120 @@ function closeImageLightbox() {
     if (e.key === "Escape" && !modal.hidden) closeImageLightbox();
   });
 })();
-// ===== LOTES DE CATEGORÍAS (3 lotes x 10 categorías) =====
 
-// LOTE 1 = antiguo LOTE_1 + LOTE_2
+/* ============================================================
+   NOMINACIONES 2026 — 6 DÍAS x 5 CATEGORÍAS
+============================================================ */
+
 const LOTE_1 = [
-  "Viajero/a del año",
-  "Picado/a del año",
-  "Guarrete del año",
-  "Papi/Mami del año",
-  "Meme del año",
-  "Brainhot del año",
-  "Correon del año",
-  "Trio/Cuarteto del año",
-  "Soltero del año",
-  "El que mejor viste del año"
+  "Mejor jugador de pádel del año",
+  "Peor Playus del año",
+  "PENDIENTE 1",
+  "Viajero del año",
+  "Llorón del año"
 ];
 
-// LOTE 2 = antiguo LOTE_3 + LOTE_4
 const LOTE_2 = [
-  "Llorón del año",
-  "Fiestero/a del año",
-  "Borracho/a del año",
-  "Mejor Personaje fuera de JyP del año",
-  "Peor momento del año",
-  "Mensaje del año",
-  "Mote del año",
-  "Palabra/Frase del año",
-  "Objeto del año",
-  "Baile del año"
+  "PENDIENTE 2",
+  "Fiestero del año",
+  "Borrachera del año",
+  "Picado del año",
+  "Princeso del año"
 ];
 
-// LOTE 3 = antiguo LOTE_5 + LOTE_6
 const LOTE_3 = [
-  "Autistada del año",
+  "Huella Digital",
+  "Mensaje del año",
+  "Sticker del año",
+  "Outfit del año",
+  "Objeto del año"
+];
+
+const LOTE_4 = [
+  "Mejor personaje fuera de CT del año",
+  "Enemigo del año",
+  "Palabra/Frase del año",
+  "Mote del año",
+  "Broma del año"
+];
+
+const LOTE_5 = [
   "Fail del año",
-  "Broma del año",
-  "Foto del año",
-  "Video del año",
+  "Autistada del año",
   "Fiesta del año",
-  "Mejor momento del año",
+  "Foto del año",
+  "Video del año"
+];
+
+const LOTE_6 = [
+  "Peor momento del año",
   "Revelación del año",
+  "Mejor momento del año",
   "Decepción del año",
   "MVP del año"
 ];
 
-// Junta todos los lotes (ahora solo 3)
-const LOTES = [LOTE_1, LOTE_2, LOTE_3];
+const LOTES = [
+  LOTE_1,
+  LOTE_2,
+  LOTE_3,
+  LOTE_4,
+  LOTE_5,
+  LOTE_6
+];
 
-// 👇 control del lote activo (1..3)
-const LOTE_ACTIVO = 3; // o 2 / 3 según el que quieras mostrar por defecto
+// ============================================
+// DÍA ACTIVO DE NOMINACIONES
+// Cambiar manualmente del 1 al 6
+// ============================================
 
+let LOTE_ACTIVO = null;
 
-/* ============================================================
-   Obtener lote actual (respeta ?lote=3)
-============================================================ */
+async function sincronizarLoteActivo() {
+
+  const snap = await getDocs(
+    collection(db, "lotes_nominaciones_2026")
+  );
+
+  const lotesAbiertos = [];
+
+  snap.forEach(docSnap => {
+
+    const data = docSnap.data();
+
+    const match =
+      docSnap.id.match(/^lote_([1-6])$/);
+
+    if (
+      data.abierto === true &&
+      match
+    ) {
+      lotesAbiertos.push(
+        Number(match[1])
+      );
+    }
+
+  });
+
+  // Exactamente un lote abierto
+  if (lotesAbiertos.length === 1) {
+
+    LOTE_ACTIVO = lotesAbiertos[0];
+
+  } else {
+
+    LOTE_ACTIVO = null;
+
+    if (lotesAbiertos.length > 1) {
+      console.error(
+        "ERROR: hay varios lotes de nominaciones abiertos:",
+        lotesAbiertos
+      );
+    }
+  }
+
+  return LOTE_ACTIVO;
+}
 
 window.getLoteActual = function () {
   return LOTE_ACTIVO;
@@ -2092,7 +1985,7 @@ function addCategoriaBlock(titulo, indice) {
 
   const max = MAX_SELECCION_POR_CATEGORIA[titulo] ?? 3;
   const p = document.createElement("p");
-  p.innerHTML = `Selecciona hasta <strong>${max}</strong> candidatos.`;
+  p.innerHTML = `Selecciona exactamente <strong>${max}</strong> candidatos.`;
 
   const grid = document.createElement("div");
   grid.id = `lista-nominados-dyn-${indice}`;
@@ -2133,6 +2026,12 @@ function insertarSeparador(texto) {
 function renderNominadosPorLotes() {
   const activo = getLoteFromQuery() ?? LOTE_ACTIVO;
 
+  if (activo === null) {
+    limpiarNominadosDinamicos();
+    insertarSeparador("🔒 No hay ningún lote de nominaciones abierto ahora mismo.");
+    return;
+  }
+
   limpiarNominadosDinamicos();
 
   const lote = LOTES[activo - 1] || [];
@@ -2154,35 +2053,27 @@ function renderNominadosPorLotes() {
 /* ============================================================
    Comprobar si ya envió nominaciones en este ciclo y lote
 ============================================================ */
-async function yaHaEnviadoNominaciones(usuario, lote = window.getLoteActual()) {
-  if (!usuario) return false;
+async function yaHaEnviadoNominaciones(lote = window.getLoteActual()) {
+  const firebaseUser = auth.currentUser;
 
-  const ciclo = await getCicloActual();
+  if (!firebaseUser) return false;
 
-  const q = query(
-    collection(db, "nominaciones"),
-    where("usuario", "==", usuario),
-    where("ciclo", "==", ciclo),
-    where("lote", "==", lote)
+  const uid = firebaseUser.uid;
+  const loteId = `lote_${lote}`;
+
+  const referencia = doc(
+    db,
+    "nominaciones_2026",
+    uid,
+    "lotes",
+    loteId
   );
 
-  const snap = await getDocs(q);
-  if (!snap.empty) return true;
+  const snap = await getDoc(referencia);
 
-  return (
-    localStorage.getItem(`nominacionesEnviadas_${usuario}_${ciclo}_L${lote}`) ===
-    "true"
-  );
+  return snap.exists();
 }
 
-async function marcarEnviadoLocal(usuario, lote = window.getLoteActual()) {
-  if (!usuario) return;
-  const ciclo = await getCicloActual();
-  localStorage.setItem(
-    `nominacionesEnviadas_${usuario}_${ciclo}_L${lote}`,
-    "true"
-  );
-}
 
 /* ============================================================
    BOTÓN “ENVIAR TODAS LAS NOMINACIONES”
@@ -2202,87 +2093,145 @@ let enviandoNominaciones = false;
 ============================================================ */
 async function onEnviarTodasNominaciones(e) {
   e.preventDefault();
+
   if (enviandoNominaciones) return;
   enviandoNominaciones = true;
 
   const btn = document.getElementById("enviarTodasNominaciones");
+
   if (btn) {
     btn.disabled = true;
     btn.innerText = "Enviando…";
   }
 
   try {
+
     const usuario = localStorage.getItem("usuarioLogueado");
-    if (!usuario) {
+    const firebaseUser = auth.currentUser;
+
+    if (!usuario || !firebaseUser) {
       alert("Debes iniciar sesión para enviar nominaciones.");
       mostrarSeccion("login");
       return;
     }
 
-    // Validar que *todas* las categorías tienen al menos un nominado
-    for (const categoria in nominacionesPorCategoria) {
-      if (!nominacionesPorCategoria[categoria].length) {
+    const uid = firebaseUser.uid;
+    const lote = window.getLoteActual();
+
+    if (lote === null) {
+      alert("No hay ningún lote de nominaciones abierto ahora mismo.");
+      return;
+    }
+
+    const loteId = `lote_${lote}`;
+
+    const categoriasDelLote = LOTES[lote - 1] || [];
+
+    if (categoriasDelLote.length === 0) {
+      alert("Este lote no contiene categorías.");
+      return;
+    }
+
+    // Comprobar exactamente 3 nominados
+    // en cada categoría del lote activo.
+    for (const categoria of categoriasDelLote) {
+
+      const seleccion =
+        nominacionesPorCategoria[categoria] || [];
+
+      if (seleccion.length !== 3) {
         alert(
-          `Debes seleccionar al menos un nominado en la categoría: ${categoria}`
+          `Debes seleccionar exactamente 3 nominados en la categoría: ${categoria}`
         );
         return;
       }
     }
 
-    const ciclo = await getCicloActual();
-    const lote = window.getLoteActual();
+    // Un único mapa con todos los votos del lote.
+    const votos = {};
 
-    // Guardar una entrada por categoría
-    for (const categoria in nominacionesPorCategoria) {
-      const id = `${safeIdPart(usuario)}__${safeIdPart(
-        categoria
-      )}__${ciclo}__L${lote}`;
+    categoriasDelLote.forEach(categoria => {
+      votos[categoria] = [
+        ...nominacionesPorCategoria[categoria]
+      ];
+    });
 
-      await setDoc(doc(db, "nominaciones", id), {
-        usuario,
-        categoria,
-        nominados: nominacionesPorCategoria[categoria],
-        ciclo,
-        lote,
-        fecha: serverTimestamp()
-      });
-    }
+    // Un único documento por usuario + lote.
+    const referencia = doc(
+      db,
+      "nominaciones_2026",
+      uid,
+      "lotes",
+      loteId
+    );
 
-    await marcarEnviadoLocal(usuario, lote);
+    await setDoc(referencia, {
+      edicion: 2026,
+      loteId,
+      usuario,
+      votos,
+      enviadoEn: serverTimestamp()
+    });
 
-    if (window.actualizarEstadoBotonNominaciones) {
-      await window.actualizarEstadoBotonNominaciones();
-    }
-
-    alert(`¡Tus nominaciones del Lote ${lote} han sido registradas!`);
+    alert(
+      `¡Tus nominaciones del Lote ${lote} han sido registradas!`
+    );
 
     document
       .querySelectorAll(".nominado")
-      .forEach((n) => n.classList.remove("selected"));
+      .forEach(n => n.classList.remove("selected"));
 
-    for (const c in nominacionesPorCategoria) {
-      nominacionesPorCategoria[c] = [];
-    }
+    categoriasDelLote.forEach(categoria => {
+      nominacionesPorCategoria[categoria] = [];
+    });
+
   } catch (err) {
+
     console.error("Error guardando nominaciones:", err);
-    alert("Hubo un error al guardar tus nominaciones.");
+
+    if (err?.code === "permission-denied") {
+      alert(
+        "No se pueden modificar estas nominaciones. Puede que ya hayas enviado este lote."
+      );
+    } else {
+      alert("Hubo un error al guardar tus nominaciones.");
+    }
+
   } finally {
+
     enviandoNominaciones = false;
 
-    const usuario = localStorage.getItem("usuarioLogueado");
     const lote = window.getLoteActual();
-    const btn = document.getElementById("enviarTodasNominaciones");
+    const btn =
+      document.getElementById("enviarTodasNominaciones");
+
+      if (lote === null) {
+        if (btn) {
+          btn.disabled = true;
+          btn.innerText = "No hay nominaciones abiertas";
+        }
+        return;
+      }
 
     if (btn) {
+
       try {
-        const enviado = await yaHaEnviadoNominaciones(usuario, lote);
+
+        const enviado =
+          await yaHaEnviadoNominaciones(lote);
+
         btn.disabled = enviado;
+
         btn.innerText = enviado
           ? `Ya has enviado tus nominaciones del Lote ${lote}`
           : `Enviar todas las nominaciones (Lote ${lote})`;
+
       } catch {
+
         btn.disabled = false;
-        btn.innerText = "Enviar todas las nominaciones";
+        btn.innerText =
+          "Enviar todas las nominaciones";
+
       }
     }
   }
@@ -2297,13 +2246,19 @@ async function actualizarEstadoBotonNominaciones() {
 
   const lote = window.getLoteActual();
 
+  if (lote === null) {
+    btn.disabled = true;
+    btn.innerText = "No hay nominaciones abiertas";
+    return;
+  }
+
   if (!usuario) {
     btn.disabled = true;
     btn.innerText = "Inicia sesión para nominar";
     return;
   }
 
-  const enviado = await yaHaEnviadoNominaciones(usuario, lote);
+  const enviado = await yaHaEnviadoNominaciones(lote);
   btn.disabled = enviado;
   btn.innerText = enviado
     ? `Ya has enviado tus nominaciones del Lote ${lote}`
@@ -2394,66 +2349,235 @@ async function cargarResultados() {
 
     const ciclo = await getCicloActual();
 
-    // NOMINACIONES ciclo actual
-    const snapNom = await getDocs(
-      query(collection(db, "nominaciones"), where("ciclo", "==", ciclo))
-    );
-
-    // VOTACIONES ciclo actual
     const snapVotos = await getDocs(
-      query(collection(db, "votaciones"), where("ciclo", "==", ciclo))
+  query(
+    collection(db, "votaciones"),
+    where("ciclo", "==", ciclo)
+  )
+);
+
+   // ============================================
+// NOMINACIONES 2026
+// ============================================
+
+const snapNom = await getDocs(
+  collectionGroup(db, "lotes")
+);
+
+contenedor.innerHTML = "";
+const frag = document.createDocumentFragment();
+
+const bloqueNom = document.createElement("section");
+
+bloqueNom.innerHTML = `
+  <h3>🏅 Nominaciones Josemari III</h3>
+  <p style="opacity:.8">
+    Cuenta cuántas veces ha sido nominado cada candidato.
+  </p>
+`;
+
+if (snapNom.empty) {
+
+  bloqueNom.insertAdjacentHTML(
+    "beforeend",
+    "<p>No hay nominaciones aún.</p>"
+  );
+
+} else {
+
+  const conteo = {};
+  const nominadores = {};
+  const participacionPorLote = {};
+
+  snapNom.forEach(docSnap => {
+
+    const data = docSnap.data() || {};
+
+    // Solo documentos del sistema 2026
+    if (data.edicion !== 2026) return;
+
+    const usuario = data.usuario || "Desconocido";
+    const votos = data.votos || {};
+
+    const loteId = data.loteId || "lote_desconocido";
+
+    participacionPorLote[loteId] ||= new Set();
+    participacionPorLote[loteId].add(usuario);
+
+    Object.entries(votos).forEach(
+      ([categoria, nominados]) => {
+
+        if (!Array.isArray(nominados)) return;
+
+        conteo[categoria] ||= {};
+        nominadores[categoria] ||= {};
+
+        nominados.forEach(nominado => {
+
+          conteo[categoria][nominado] =
+            (conteo[categoria][nominado] || 0) + 1;
+
+          (
+            nominadores[categoria][nominado] ||= new Set()
+          ).add(usuario);
+
+        });
+      }
+    );
+  });
+
+  const todosLosUsuarios = Object.keys(loginMap);
+
+LOTES.forEach((categoriasDelLote, indiceLote) => {
+
+  const categoriasConResultados = categoriasDelLote.filter(
+    categoria => conteo[categoria]
+  );
+
+  // Si este lote todavía no tiene resultados, no lo mostramos.
+  if (categoriasConResultados.length === 0) return;
+
+  const tituloLote = document.createElement("h3");
+  tituloLote.textContent = `❄️ Lote ${indiceLote + 1}`;
+  tituloLote.className = "resultado-titulo-lote";
+
+  bloqueNom.appendChild(tituloLote);
+
+  const loteId = `lote_${indiceLote + 1}`;
+
+const hanParticipado =
+  participacionPorLote[loteId] || new Set();
+
+const faltan = todosLosUsuarios.filter(
+  usuario => !hanParticipado.has(usuario)
+);
+
+const resumen = document.createElement("div");
+resumen.className = "resultado-resumen-lote";
+
+resumen.innerHTML = `
+  <p>
+    <strong>Participación:</strong>
+    ${hanParticipado.size}/${todosLosUsuarios.length}
+  </p>
+
+  <p>
+    <strong>Han enviado:</strong>
+    ${
+      hanParticipado.size
+        ? Array.from(hanParticipado).join(", ")
+        : "Nadie todavía"
+    }
+  </p>
+
+  <p>
+    <strong>Faltan:</strong>
+    ${
+      faltan.length
+        ? faltan.join(", ")
+        : "Nadie ✅"
+    }
+  </p>
+`;
+
+bloqueNom.appendChild(resumen);
+
+  categoriasConResultados.forEach(categoria => {
+
+    const mapa = conteo[categoria];
+
+    const div = document.createElement("div");
+    div.className = "resultado-categoria";
+
+    const h4 = document.createElement("h4");
+    h4.textContent = categoria;
+
+    const ul = document.createElement("ul");
+
+    const maxVotos = Math.max(
+      ...Object.values(mapa),
+      1
     );
 
-    contenedor.innerHTML = "";
-    const frag = document.createDocumentFragment();
+    const ranking = Object.entries(mapa)
+  .sort((a, b) => b[1] - a[1]);
 
-    /* =======================
-       BLOQUE — NOMINACIONES
-    ======================= */
-    const bloqueNom = document.createElement('section');
-    bloqueNom.innerHTML = `
-      <h3>🏅 Nominaciones Ciclo ${ciclo}</h3>
-      <p style="opacity:.8">Cuenta cuántas veces ha sido nominado cada candidato.</p>
-    `;
+    const votosCuarto =
+      ranking.length >= 4
+        ? ranking[3][1]
+        : null;
 
-    if (snapNom.empty) {
-      bloqueNom.insertAdjacentHTML('beforeend', `<p>No hay nominaciones aún.</p>`);
-    } else {
-      const conteo = {};
-      const nominadores = {};
+    ranking.forEach(([nominado, total], indice) => {
 
-      snapNom.forEach(d => {
-        const data = d.data() || {};
-        const cat   = data.categoria;
-        const noms  = data.nominados || [];
+        const li = document.createElement("li");
 
-        conteo[cat] ||= {};
-        nominadores[cat] ||= {};
+        const esTop4 =
+          indice < 4 ||
+          (votosCuarto !== null && total === votosCuarto);
 
-        noms.forEach(n => {
-          conteo[cat][n] = (conteo[cat][n] || 0) + 1;
-          (nominadores[cat][n] ||= new Set()).add(data.usuario);
-        });
+        const hayEmpateEnCorte =
+          votosCuarto !== null &&
+          ranking.filter(([, votos]) => votos === votosCuarto).length > 1;
+
+        li.className =
+          esTop4
+            ? "resultado-candidato resultado-top4"
+            : "resultado-candidato";
+
+        const quienes = Array.from(
+          nominadores[categoria][nominado]
+        ).join(", ");
+
+        const porcentaje =
+          Math.round((total / maxVotos) * 100);
+
+        li.innerHTML = `
+          <div class="resultado-linea">
+
+            <span class="resultado-nombre">
+              ${esTop4 ? "🏆 " : ""}
+              ${nominado}
+              ${
+                esTop4
+                  ? `<span class="resultado-finalista">
+                  ${hayEmpateEnCorte && total === votosCuarto
+                    ? "EMPATE TOP 4"
+                    : "TOP 4"}
+              </span>`
+              : ""
+            }
+            </span>
+
+            <strong>${total}</strong>
+
+          </div>
+
+          <div class="resultado-barra">
+            <div
+              class="resultado-barra-relleno"
+              style="width:${porcentaje}%"
+            ></div>
+          </div>
+
+          <div class="resultado-detalle">
+            Nominado por: ${quienes}
+          </div>
+        `;
+
+        ul.appendChild(li);
       });
 
-      Object.entries(conteo).sort(([a],[b]) => a.localeCompare(b)).forEach(([cat, mapa]) => {
-        const div = document.createElement('div');
-        div.innerHTML = `<h4>${cat}</h4>`;
-        const ul = document.createElement('ul');
+    div.appendChild(h4);
+    div.appendChild(ul);
 
-        Object.entries(mapa).sort((a,b)=>b[1]-a[1]).forEach(([nom, total]) => {
-          const li = document.createElement('li');
-          const quienes = Array.from(nominadores[cat][nom]).join(', ');
-          li.textContent = `${nom}: ${total} nominación(es) — Por: ${quienes}`;
-          ul.appendChild(li);
-        });
+    bloqueNom.appendChild(div);
+  });
 
-        div.appendChild(ul);
-        bloqueNom.appendChild(div);
-      });
-    }
-    frag.appendChild(bloqueNom);
+});
 
+}
+
+frag.appendChild(bloqueNom);
 
     /* =======================
        BLOQUE — VOTACIÓN FINAL
@@ -2552,6 +2676,56 @@ async function borrarColeccion(nombreColeccion) {
   }
 }
 
+async function borrarNominaciones2026() {
+
+  try {
+
+    let borrados = 0;
+
+    while (true) {
+
+      const q = query(
+        collectionGroup(db, "lotes"),
+        where("edicion", "==", 2026),
+        limit(400)
+      );
+
+      const snap = await getDocs(q);
+
+      if (snap.empty) break;
+
+      const batch = writeBatch(db);
+
+      snap.docs.forEach(d => {
+        batch.delete(d.ref);
+      });
+
+      await batch.commit();
+
+      borrados += snap.size;
+    }
+
+    alert(
+      `Se han borrado ${borrados} documentos de nominaciones 2026.`
+    );
+
+    if (typeof cargarResultados === "function") {
+      cargarResultados();
+    }
+
+  } catch (error) {
+
+    console.error(
+      "Error borrando nominaciones 2026:",
+      error
+    );
+
+    alert(
+      "Error al borrar las nominaciones 2026."
+    );
+  }
+}
+
 
 /* Helpers botón de carga */
 function setBtnLoading(btn, txt) {
@@ -2578,6 +2752,7 @@ if (btnBorrarVotos && !btnBorrarVotos.dataset.bound) {
     if (!confirm("Vas a BORRAR definitivamente TODOS los votos de la votación final. ¿Continuar?")) return;
     setBtnLoading(btnBorrarVotos, 'Borrando…');
     await borrarColeccion('votaciones');
+
     unsetBtnLoading(btnBorrarVotos);
     if (typeof cargarResultados === 'function') cargarResultados();
   });
@@ -2588,7 +2763,7 @@ if (btnBorrarNomin && !btnBorrarNomin.dataset.bound) {
   btnBorrarNomin.addEventListener('click', async () => {
     if (!confirm("Vas a BORRAR definitivamente TODAS las nominaciones. ¿Continuar?")) return;
     setBtnLoading(btnBorrarNomin, 'Borrando…');
-    await borrarColeccion('nominaciones');
+    await borrarNominaciones2026();
     unsetBtnLoading(btnBorrarNomin);
     if (typeof cargarResultados === 'function') cargarResultados();
   });
