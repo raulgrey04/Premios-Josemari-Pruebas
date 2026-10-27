@@ -168,7 +168,7 @@ function controlarAccesoResultados() {
 ===================================== */
 
 // Cambiar a true cuando se abran las secciones.
-const CATEGORIAS_ABIERTAS = false;
+const CATEGORIAS_ABIERTAS = true;
 const NOMINACIONES_ABIERTAS = false;
 const VOTACIONES_ABIERTAS = false;
 
