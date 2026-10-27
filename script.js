@@ -868,41 +868,43 @@ const categoryImages = {
   // DÍA 1
   "Mejor jugador de pádel del año": "fotos/mejorpadelista.png",
   "Peor Playus del año": "fotos/peorplayus.png",
-  "Viajero del año": "fotos/viajero.jpeg",
-  "Llorón del año": "fotos/lloron.jpeg",
+  "Correa del Año": "fotos/correa.png",
+  "Viajero del año": "fotos/viajero.png",
+  "Llorón del año": "fotos/lloron.png",
 
   // DÍA 2
-  "Fiestero del año": "fotos/fiestero.jpeg",
-  "Borrachera del año": "fotos/borracho.jpeg",
+  "Absolute Cinema del Año": "fotos/absolutecinema.png",
+  "Fiestero del año": "fotos/fiestero.png",
+  "Borrachera del año": "fotos/borrachera.png",
   "Picado del año": "fotos/picado.png",
   "Princeso del año": "fotos/princeso.png",
 
   // DÍA 3
   "Huella Digital": "fotos/huella.png",
-  "Mensaje del año": "fotos/mensaje.jpeg",
+  "Mensaje del año": "fotos/mensaje.png",
   "Sticker del año": "fotos/sticker.png",
   "Outfit del año": "fotos/outfit.png",
-  "Objeto del año": "fotos/objeto.jpg",
+  "Objeto del año": "fotos/objeto.png",
 
   // DÍA 4
   "Mejor personaje fuera de CT del año": "fotos/personaje.png",
   "Enemigo del año": "fotos/enemigo.png",
-  "Palabra/Frase del año": "fotos/palabra.jpeg",
-  "Mote del año": "fotos/mote.jpeg",
-  "Broma del año": "fotos/broma.jpeg",
+  "Palabra/Frase del año": "fotos/palabra.png",
+  "Mote del año": "fotos/mote.png",
+  "Broma del año": "fotos/broma.png",
 
   // DÍA 5
-  "Fail del año": "fotos/fail.jpeg",
-  "Autistada del año": "fotos/autistada.jpg",
-  "Fiesta del año": "fotos/fiesta.jpeg",
-  "Foto del año": "fotos/foto.jpeg",
-  "Video del año": "fotos/video.jpeg",
+  "Fail del año": "fotos/fail.png",
+  "Autistada del año": "fotos/autistada.png",
+  "Fiesta del año": "fotos/fiesta.png",
+  "Foto del año": "fotos/foto.png",
+  "Video del año": "fotos/video.png",
 
   // DÍA 6
-  "Peor momento del año": "fotos/p_momento.jpeg",
+  "Peor momento del año": "fotos/peormomento.png",
   "Revelación del año": "fotos/revelacion.png",
-  "Mejor momento del año": "fotos/m_momento.jpeg",
-  "Decepción del año": "fotos/decepcion.jpeg",
+  "Mejor momento del año": "fotos/mejormomento.png",
+  "Decepción del año": "fotos/decepcion.png",
   "MVP del año": "fotos/mvp.png"
 
 };
@@ -1483,13 +1485,279 @@ document.getElementById("enviarVotacion")?.addEventListener("click", async () =>
   }
 });
 
+
+const CATEGORIAS_TODOS = [
+  "Viajero del año",
+  "Fiestero del año",
+  "Llorón del año",
+  "Picado del año",
+  "Princeso del año",
+  "Revelación del año",
+  "Decepción del año",
+  "MVP del año"
+];
+
 /* =======================================================
    NOMINADOS ESPECIALES 2026
    Aquí iremos metiendo las categorías que NO usen
    automáticamente a todos los participantes.
 ======================================================= */
 
-const NOMINADOS_ESPECIALES = {};
+const NOMINADOS_ESPECIALES = {
+
+  "Mejor jugador de pádel del año": [
+    { nombre: "Asieras",       foto: "fotos/asieras.jpeg" },
+    { nombre: "Darawayas",     foto: "fotos/dario.jpeg" },
+    { nombre: "Ivanpechotes",  foto: "fotos/ivanp.jpeg" },
+    { nombre: "Lusilu",        foto: "fotos/Lucia.jpeg" },
+    { nombre: "Toñaco",        foto: "fotos/marco.jpeg" },
+    { nombre: "Manolo",        foto: "fotos/manu.jpeg" },
+    { nombre: "Kastor",        foto: "fotos/mario.jpeg" },
+    { nombre: "Gamepro",       foto: "fotos/gamepro.jpeg" },
+    { nombre: "El Enano",      foto: "fotos/fervico.jpeg" },
+    { nombre: "Poru",          foto: "fotos/Poru.jpeg" },
+    { nombre: "Ikardo",        foto: "fotos/iker.jpeg" },
+    { nombre: "Lab El Viejo",  foto: "fotos/labrada.jpeg" }
+  ],
+
+  "Peor Playus del año": [
+    { nombre: "Asieras",      foto: "fotos/asieras.jpeg" },
+    { nombre: "Rulillas",     foto: "fotos/rulillas.jpeg" },
+    { nombre: "Darawayas",    foto: "fotos/dario.jpeg" },
+    { nombre: "Lusilu",       foto: "fotos/Lucia.jpeg" },
+    { nombre: "Almansa",      foto: "fotos/ines.jpeg" },
+    { nombre: "Toñaco",       foto: "fotos/marco.jpeg" },
+    { nombre: "Manolo",       foto: "fotos/manu.jpeg" },
+    { nombre: "Kastor",       foto: "fotos/mario.jpeg" },
+    { nombre: "Gamepro",      foto: "fotos/gamepro.jpeg" },
+    { nombre: "El Enano",     foto: "fotos/fervico.jpeg" },
+    { nombre: "Poru",         foto: "fotos/Poru.jpeg" },
+    { nombre: "Lab El Viejo", foto: "fotos/labrada.jpeg" }
+  ],
+
+  "Correa del Año": [
+    { nombre: "Hugo y el Popeyes", foto: "fotos/correa/hugo.png" },
+    { nombre: "Dani y el Ejército", foto: "fotos/correa/dani.png" },
+    { nombre: "Labrada y los de su uni", foto: null },
+    { nombre: "Marco y salir con enfermería", foto: null },
+    { nombre: "Fer y Unai", foto: null },
+    { nombre: "Ines y las de su uni", foto: null },
+    { nombre: "Rulas y las procesiones", foto: "fotos/correa/rulas.png" },
+    { nombre: "Manu y los estudios", foto: null },
+    { nombre: "Dario", foto: null },
+    { nombre: "Poru y sus crocs", foto: null },
+    { nombre: "Lucia", foto: null },
+    { nombre: "Ivanpe", foto: null },
+    { nombre: "Maria", foto: null },
+    { nombre: "Asier", foto: null },
+    { nombre: "Iker y hablar con tias en una fiesta", foto: null },
+    { nombre: "Mario", foto: null }
+  ],
+
+  "Absolute Cinema del Año": [
+    { nombre: "Absolute Battles", foto: "fotos/absolute cinema/batallas.jpeg" },
+    { nombre: "Absolute Carloja", foto: "fotos/absolute cinema/carloja.jpeg" },
+    { nombre: "Absolute Poyoco", foto: "fotos/absolute cinema/marco.jpeg" },
+    { nombre: "Absolute Senil", foto: "fotos/absolute cinema/labrada.jpeg" },
+    { nombre: "Absolute Rulas", foto: "fotos/absolute cinema/rulas.jpeg" },
+    { nombre: "Absolute Asier", foto: "fotos/absolute cinema/asier.jpeg" },
+    { nombre: "Absolute My Bad", foto: "fotos/absolute cinema/ivanpe.jpeg" },
+    { nombre: "Absolute Quegas", foto: "fotos/absolute cinema/poru.jpeg" },
+    { nombre: "Absolute Iceman", foto: "fotos/absolute cinema/iceman.jpeg" },
+    { nombre: "Absolute Dali", foto: "fotos/absolute cinema/dali.jpeg" }
+  ],
+
+  "Borrachera del año": [
+    { nombre: "Abrazado al Retrete (Gamepro)", foto: "fotos/borrachera/hugo.jpeg" },
+    { nombre: "No Mas Tequila, Por Favor (Labrada)", foto: "fotos/borrachera/labrada.jpeg" },
+    { nombre: "La palmera Ropax (Poru)", foto: "fotos/borrachera/poru.jpeg" },
+    { nombre: "El Acosador Canario (Marco)", foto: "fotos/borrachera/marco.jpeg" },
+    { nombre: "Yo nunca gomito (Dario)", foto: "fotos/borrachera/dario.jpeg" },
+    { nombre: "Sin pantalones (Ivanpe)", foto: "fotos/borrachera/ivanpe.jpeg" },
+    { nombre: "Da igual cuando lo leas (Asier)", foto: "fotos/borrachera/asier.jpeg" },
+    { nombre: "Ronda de chupitos (Maria)", foto: "fotos/borrachera/maria.jpeg" },
+    { nombre: "Vomito detras de la casa (Fervico)", foto: "fotos/borrachera/fer.jpeg" },
+    { nombre: "Siempre voy borracho (Iker)", foto: "fotos/borrachera/iker.jpeg" }
+  ],
+
+  "Huella Digital": [
+    { nombre: "Dani moderno", foto: "fotos/huella digital/dani.jpeg" },
+    { nombre: "Fer bollycao", foto: "fotos/huella digital/fer.jpeg" },
+    { nombre: "DJ Rulas", foto: "fotos/huella digital/rulas.jpeg" },
+    { nombre: "Vecchia Signora", foto: "fotos/huella digital/marco.jpeg" },
+    { nombre: "Premios 2k16", foto: "fotos/huella digital/asieryrulas.jpeg" },
+    { nombre: "Feliz Navidad", foto: "fotos/huella digital/mario.jpeg" },
+    { nombre: "Hugo antes del Sexo", foto: "fotos/huella digital/hugo.jpeg" }
+  ],
+
+  "Mensaje del año": [
+    { nombre: "Conversación de abuelas (Poru y Asier)", foto: "fotos/mensaje/asieryporu.jpeg" },
+    { nombre: "Fernando charcutero (Dani)", foto: "fotos/mensaje/dani.jpeg" },
+    { nombre: "Mr. Quejas (Poru)", foto: "fotos/mensaje/poru.jpeg"  },
+    { nombre: "Desayuno o merienda (Gamepro)", foto: "fotos/mensaje/hugo.jpeg" },
+    { nombre: "Corto pero intenso (Lucia)", foto: "fotos/mensaje/lucia.jpeg"  },
+    { nombre: "TecladoPro (Dario y Gamepro)", foto: "fotos/mensaje/darioyhugo.jpeg" },
+    { nombre: "Vinicius Jr. (Asier)", foto: "fotos/mensaje/asier.jpeg" },
+    { nombre: "Labrada vs. Socios.Brand (Labrada)", foto: "fotos/mensaje/labrada.jpeg" },
+    { nombre: "Lagrimas por Cheeso (Marco y Fer)", foto: "fotos/mensaje/marcoyfer.jpeg" },
+    { nombre: "FactouPro (Gamepro)", foto: "fotos/mensaje/hugo2.jpeg" }
+  ],
+
+  "Sticker del año": [
+    { nombre: "Poru Israelita", foto: "fotos/sticker/poru.jpeg" },
+    { nombre: "Dario Glasses", foto: "fotos/sticker/dario.jpeg" },
+    { nombre: "Roman", foto: "fotos/sticker/roman.jpeg" },
+    { nombre: "Zipi Zape", foto: "fotos/sticker/hugo.jpeg" },
+    { nombre: "Fer free compresas", foto: "fotos/sticker/fer.jpeg" },
+    { nombre: "67 tun tun tun tun sahur", foto: "fotos/sticker/tuntun.jpeg" },
+    { nombre: "Pereira Franquista", foto: "fotos/sticker/pereira.jpeg" },
+    { nombre: "No Mas Tequila Por Favor", foto: "fotos/sticker/labrada.jpeg" },
+    { nombre: "Rulilas empalmado", foto: "fotos/sticker/rulas.jpeg" }
+  ],
+
+  "Outfit del año": [
+    { nombre: "Ivanpe Electricista", foto: "fotos/outfit/ivanpe.jpeg" },
+    { nombre: "Los Popeyeros", foto: "fotos/outfit/popeyes.jpeg" },
+    { nombre: "El Abuelo Paco", foto: "fotos/outfit/poru.jpeg" },
+    { nombre: "Dani Militar", foto: "fotos/outfit/dani.jpeg" },
+    { nombre: "Hugo tirantes de policía", foto: "fotos/outfit/hugo.jpeg" },
+    { nombre: "Fer encamisado", foto: "fotos/outfit/fer.jpeg" },
+    { nombre: "Mexicanos Lindos", foto: "fotos/outfit/mexico.jpeg" },
+    { nombre: "Cornudas", foto: "fotos/outfit/pibas.jpeg" },
+    { nombre: "El Pesao Argentino", foto: "fotos/outfit/iker.jpeg" },
+    { nombre: "Los Renos", foto: "fotos/outfit/daniylabrada.jpeg" }
+  ],
+
+  "Objeto del año": [
+    { nombre: "Manolo-Pinto (Alienigena)", foto: "fotos/objeto/manolo.jpeg" },
+    { nombre: "Mechero de Gamepro", foto: "fotos/objeto/hugo.png" },
+    { nombre: "Bandera Italiana de Asier", foto: "fotos/objeto/italia.jpeg" },
+    { nombre: "Copa del Mundo Fake", foto: "fotos/objeto/mundial.jpeg" },
+    { nombre: "Mesa de Mezclas de DJ Sistema", foto: "fotos/objeto/mesa.jpeg" },
+    { nombre: "Balon de Canarias", foto: "fotos/objeto/balon.jpeg" },
+    { nombre: "Cartel de bebidas Proyecto Y", foto: "fotos/objeto/cartel.jpeg" },
+    { nombre: "Tiburón de Asier", foto: "fotos/objeto/tiburon.jpeg" },
+    { nombre: "Tequila Proyecto Y", foto: "fotos/objeto/tequila.jpeg" },
+    { nombre: "Cubo de Rubik de Fer (Robado por ...)", foto: "fotos/objeto/rubik.png" },
+    { nombre: "Cartel Obra Robado", foto: "fotos/objeto/señal.jpg" }
+
+  ],
+
+  "Mejor personaje fuera de CT del año": [
+    { nombre: "Pepito", foto: null },
+    { nombre: "Diego", foto: null },
+    { nombre: "Fermoriv", foto: null },
+    { nombre: "Iceman", foto: null },
+    { nombre: "Luisli", foto: null },
+    { nombre: "Artupa", foto: null },
+    { nombre: "Angel Madrid (Simba)", foto: null },
+    { nombre: "Carcapri", foto: null },
+    { nombre: "Carmen López", foto: null },
+    { nombre: "Lucas Golderos", foto: null }
+  ],
+
+  "Enemigo del año": [
+    { nombre: "DJ Sistema", foto: null },
+    { nombre: "Roman", foto: null },
+    { nombre: "Yoryo", foto: null },
+    { nombre: "Adrivus", foto: null },
+    { nombre: "Celia Quintero", foto: null },
+    { nombre: "Pilar", foto: null },
+    { nombre: "Roberms", foto: null },
+    { nombre: "Fermoriv", foto: null },
+    { nombre: "VictorZu (por Marco)", foto: null }
+  ],
+
+  "Palabra/Frase del año": [
+    { nombre: "Raskiperro", foto: null },
+    { nombre: "Imposible, Imposible", foto: null },
+    { nombre: "Mai Bat", foto: null },
+    { nombre: "A ellos", foto: null },
+    { nombre: "Payo", foto: null },
+    { nombre: "Mari Carmen la reina", foto: null },
+    { nombre: "Charos", foto: null },
+    { nombre: "mis hijos", foto: null }
+  ],
+
+  "Mote del año": [
+    { nombre: "Mecherin", foto: null },
+    { nombre: "Topocho", foto: null },
+    { nombre: "Mojadin", foto: null },
+    { nombre: "Simba", foto: null },
+    { nombre: "Manototo", foto: null },
+    { nombre: "Mr. Grey", foto: null },
+    { nombre: "Alva", foto: null },
+    { nombre: "Peruano", foto: null }
+  ],
+
+  "Broma del año": [
+    { nombre: "Escondite Camisetas Fer (Yincana)", foto: null },
+    { nombre: "Cono a Javichu Vol. 3", foto: null },
+    { nombre: "Poru y entradas de Alvama Ice", foto: null },
+    { nombre: "Tatoo Poru", foto: null },
+    { nombre: "Robada del cubo de Rubik", foto: null }
+  ],
+
+  "Fail del año": [
+    { nombre: "Choque Coche Asier-Ivanpe", foto: null },
+    { nombre: "Pantalones rotos de Ivanpe", foto: null },
+    { nombre: "El intento de Casa Rural", foto: null },
+    { nombre: "Concurso de Burguers Fallido", foto: null },
+    { nombre: "Apuesta histórica (puta Paraguay)", foto: null },
+    { nombre: "Restaurante Canarias", foto: null }
+  ],
+
+  "Autistada del año": [
+    { nombre: "Regalos Fervi, Lab, Ivanp y Marioda", foto: null },
+    { nombre: "Tribu mierdoso de conductores", foto: null },
+    { nombre: "Rulas miedo a avión 2.0", foto: null },
+    { nombre: "DJ dario", foto: null },
+    { nombre: "Asier viendo una peli en arena negra", foto: null },
+    { nombre: "El tiktok de Marco en la carretera de Canarias", foto: null },
+    { nombre: "Marco y diciembre en cholas", foto: null },
+    { nombre: "Asier y Dario con el gato", foto: null },
+    { nombre: "Pellejos de Labruda", foto: null }
+  ],
+
+  "Fiesta del año": [
+    { nombre: "Nochevieja", foto: null },
+    { nombre: "Carnavales", foto: null },
+    { nombre: "Feria de Abril", foto: null },
+    { nombre: "Campus Link", foto: null },
+    { nombre: "Proyecto Y", foto: null },
+    { nombre: "Zurra", foto: null },
+    { nombre: "Pandorga", foto: null },
+    { nombre: "Fiesta Canaria", foto: null },
+    { nombre: "Ferias", foto: null },
+    { nombre: "Piedrabuena", foto: null },
+    { nombre: "Halloween", foto: null }
+  ],
+
+  "Foto del año": [],
+
+  "Video del año": [],
+
+  "Peor momento del año": [
+    { nombre: "Coche Volcado en Canarias + Comida Restaurante Canarias", foto: null },
+    { nombre: "Coche Vuelta Canarias", foto: null },
+    { nombre: "DJ Sistema estafador", foto: null },
+    { nombre: "Los Porros de Gonsi en la Cervezada", foto: null },
+    { nombre: "Pelea Zurra con Josemi", foto: null },
+    { nombre: "Lucia y el cristal que se clavo en Pandorga", foto: null }
+  ],
+
+  "Mejor momento del año": [
+    { nombre: "Mundial España", foto: null },
+    { nombre: "Conga Proyecto Y", foto: null },
+    { nombre: "Casa de María Previa Carnaval (todos vistiéndonos de abuelas y Gamepro Cuñao)", foto: null },
+    { nombre: "Asier escondido en los arbustos pillando a Fer follando (ojalá hubiera pasao)", foto: null },
+    { nombre: "Super cuota de Winamax", foto: null },
+    { nombre: "Lanzamiento de Hielos en Canarias", foto: null },
+    { nombre: "Labrada destronando a Socios.Brand", foto: null },
+    { nombre: "Carrera Dunas", foto: null }
+  ],
+
+};
 
 /* ============================================
    MÁXIMO DE SELECCIÓN POR CATEGORÍA
@@ -1520,23 +1788,57 @@ function crearApartadoNominaciones(idLista, categoriaNombre) {
   const override = NOMINADOS_ESPECIALES[categoriaNombre];
   let lista = [];
 
-  // 1) Usar nominados especiales si existen
-  if (Array.isArray(override) && override.length > 0) {
-    lista = override.map(o => ({
-      nombre: o.nombre,
-      foto:   o.foto ?? null,
-      video:  o.video ?? null,
-      poster: o.poster ?? null
-    }));
-  } 
-  // 2) Si no, usar participantes del grid
-  else {
-    document.querySelectorAll("#participantes .participante").forEach(part => {
-      const nombre = part.querySelector("h3").innerText.trim();
-      const foto   = part.querySelector("img").src;
+  // 1) Categorías con nominados elegidos manualmente
+if (Array.isArray(override) && override.length > 0) {
+
+  lista = override.map(o => ({
+    nombre: o.nombre,
+    foto:   o.foto ?? null,
+    video:  o.video ?? null,
+    poster: o.poster ?? null
+  }));
+
+}
+
+// 2) Solo estas categorías permiten a TODOS los participantes
+else if (CATEGORIAS_TODOS.includes(categoriaNombre)) {
+
+  const EXCLUIDOS = [
+    "Rober",
+    "Robertuki",
+    "Fermoriv"
+  ];
+
+  document
+    .querySelectorAll("#participantes .participante")
+    .forEach(part => {
+
+      const nombre =
+        part.querySelector("h3").innerText.trim();
+
+      if (EXCLUIDOS.includes(nombre)) {
+        return;
+      }
+
+      const foto =
+        part.querySelector("img").src;
+
       lista.push({ nombre, foto });
     });
-  }
+
+}
+
+// 3) El resto necesita nominados especiales
+else {
+
+  contenedor.innerHTML = `
+    <p class="nominados-pendientes">
+      🔒 Nominados pendientes de configurar.
+    </p>
+  `;
+
+  return;
+}
 
   /* === 3) Pintar tarjetas === */
   lista.forEach(item => {
@@ -1555,40 +1857,46 @@ function crearApartadoNominaciones(idLista, categoriaNombre) {
 
     /* Botón lupa SOLO para “Mensaje del año” */
 // 🔍 Botón lupa para IMÁGENES de "Mensaje del año" y "Foto del año" (votación final)
-if (!video && (categoriaNombre === "Mensaje del año" || categoriaNombre === "Foto del año") && foto) {
-      const btn = document.createElement("div");
-      btn.className = "btn-zoom";
-      btn.setAttribute("role", "button");
-      btn.setAttribute("aria-label", "Ver imagen en grande");
+if (
+  !video &&
+  (
+    categoriaNombre === "Mensaje del año" ||
+    categoriaNombre === "Foto del año" ||
+    categoriaNombre === "Absolute Cinema del Año" ||
+    categoriaNombre === "Huella Digital" ||
+    categoriaNombre === "Sticker del año"
+  ) &&
+  foto
+) {
+  const btn = document.createElement("div");
+  btn.className = "btn-zoom";
+  btn.setAttribute("role", "button");
+  btn.setAttribute("aria-label", "Ver imagen en grande");
+  btn.title = "Ver imagen en grande";
 
-      const svgNS = "http://www.w3.org/2000/svg";
-      const svg = document.createElementNS(svgNS, "svg");
-      svg.setAttribute("width", "18");
-      svg.setAttribute("height", "18");
-      svg.setAttribute("fill", "currentColor");
-      svg.setAttribute("viewBox", "0 0 16 16");
+  const svgNS = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(svgNS, "svg");
+  svg.setAttribute("width", "18");
+  svg.setAttribute("height", "18");
+  svg.setAttribute("fill", "currentColor");
+  svg.setAttribute("viewBox", "0 0 16 16");
 
-      const path = document.createElementNS(svgNS, "path");
-      path.setAttribute(
-        "d",
-        "M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85zm-5.242 1.656a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"
-      );
+  const path = document.createElementNS(svgNS, "path");
+  path.setAttribute(
+    "d",
+    "M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85zm-5.242 1.656a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"
+  );
 
-      
+  svg.appendChild(path);
+  btn.appendChild(svg);
 
-      svg.appendChild(path);
-      btn.appendChild(svg);
-
-      btn.addEventListener("click", e => {
-        e.stopPropagation();
-        openImageLightbox(foto, nombre);
-      });
-
-      div.appendChild(btn);
-    }
-
-
+  btn.addEventListener("click", e => {
+    e.stopPropagation();
+    openImageLightbox(foto, nombre);
   });
+
+  div.appendChild(btn);
+}
 
   /* 4) Activar vídeos dentro de esas tarjetas */
   wireLightboxForVideos(contenedor);
@@ -1614,6 +1922,9 @@ if (!video && (categoriaNombre === "Mensaje del año" || categoriaNombre === "Fo
       }
     });
   });
+
+});
+
 }
 
 
@@ -1858,13 +2169,13 @@ function closeImageLightbox() {
 const LOTE_1 = [
   "Mejor jugador de pádel del año",
   "Peor Playus del año",
-  "PENDIENTE 1",
+  "Correa del Año",
   "Viajero del año",
   "Llorón del año"
 ];
 
 const LOTE_2 = [
-  "PENDIENTE 2",
+  "Absolute Cinema del Año",
   "Fiestero del año",
   "Borrachera del año",
   "Picado del año",
