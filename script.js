@@ -156,10 +156,19 @@ localStorage.setItem("usuarioLogueado", nombre);
    CONTROL DE ACCESO 
 ============================ */
 function controlarAccesoResultados() {
-  const user = localStorage.getItem("usuarioLogueado");
   const btn = document.getElementById("btnResultados");
   if (!btn) return;
-  btn.style.display = ["Rulas", "Lucia"].includes(user) ? "" : "none";
+
+  const firebaseUser = auth.currentUser;
+
+  const esAdminReal =
+    firebaseUser &&
+    [
+      "rulas@premios.com",
+      "lucia@premios.com"
+    ].includes(firebaseUser.email);
+
+  btn.style.display = esAdminReal ? "" : "none";
 }
 
 
@@ -176,8 +185,14 @@ const VOTACIONES_ABIERTAS = false;
 const ORGANIZADORES = ["Rulas", "Lucia"];
 
 function esOrganizador() {
-  const usuario = localStorage.getItem("usuarioLogueado");
-  return ORGANIZADORES.includes(usuario);
+  const firebaseUser = auth.currentUser;
+
+  if (!firebaseUser) return false;
+
+  return [
+    "rulas@premios.com",
+    "lucia@premios.com"
+  ].includes(firebaseUser.email);
 }
 
 function controlarSeccionesCerradas() {
@@ -1538,19 +1553,19 @@ const NOMINADOS_ESPECIALES = {
   "Correa del Año": [
     { nombre: "Hugo y el Popeyes", foto: "fotos/correa/hugo.png" },
     { nombre: "Dani y el Ejército", foto: "fotos/correa/dani.png" },
-    { nombre: "Labrada y los de su uni", foto: null },
-    { nombre: "Marco y salir con enfermería", foto: null },
-    { nombre: "Fer y Unai", foto: null },
-    { nombre: "Ines y las de su uni", foto: null },
+    { nombre: "Labrada y los de su uni", foto: "fotos/correa/labrada.png" },
+    { nombre: "Marco y salir con enfermería", foto: "fotos/correa/marco.jpeg" },
+    { nombre: "Fer y Unai", foto: "fotos/correa/ferunai.png" },
+    { nombre: "Ines y las de su uni", foto: "fotos/correa/ines.jpeg" },
     { nombre: "Rulas y las procesiones", foto: "fotos/correa/rulas.png" },
-    { nombre: "Manu y los estudios", foto: null },
+    { nombre: "Manu y los estudios", foto: "fotos/correa/manu.png" },
     { nombre: "Dario", foto: null },
-    { nombre: "Poru y sus crocs", foto: null },
+    { nombre: "Poru", foto: null },
     { nombre: "Lucia", foto: null },
     { nombre: "Ivanpe", foto: null },
     { nombre: "Maria", foto: null },
     { nombre: "Asier", foto: null },
-    { nombre: "Iker y hablar con tias en una fiesta", foto: null },
+    { nombre: "Iker y hablar con tias en una fiesta", foto: "fotos/correa/iker.png" },
     { nombre: "Mario", foto: null }
   ],
 
@@ -1587,7 +1602,11 @@ const NOMINADOS_ESPECIALES = {
     { nombre: "Vecchia Signora", foto: "fotos/huella digital/marco.jpeg" },
     { nombre: "Premios 2k16", foto: "fotos/huella digital/asieryrulas.jpeg" },
     { nombre: "Feliz Navidad", foto: "fotos/huella digital/mario.jpeg" },
-    { nombre: "Hugo antes del Sexo", foto: "fotos/huella digital/hugo.jpeg" }
+    { nombre: "Hugo antes del Sexo", foto: "fotos/huella digital/hugo.jpeg" },
+    { nombre: "Padre Nuestro Que Estas en los Cielos", foto: "fotos/huella digital/manu.jpeg" },
+    { nombre: "Darius", foto: "fotos/huella digital/dario.png" },
+    { nombre: "SR4", foto: "fotos/huella digital/SR4.png" },
+    { nombre: "Labrada Gay", foto: "fotos/huella digital/labrada.png" }
   ],
 
   "Mensaje del año": [
@@ -1644,67 +1663,75 @@ const NOMINADOS_ESPECIALES = {
   ],
 
   "Mejor personaje fuera de CT del año": [
-    { nombre: "Pepito", foto: null },
-    { nombre: "Diego", foto: null },
-    { nombre: "Fermoriv", foto: null },
-    { nombre: "Iceman", foto: null },
-    { nombre: "Luisli", foto: null },
-    { nombre: "Artupa", foto: null },
-    { nombre: "Angel Madrid (Simba)", foto: null },
-    { nombre: "Carcapri", foto: null },
-    { nombre: "Carmen López", foto: null },
-    { nombre: "Lucas Golderos", foto: null }
+    { nombre: "Pepito", foto: "fotos/perosnajes/pepito.jpeg" },
+    { nombre: "Diego", foto: "fotos/perosnajes/diego.jpeg" },
+    { nombre: "Fermoriv", foto: "fotos/perosnajes/fermoriv.jpeg" },
+    { nombre: "Iceman", foto: "fotos/perosnajes/iceman.jpeg" },
+    { nombre: "Luisli", foto: "fotos/perosnajes/luisli.jpeg" },
+    { nombre: "Artupa", foto: "fotos/perosnajes/artupa.jpeg" },
+    { nombre: "Angel Madrid (Simba)", foto: "fotos/perosnajes/angel.jpeg" },
+    { nombre: "Carcapri", foto: "fotos/perosnajes/carcapri.jpeg" },
+    { nombre: "Carmen López", foto: "fotos/perosnajes/carmen.jpeg" },
+    { nombre: "Lucas Golderos", foto: "fotos/perosnajes/lucas.jpeg" },
+    { nombre: "Enrique Galiana", foto: "fotos/perosnajes/enrique.jpeg" },
+    { nombre: "Unai", foto: "fotos/perosnajes/unai.jpeg" },
   ],
 
   "Enemigo del año": [
-    { nombre: "DJ Sistema", foto: null },
-    { nombre: "Roman", foto: null },
-    { nombre: "Yoryo", foto: null },
-    { nombre: "Adrivus", foto: null },
+    { nombre: "DJ Sistema", foto: "fotos/perosnajes/djsistema.jpeg"  },
+    { nombre: "Roman", foto: "fotos/perosnajes/roman.jpeg" },
+    { nombre: "Yoryo", foto: "fotos/perosnajes/yoryo.jpeg" },
+    { nombre: "Adriyus", foto: "fotos/perosnajes/adriyus.jpeg" },
     { nombre: "Celia Quintero", foto: null },
     { nombre: "Pilar", foto: null },
-    { nombre: "Roberms", foto: null },
-    { nombre: "Fermoriv", foto: null },
-    { nombre: "VictorZu (por Marco)", foto: null }
+    { nombre: "Roberms", foto: "fotos/perosnajes/roberms.jpeg" },
+    { nombre: "VictorZu (por Marco)", foto: "fotos/perosnajes/victorzu.jpeg" }
   ],
 
   "Palabra/Frase del año": [
-    { nombre: "Raskiperro", foto: null },
-    { nombre: "Imposible, Imposible", foto: null },
-    { nombre: "Mai Bat", foto: null },
-    { nombre: "A ellos", foto: null },
-    { nombre: "Payo", foto: null },
-    { nombre: "Mari Carmen la reina", foto: null },
-    { nombre: "Charos", foto: null },
-    { nombre: "mis hijos", foto: null }
+    { nombre: "Raskyperro", foto: "fotos/palabra/raskiperro.png" },
+    { nombre: "Imposible, Imposible", foto: "fotos/palabra/imposible.png" },
+    { nombre: "Mai Bat", foto: "fotos/palabra/mai.png" },
+    { nombre: "A ellos", foto: "fotos/palabra/ellos.png" },
+    { nombre: "Payo", foto: "fotos/palabra/payo.png" },
+    { nombre: "Mari Carmen", foto: "fotos/palabra/maricarmen.png" },
+    { nombre: "Charos", foto: "fotos/palabra/charos.png" },
+    { nombre: "Mis hijos", foto: "fotos/palabra/hijos.png" },
+    { nombre: "Diciembre en Cholas", foto: "fotos/palabra/diciembre.png" },
+    { nombre: "No me godas", foto: "fotos/palabra/godas.png" }
   ],
 
   "Mote del año": [
-    { nombre: "Mecherin", foto: null },
-    { nombre: "Topocho", foto: null },
-    { nombre: "Mojadin", foto: null },
-    { nombre: "Simba", foto: null },
+    { nombre: "CachondoPro o PolloPro", foto: null },
+    { nombre: "Topocho", foto: "fotos/mote/topocho.png" },
+    { nombre: "Mojadin", foto: "fotos/mote/mojadin.png" },
+    { nombre: "Simba", foto: "fotos/mote/simba.jpg" },
     { nombre: "Manototo", foto: null },
-    { nombre: "Mr. Grey", foto: null },
-    { nombre: "Alva", foto: null },
-    { nombre: "Peruano", foto: null }
+    { nombre: "Mr. Grey", foto: "fotos/mote/grey.png" },
+    { nombre: "Alva", foto: "fotos/mote/alva.png" },
+    { nombre: "Peruano", foto: "fotos/mote/peruano.png" },
+    { nombre: "Kustir", foto: "fotos/mote/kustir.png" },
+    { nombre: "DH4", foto: "fotos/mote/huijsen.png" },
+    { nombre: "Sushi", foto: "fotos/mote/sushi.jpg" }
   ],
 
   "Broma del año": [
-    { nombre: "Escondite Camisetas Fer (Yincana)", foto: null },
-    { nombre: "Cono a Javichu Vol. 3", foto: null },
-    { nombre: "Poru y entradas de Alvama Ice", foto: null },
-    { nombre: "Tatoo Poru", foto: null },
-    { nombre: "Robada del cubo de Rubik", foto: null }
+    { nombre: "Yinkana Camisetas Fer", foto: "fotos/broma/yinkana.jpeg" },
+    { nombre: "Cono a Javichu Vol. 3", foto: "fotos/broma/cono.jpeg" },
+    { nombre: "Compra Entradas Alvama Ice (Ropas)", foto: "fotos/broma/alvama.jpg" },
+    { nombre: "Tatoo Poru", foto: "fotos/broma/tatu.jpeg" },
+    { nombre: "Robada del cubo de Rubik de Fer", foto: "fotos/broma/fermoriv.png" },
+    { nombre: "Bajada pantalones Canarias", foto: "fotos/broma/pantalon.jpg" }
   ],
 
   "Fail del año": [
-    { nombre: "Choque Coche Asier-Ivanpe", foto: null },
+    { nombre: "Choque Coche Asier-Ivanpe", foto: "fotos/fail/choque.jpeg" },
     { nombre: "Pantalones rotos de Ivanpe", foto: null },
     { nombre: "El intento de Casa Rural", foto: null },
     { nombre: "Concurso de Burguers Fallido", foto: null },
     { nombre: "Apuesta histórica (puta Paraguay)", foto: null },
-    { nombre: "Restaurante Canarias", foto: null }
+    { nombre: "Restaurante Canarias", foto: null },
+    { nombre: "CharcoPro en los karts", foto: null }
   ],
 
   "Autistada del año": [
@@ -1720,17 +1747,17 @@ const NOMINADOS_ESPECIALES = {
   ],
 
   "Fiesta del año": [
-    { nombre: "Nochevieja", foto: null },
-    { nombre: "Carnavales", foto: null },
-    { nombre: "Feria de Abril", foto: null },
-    { nombre: "Campus Link", foto: null },
-    { nombre: "Proyecto Y", foto: null },
-    { nombre: "Zurra", foto: null },
-    { nombre: "Pandorga", foto: null },
-    { nombre: "Fiesta Canaria", foto: null },
-    { nombre: "Ferias", foto: null },
-    { nombre: "Piedrabuena", foto: null },
-    { nombre: "Halloween", foto: null }
+    { nombre: "Nochevieja", foto: "fotos/fiesta/nochevieja.jpeg" },
+    { nombre: "Carnavales", foto: "fotos/fiesta/carnaval.jpeg" },
+    { nombre: "Feria de Abril", foto: "fotos/fiesta/abril.jpeg"  },
+    { nombre: "Campus Link", foto: "fotos/fiesta/campus.jpeg"  },
+    { nombre: "Proyecto Y", foto: "fotos/fiesta/proyecto.jpeg"  },
+    { nombre: "Zurra", foto: "fotos/fiesta/zurra.jpeg"  },
+    { nombre: "Pandorga", foto: "fotos/fiesta/pandorga.jpeg"  },
+    { nombre: "Arena Negra", foto: "fotos/fiesta/arena.jpeg"  },
+    { nombre: "Ferias (foto feik)", foto: "fotos/fiesta/ferias.jpeg"  },
+    { nombre: "Piedrabuena (foto feik)", foto: "fotos/fiesta/piedrabuena.jpeg"  },
+    { nombre: "Halloween", foto: "fotos/fiesta/halloween.jpeg" }
   ],
 
   "Foto del año": [],
@@ -1754,7 +1781,8 @@ const NOMINADOS_ESPECIALES = {
     { nombre: "Super cuota de Winamax", foto: null },
     { nombre: "Lanzamiento de Hielos en Canarias", foto: null },
     { nombre: "Labrada destronando a Socios.Brand", foto: null },
-    { nombre: "Carrera Dunas", foto: null }
+    { nombre: "Carrera Dunas", foto: null },
+    { nombre: "Karts Corral", foto: null }
   ],
 
 };
@@ -2417,14 +2445,22 @@ async function onEnviarTodasNominaciones(e) {
 
   try {
 
-    const usuario = localStorage.getItem("usuarioLogueado");
-    const firebaseUser = auth.currentUser;
+const firebaseUser = auth.currentUser;
 
-    if (!usuario || !firebaseUser) {
-      alert("Debes iniciar sesión para enviar nominaciones.");
-      mostrarSeccion("login");
-      return;
-    }
+if (!firebaseUser) {
+  alert("Debes iniciar sesión para enviar nominaciones.");
+  mostrarSeccion("login");
+  return;
+}
+
+const usuario = Object.keys(loginMap).find(
+  nombre => loginMap[nombre].email === firebaseUser.email
+);
+
+if (!usuario) {
+  alert("La cuenta autenticada no es válida.");
+  return;
+}
 
     const uid = firebaseUser.uid;
     const lote = window.getLoteActual();
@@ -4067,8 +4103,8 @@ construirSalaMuseo(2025);
 
   if (!dias || !horas || !minutos || !segundos) return;
 
-  // Fecha provisional de la gala
-  const fechaGala = new Date("2026-12-26T20:00:00");
+  // Fecha oficial de la gala
+  const fechaGala = new Date("2026-12-26T20:30:00");
 
   function actualizarContador() {
 

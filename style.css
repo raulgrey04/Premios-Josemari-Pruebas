@@ -6669,3 +6669,18 @@ body.easter-final-activo .nieve-capa {
     margin: 0 !important;
   }
 }
+
+/* Casino Polar y Easter Eggs sin el panel oscuro exterior */
+#casino,
+#casino-polar,
+#easter-eggs {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+/* Dejar visible el fondo polar general */
+#appContent {
+  background: transparent !important;
+}
