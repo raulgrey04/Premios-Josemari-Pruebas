@@ -4168,8 +4168,14 @@ construirSalaMuseo(2025);
 
   const TOTAL_EASTER_EGGS = 5;
 
+  const usuarioEaster =
+    localStorage.getItem("usuarioLogueado") || "invitado";
+
+  const claveEasterEggs =
+    `easterEggsJosemari_${usuarioEaster}`;
+
   let encontrados = JSON.parse(
-    localStorage.getItem("easterEggsJosemari") || "[]"
+    localStorage.getItem(claveEasterEggs) || "[]"
   );
 
   const contador =
@@ -4365,7 +4371,7 @@ construirSalaMuseo(2025);
     encontrados.push(id);
 
     localStorage.setItem(
-      "easterEggsJosemari",
+      claveEasterEggs,
       JSON.stringify(encontrados)
     );
 
