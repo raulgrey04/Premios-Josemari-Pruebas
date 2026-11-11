@@ -1553,20 +1553,20 @@ const NOMINADOS_ESPECIALES = {
   "Correa del Año": [
     { nombre: "Hugo y el Popeyes", foto: "fotos/correa/hugo.png" },
     { nombre: "Dani y el Ejército", foto: "fotos/correa/dani.png" },
-    { nombre: "Labrada y los de su uni", foto: "fotos/correa/labrada.png" },
-    { nombre: "Marco y salir con enfermería", foto: "fotos/correa/marco.jpeg" },
-    { nombre: "Fer y Unai", foto: "fotos/correa/ferunai.png" },
-    { nombre: "Ines y las de su uni", foto: "fotos/correa/ines.jpeg" },
-    { nombre: "Rulas y las procesiones", foto: "fotos/correa/rulas.png" },
+    { nombre: "Labrada y el TFG", foto: "fotos/correa/labrada.png" },
+    { nombre: "Marco y los/as enfermeros/as", foto: "fotos/correa/marco.png" },
+    { nombre: "Fer y Spiderman", foto: "fotos/correa/fer.png" },
+    { nombre: "Ines y caminos", foto: "fotos/correa/ines.png" },
+    { nombre: "Rulas y la Semana Santa", foto: "fotos/correa/rulas.png" },
     { nombre: "Manu y los estudios", foto: "fotos/correa/manu.png" },
-    { nombre: "Dario", foto: null },
-    { nombre: "Poru", foto: null },
-    { nombre: "Lucia", foto: null },
-    { nombre: "Ivanpe", foto: null },
-    { nombre: "Maria", foto: null },
-    { nombre: "Asier", foto: null },
+    { nombre: "Dario y los quesitos", foto: "fotos/correa/dario.png" },
+    { nombre: "Poru y el token de Fortnite", foto: "fotos/correa/poru.png" },
+    { nombre: "Lucia y el GYM", foto: "fotos/correa/lucia.png" },
+    { nombre: "Ivanpe y el Barsa", foto: "fotos/correa/ivanpe.png" },
+    { nombre: "Maria y las de su uni", foto: "fotos/correa/maria.png" },
+    { nombre: "Asier y Tomelloso", foto: "fotos/correa/asier.png" },
     { nombre: "Iker y hablar con tias en una fiesta", foto: "fotos/correa/iker.png" },
-    { nombre: "Mario", foto: null }
+    { nombre: "Mario y el deporte", foto: "fotos/correa/mario.png" }
   ],
 
   "Absolute Cinema del Año": [
@@ -1606,7 +1606,11 @@ const NOMINADOS_ESPECIALES = {
     { nombre: "Padre Nuestro Que Estas en los Cielos", foto: "fotos/huella digital/manu.jpeg" },
     { nombre: "Darius", foto: "fotos/huella digital/dario.png" },
     { nombre: "SR4", foto: "fotos/huella digital/SR4.png" },
-    { nombre: "Labrada Gay", foto: "fotos/huella digital/labrada.png" }
+    { nombre: "Asier Abascal", foto: "fotos/huella digital/asier.jpeg" },
+    { nombre: "Disney +", foto: "fotos/huella digital/marioylab1.jpeg" },
+    { nombre: "Que es lo que tienes yo no se", video: "fotos/huella digital/marioylab2.mp4", poster: "fotos/huella digital/marioylab2.jpeg"},
+    { nombre: "Ivanp Navideño", foto: "fotos/huella digital/ivanpe.jpeg" },
+
   ],
 
   "Mensaje del año": [
@@ -1663,7 +1667,6 @@ const NOMINADOS_ESPECIALES = {
   ],
 
   "Mejor personaje fuera de CT del año": [
-    { nombre: "Pepito", foto: "fotos/perosnajes/pepito.jpeg" },
     { nombre: "Diego", foto: "fotos/perosnajes/diego.jpeg" },
     { nombre: "Fermoriv", foto: "fotos/perosnajes/fermoriv.jpeg" },
     { nombre: "Iceman", foto: "fotos/perosnajes/iceman.jpeg" },
@@ -1673,7 +1676,6 @@ const NOMINADOS_ESPECIALES = {
     { nombre: "Carcapri", foto: "fotos/perosnajes/carcapri.jpeg" },
     { nombre: "Carmen López", foto: "fotos/perosnajes/carmen.jpeg" },
     { nombre: "Lucas Golderos", foto: "fotos/perosnajes/lucas.jpeg" },
-    { nombre: "Enrique Galiana", foto: "fotos/perosnajes/enrique.jpeg" },
     { nombre: "Unai", foto: "fotos/perosnajes/unai.jpeg" },
   ],
 
@@ -1683,7 +1685,6 @@ const NOMINADOS_ESPECIALES = {
     { nombre: "Yoryo", foto: "fotos/perosnajes/yoryo.jpeg" },
     { nombre: "Adriyus", foto: "fotos/perosnajes/adriyus.jpeg" },
     { nombre: "Celia Quintero", foto: null },
-    { nombre: "Pilar", foto: null },
     { nombre: "Roberms", foto: "fotos/perosnajes/roberms.jpeg" },
     { nombre: "VictorZu (por Marco)", foto: "fotos/perosnajes/victorzu.jpeg" }
   ],
@@ -1702,7 +1703,7 @@ const NOMINADOS_ESPECIALES = {
   ],
 
   "Mote del año": [
-    { nombre: "CachondoPro o PolloPro", foto: null },
+    { nombre: "CachondoPro/PolloPro", foto: null },
     { nombre: "Topocho", foto: "fotos/mote/topocho.png" },
     { nombre: "Mojadin", foto: "fotos/mote/mojadin.png" },
     { nombre: "Simba", foto: "fotos/mote/simba.jpg" },
@@ -1726,18 +1727,18 @@ const NOMINADOS_ESPECIALES = {
 
   "Fail del año": [
     { nombre: "Choque Coche Asier-Ivanpe", foto: "fotos/fail/choque.jpeg" },
-    { nombre: "Pantalones rotos de Ivanpe", foto: null },
-    { nombre: "El intento de Casa Rural", foto: null },
-    { nombre: "Concurso de Burguers Fallido", foto: null },
-    { nombre: "Apuesta histórica (puta Paraguay)", foto: null },
-    { nombre: "Restaurante Canarias", foto: null },
-    { nombre: "CharcoPro en los karts", foto: null }
+    { nombre: "Pantalones rotos de Ivanpe", foto: "fotos/fail/pantalones.png" },
+    { nombre: "El intento de Casa Rural", foto: "fotos/fail/casa.png" },
+    { nombre: "Concurso de Burguers Fallido", foto: "fotos/fail/burguer.jpeg" },
+    { nombre: "Apuesta histórica (puta Paraguay)", foto: "fotos/fail/paraguay.jpeg" },
+    { nombre: "Guayadeque", foto: "fotos/fail/restaurante.jpg" },
+    { nombre: "CharcoPro en los karts", foto: "fotos/fail/charco.jpeg" }
   ],
 
   "Autistada del año": [
-    { nombre: "Regalos Fervi, Lab, Ivanp y Marioda", foto: null },
-    { nombre: "Tribu mierdoso de conductores", foto: null },
-    { nombre: "Rulas miedo a avión 2.0", foto: null },
+    { nombre: "Regalos Fervi, Lab, Ivanp y Marioda", foto: "fotos/autistada/regalos.png" },
+    { nombre: "Tribu mierdoso de conductores", foto: "fotos/autistada/tribu.png" },
+    { nombre: "Rulas miedo a avión 2.0", foto: "fotos/autistada/rulas.png" },
     { nombre: "DJ dario", foto: null },
     { nombre: "Asier viendo una peli en arena negra", foto: null },
     { nombre: "El tiktok de Marco en la carretera de Canarias", foto: null },
@@ -1926,6 +1927,8 @@ if (
   div.appendChild(btn);
 }
 
+});
+
   /* 4) Activar vídeos dentro de esas tarjetas */
   wireLightboxForVideos(contenedor);
 
@@ -1951,7 +1954,6 @@ if (
     });
   });
 
-});
 
 }
 
@@ -2257,8 +2259,15 @@ const LOTES = [
 // ============================================
 
 let LOTE_ACTIVO = null;
+const MODO_PRUEBAS = true;
+const LOTE_PRUEBAS = 3;
 
 async function sincronizarLoteActivo() {
+
+    if (MODO_PRUEBAS) {
+      LOTE_ACTIVO = LOTE_PRUEBAS;
+      return LOTE_ACTIVO;
+    }
 
   const snap = await getDocs(
     collection(db, "lotes_nominaciones_2026")
