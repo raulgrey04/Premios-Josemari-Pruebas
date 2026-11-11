@@ -2260,7 +2260,7 @@ const LOTES = [
 
 let LOTE_ACTIVO = null;
 const MODO_PRUEBAS = true;
-const LOTE_PRUEBAS = 3;
+const LOTE_PRUEBAS = 1;
 
 async function sincronizarLoteActivo() {
 
