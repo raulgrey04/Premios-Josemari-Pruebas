@@ -1622,7 +1622,7 @@ const NOMINADOS_ESPECIALES = {
     { nombre: "TecladoPro (Dario y Gamepro)", foto: "fotos/mensaje/darioyhugo.jpeg" },
     { nombre: "Vinicius Jr. (Asier)", foto: "fotos/mensaje/asier.jpeg" },
     { nombre: "Labrada vs. Socios.Brand (Labrada)", foto: "fotos/mensaje/labrada.jpeg" },
-    { nombre: "Lagrimas por Cheeso (Marco y Fer)", foto: "fotos/mensaje/marcoyfer.jpeg" },
+    { nombre: "Gordas y Panchas (Manu)", foto: "fotos/mensaje/manu.jpeg" },
     { nombre: "FactouPro (Gamepro)", foto: "fotos/mensaje/hugo2.jpeg" }
   ],
 
@@ -1653,7 +1653,7 @@ const NOMINADOS_ESPECIALES = {
 
   "Objeto del año": [
     { nombre: "Manolo-Pinto (Alienigena)", foto: "fotos/objeto/manolo.jpeg" },
-    { nombre: "Mechero de Gamepro", foto: "fotos/objeto/hugo.png" },
+    { nombre: "Mechero de Gamepro", foto: "fotos/objeto/mechero.jpeg" },
     { nombre: "Bandera Italiana de Asier", foto: "fotos/objeto/italia.jpeg" },
     { nombre: "Copa del Mundo Fake", foto: "fotos/objeto/mundial.jpeg" },
     { nombre: "Mesa de Mezclas de DJ Sistema", foto: "fotos/objeto/mesa.jpeg" },
@@ -1662,7 +1662,8 @@ const NOMINADOS_ESPECIALES = {
     { nombre: "Tiburón de Asier", foto: "fotos/objeto/tiburon.jpeg" },
     { nombre: "Tequila Proyecto Y", foto: "fotos/objeto/tequila.jpeg" },
     { nombre: "Cubo de Rubik de Fer (Robado por ...)", foto: "fotos/objeto/rubik.png" },
-    { nombre: "Cartel Obra Robado", foto: "fotos/objeto/señal.jpg" }
+    { nombre: "Cartel Obra Robado", foto: "fotos/objeto/señal.jpg" },
+    { nombre: "Pipas Piperos", foto: "fotos/objeto/pipas.jpeg" }
 
   ],
 
@@ -1684,9 +1685,9 @@ const NOMINADOS_ESPECIALES = {
     { nombre: "Roman", foto: "fotos/perosnajes/roman.jpeg" },
     { nombre: "Yoryo", foto: "fotos/perosnajes/yoryo.jpeg" },
     { nombre: "Adriyus", foto: "fotos/perosnajes/adriyus.jpeg" },
-    { nombre: "Celia Quintero", foto: null },
+    { nombre: "Celia Quintero", foto: "fotos/perosnajes/celia.jpeg" },
     { nombre: "Roberms", foto: "fotos/perosnajes/roberms.jpeg" },
-    { nombre: "VictorZu (por Marco)", foto: "fotos/perosnajes/victorzu.jpeg" }
+    { nombre: "VictorZu", foto: "fotos/perosnajes/victorzu.jpeg" }
   ],
 
   "Palabra/Frase del año": [
@@ -1703,11 +1704,11 @@ const NOMINADOS_ESPECIALES = {
   ],
 
   "Mote del año": [
-    { nombre: "CachondoPro/PolloPro", foto: null },
+    { nombre: "CachondoPro y PolloPro", foto: "fotos/mote/hugo.png" },
     { nombre: "Topocho", foto: "fotos/mote/topocho.png" },
     { nombre: "Mojadin", foto: "fotos/mote/mojadin.png" },
     { nombre: "Simba", foto: "fotos/mote/simba.jpg" },
-    { nombre: "Manototo", foto: null },
+    { nombre: "Manototo", foto: "fotos/mote/mano.jpg" },
     { nombre: "Mr. Grey", foto: "fotos/mote/grey.png" },
     { nombre: "Alva", foto: "fotos/mote/alva.png" },
     { nombre: "Peruano", foto: "fotos/mote/peruano.png" },
@@ -1722,7 +1723,8 @@ const NOMINADOS_ESPECIALES = {
     { nombre: "Compra Entradas Alvama Ice (Ropas)", foto: "fotos/broma/alvama.jpg" },
     { nombre: "Tatoo Poru", foto: "fotos/broma/tatu.jpeg" },
     { nombre: "Robada del cubo de Rubik de Fer", foto: "fotos/broma/fermoriv.png" },
-    { nombre: "Bajada pantalones Canarias", foto: "fotos/broma/pantalon.jpg" }
+    { nombre: "Bajada pantalones Canarias", foto: "fotos/broma/pantalon.jpg" },
+    { nombre: "Carcapri al Campus Link con Rulas rayao", foto: "fotos/broma/carlosss.jpeg" }
   ],
 
   "Fail del año": [
@@ -1739,12 +1741,12 @@ const NOMINADOS_ESPECIALES = {
     { nombre: "Regalos Fervi, Lab, Ivanp y Marioda", foto: "fotos/autistada/regalos.png" },
     { nombre: "Tribu mierdoso de conductores", foto: "fotos/autistada/tribu.png" },
     { nombre: "Rulas miedo a avión 2.0", foto: "fotos/autistada/rulas.png" },
-    { nombre: "DJ dario", foto: null },
-    { nombre: "Asier viendo una peli en arena negra", foto: null },
-    { nombre: "El tiktok de Marco en la carretera de Canarias", foto: null },
-    { nombre: "Marco y diciembre en cholas", foto: null },
-    { nombre: "Asier y Dario con el gato", foto: null },
-    { nombre: "Pellejos de Labruda", foto: null }
+    { nombre: "DJ dario en Campo de Asier", foto: "fotos/autistada/dariodj.png" },
+    { nombre: "Asier viendo una peli en arena negra", foto: "fotos/autistada/asierpeli.png" },
+    { nombre: "Tik Tok Quevedo", video: "fotos/autistada/quevedo.mp4", poster: "fotos/autistada/quevedo.jpeg" },
+    { nombre: "Marco en Canarias", foto: "fotos/autistada/canarias.png" },
+    { nombre: "Asier y Dario con el gato", foto: "fotos/autistada/reyleon.png" },
+    { nombre: "Pellejos de Labruda", foto: "fotos/autistada/pellejos.png" }
   ],
 
   "Fiesta del año": [
@@ -1761,29 +1763,53 @@ const NOMINADOS_ESPECIALES = {
     { nombre: "Halloween", foto: "fotos/fiesta/halloween.jpeg" }
   ],
 
-  "Foto del año": [],
+  "Foto del año": [
+    { nombre: "IA", foto: "fotos/fotos/IA.jpeg" },
+    { nombre: "Qloo Durmiente", foto: "fotos/fotos/marco.jpeg" },
+    { nombre: "Asier Drogado", foto: "fotos/fotos/asier.jpeg" },
+    { nombre: "Primer baño del dia", foto: "fotos/fotos/baño.jpeg" },
+    { nombre: "Rulas Pig", foto: "fotos/fotos/pig.jpeg" },
+    { nombre: "Alien comiendose a Dario", foto: "fotos/fotos/alien.jpeg" },
+    { nombre: "Las lagrimas de Iker", foto: "fotos/fotos/iker.jpeg" },
+    { nombre: "Columnas", foto: "fotos/fotos/columna.jpeg" },
+    { nombre: "VergaYDura", foto: "fotos/fotos/vergaydura.jpeg" },
+    { nombre: "Pinguinos culeros", foto: "fotos/fotos/pinguinos.jpeg" },
+    { nombre: "Kastor borracho", foto: "fotos/fotos/kastorborracho.jpeg" }
+  ],
 
-  "Video del año": [],
+  "Video del año": [
+    { nombre: "Vuelta Lesiva Canarias", video: "videos/cochecanarias.mp4", poster: "videos/posters/vuelta.jpeg" },
+    { nombre: "A! Asier felicidades! Me encanta!", video: "videos/jackie.mp4", poster: "videos/posters/jackie.jpeg" },
+    { nombre: "FilosofoPro", video: "videos/mujeres.mp4", poster: "videos/posters/filosofo.jpeg" },
+    { nombre: "Asier vs Pancha", video: "videos/pancha.mp4", poster: "videos/posters/pancha.jpeg" },
+    { nombre: "Minion culiando a Fer", video: "videos/minion.mp4", poster: "videos/posters/minion.jpeg" },
+    { nombre: "Instagram/Realidad", video: "videos/quijote.mp4", poster: "videos/posters/quijote.jpeg" },
+    { nombre: "Iker cantando a Artupa", video: "videos/ikercantando.mp4", poster: "videos/posters/cantar.jpeg" },
+    { nombre: "Nazis borrachos", video: "videos/nazi.mp4", poster: "videos/posters/nazi.jpeg" },
+    { nombre: "Reto del Huevo (nadie mas lo hizo)", video: "videos/huevo.mp4", poster: "videos/posters/huevo.jpeg" },
+    { nombre: "Pay to Lose", video: "videos/pay.mp4", poster: "videos/posters/pay.jpeg" },
+    { nombre: "Un cafecito Riquito Riquito", video: "videos/cafecito.mp4", poster: "videos/posters/cafecito.jpeg" }
+  ],
 
   "Peor momento del año": [
-    { nombre: "Coche Volcado en Canarias + Comida Restaurante Canarias", foto: null },
-    { nombre: "Coche Vuelta Canarias", foto: null },
-    { nombre: "DJ Sistema estafador", foto: null },
-    { nombre: "Los Porros de Gonsi en la Cervezada", foto: null },
-    { nombre: "Pelea Zurra con Josemi", foto: null },
-    { nombre: "Lucia y el cristal que se clavo en Pandorga", foto: null }
+    { nombre: "Coche Volcado en Canarias", foto: "fotos/p_momento/coche.jpeg" },
+    { nombre: "Coche Vuelta Canarias", foto: "fotos/p_momento/vuelta.jpeg" },
+    { nombre: "DJ Sistema estafador", foto: "fotos/p_momento/djsistema.png" },
+    { nombre: "Los Porros de Gonsi en la Cervezada", foto: "fotos/p_momento/porro.png" },
+    { nombre: "Pelea Zurra con Josemi", foto: "fotos/p_momento/josemi.png" },
+    { nombre: "Lucia y el cristal que se clavo en Pandorga", foto: "fotos/p_momento/herida.png" }
   ],
 
   "Mejor momento del año": [
-    { nombre: "Mundial España", foto: null },
-    { nombre: "Conga Proyecto Y", foto: null },
-    { nombre: "Casa de María Previa Carnaval (todos vistiéndonos de abuelas y Gamepro Cuñao)", foto: null },
-    { nombre: "Asier escondido en los arbustos pillando a Fer follando (ojalá hubiera pasao)", foto: null },
-    { nombre: "Super cuota de Winamax", foto: null },
-    { nombre: "Lanzamiento de Hielos en Canarias", foto: null },
-    { nombre: "Labrada destronando a Socios.Brand", foto: null },
-    { nombre: "Carrera Dunas", foto: null },
-    { nombre: "Karts Corral", foto: null }
+    { nombre: "Mundial España", foto: "fotos/m_momento/españa.jpeg" },
+    { nombre: "Conga Proyecto Y", foto: "fotos/m_momento/conga.jpeg" },
+    { nombre: "Casa de María Previa Carnaval", foto: "fotos/m_momento/abuelas.jpeg" },
+    { nombre: "Asier escondido en los arbustos pillando a Fer", foto: "fotos/m_momento/asier.png" },
+    { nombre: "Super cuota de Winamax", foto: "fotos/m_momento/winamax.jpg" },
+    { nombre: "Lanzamiento de Hielos en Canarias", foto: "fotos/m_momento/hielos.jpeg" },
+    { nombre: "Labrada destronando a Socios.Brand", foto: "fotos/m_momento/labrada.jpeg" },
+    { nombre: "Carrera Dunas", foto: "fotos/m_momento/dunas.jpeg" },
+    { nombre: "Karts Corral", foto: "fotos/m_momento/karts.jpeg" }
   ],
 
 };
@@ -2260,7 +2286,7 @@ const LOTES = [
 
 let LOTE_ACTIVO = null;
 const MODO_PRUEBAS = true;
-const LOTE_PRUEBAS = 1;
+const LOTE_PRUEBAS = 6;
 
 async function sincronizarLoteActivo() {
 
