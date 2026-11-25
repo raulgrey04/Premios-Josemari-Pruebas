@@ -1121,33 +1121,15 @@
 
 <section id="votacion" class="seccion" style="display:none;">
 
-  <div class="seccion-proximamente">
+  <h2>Votación Final</h2>
 
-    <div class="proximamente-icono">🏆</div>
+  <div id="votacionWrapper"></div>
 
-    <span class="proximamente-kicker">
-      PREMIOS JOSEMARI III
-    </span>
-
-    <h2>Votación Final</h2>
-
-    <h3>
-      La votación final todavía no ha comenzado
-    </h3>
-
-    <p>
-      Cuando se conozcan los nominados definitivos,
-      podrás votar aquí a los ganadores de cada categoría.
-    </p>
-
-    <div class="proximamente-estado">
-      🔒 PRÓXIMAMENTE
-    </div>
-
-  </div>
+  <button id="enviarVotacion" class="btn">
+    Enviar votación
+  </button>
 
 </section>
-
 
 <!-- =====================================
      MIS VOTOS
@@ -1155,30 +1137,19 @@
 
 <section id="tu-votacion" class="seccion" style="display:none;">
 
-  <div class="seccion-proximamente">
+  <h2>Mis votos</h2>
 
-    <div class="proximamente-icono">🧊</div>
+  <p id="tuVotacion-subtitle"></p>
 
-    <span class="proximamente-kicker">
-      PREMIOS JOSEMARI III
-    </span>
+  <button id="tuVotacion-refresh" class="btn">
+    Actualizar
+  </button>
 
-    <h2>Mis votos</h2>
+  <div id="tuVotacion-simple"></div>
 
-    <h3>
-      Todavía no hay votos que consultar
-    </h3>
+  <div id="tuVotacion-nominaciones"></div>
 
-    <p>
-      Tus nominaciones y tus votos aparecerán aquí cuando
-      comiencen oficialmente las votaciones de esta edición.
-    </p>
-
-    <div class="proximamente-estado">
-      🔒 PRÓXIMAMENTE
-    </div>
-
-  </div>
+  <div id="tuVotacion-empty" style="display:none;"></div>
 
 </section>
 

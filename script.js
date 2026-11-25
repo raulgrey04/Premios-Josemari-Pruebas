@@ -179,7 +179,7 @@ function controlarAccesoResultados() {
 // Cambiar a true cuando se abran las secciones.
 const CATEGORIAS_ABIERTAS = true;
 const NOMINACIONES_ABIERTAS = false;
-const VOTACIONES_ABIERTAS = false;
+const VOTACIONES_ABIERTAS = true;
 
 // Nombres exactos del login.
 const ORGANIZADORES = ["Rulas", "Lucia"];
@@ -684,6 +684,15 @@ window.mostrarSeccion = async function (seccion) {
     cargarTuVotacion();
   }
 
+  // VOTACIÓN FINAL
+  if (seccion === "votacion") {
+
+    await sincronizarLoteVotacionActivo();
+
+    pintarVotacion();
+
+  }
+
   // Estilos especiales para la pestaña "votacion"
   if (seccion === "votacion") {
     document.body.classList.add("tab-votacion");
@@ -728,40 +737,77 @@ async function cargarTuVotacion() {
   subtitle.textContent = `Usuario: ${user}`;
 
   try {
-    /* ============================================
-       1) VOTACIÓN SIMPLE — ÚLTIMO VOTO POR CATEGORÍA
-    ============================================= */
-    const qV = query(collection(db, "votaciones"), where("usuario", "==", user));
-    const snapV = await getDocs(qV);
+   /* ============================================
+   1) VOTACIÓN FINAL — JOSEMARI III 2026
+============================================= */
 
-    const ultimosPorCat = {};
-    snapV.forEach(d => {
-      const data = d.data() || {};
-      const cat  = data.categoria || "Sin categoría";
-      const ts   = data.timestamp?.seconds || 0;
+const firebaseUserVotacion = auth.currentUser;
 
-      if (!ultimosPorCat[cat] || ts > ultimosPorCat[cat].ts) {
-        ultimosPorCat[cat] = { voto: data.voto, ts };
-      }
+if (!firebaseUserVotacion) {
+
+  boxSimple.innerHTML =
+    "<p>No hay votos registrados aún.</p>";
+
+} else {
+
+  const uid = firebaseUserVotacion.uid;
+  const votosFinales = {};
+
+  for (let lote = 1; lote <= 3; lote++) {
+
+    const referencia = doc(
+      db,
+      "votaciones_finales_2026",
+      uid,
+      "lotes",
+      `lote_${lote}`
+    );
+
+    const snap = await getDoc(referencia);
+
+    if (!snap.exists()) continue;
+
+    const data = snap.data() || {};
+    const votos = data.votos || {};
+
+    Object.entries(votos).forEach(([categoria, voto]) => {
+      votosFinales[categoria] = voto;
     });
+  }
 
-    if (Object.keys(ultimosPorCat).length === 0) {
-      boxSimple.innerHTML = "<p>No hay votos registrados aún.</p>";
-    } else {
-      const ul = document.createElement("ul");
+  if (Object.keys(votosFinales).length === 0) {
 
-      Object.entries(ultimosPorCat)
-        .sort(([a],[b]) => a.localeCompare(b))
-        .forEach(([categoria, { voto }]) => {
-          const li = document.createElement("li");
-          li.textContent = `${categoria}: ${voto}`;
-          ul.appendChild(li);
-        });
+    boxSimple.innerHTML =
+      "<p>No hay votos registrados aún.</p>";
 
-      boxSimple.innerHTML = "";
-      boxSimple.appendChild(ul);
-    }
+  } else {
 
+    const bloque = document.createElement("div");
+bloque.className = "mis-votos-final";
+
+const titulo = document.createElement("h3");
+titulo.textContent = "🗳️ Votación Final";
+bloque.appendChild(titulo);
+
+Object.entries(votosFinales)
+  .sort(([a], [b]) => a.localeCompare(b, "es"))
+  .forEach(([categoria, voto]) => {
+
+    const tarjeta = document.createElement("div");
+    tarjeta.className = "mi-voto-card";
+
+    tarjeta.innerHTML = `
+      <div class="mi-voto-categoria">${categoria}</div>
+      <div class="mi-voto-eleccion">${voto}</div>
+    `;
+
+    bloque.appendChild(tarjeta);
+  });
+
+boxSimple.innerHTML = "";
+boxSimple.appendChild(bloque);
+  }
+}
 
     /* ============================================
    2) NOMINACIONES — JOSEMARI III 2026
@@ -838,7 +884,14 @@ if (!firebaseUser) {
         frag.appendChild(wrap);
       });
 
-    boxNom.innerHTML = "";
+      boxNom.innerHTML = "";
+
+    const tituloNominaciones = document.createElement("h3");
+tituloNominaciones.textContent = "🏅 Mis nominaciones";
+tituloNominaciones.style.marginTop = "28px";
+tituloNominaciones.style.marginBottom = "16px";
+
+boxNom.appendChild(tituloNominaciones);
     boxNom.appendChild(frag);
   }
 }
@@ -995,218 +1048,102 @@ function enhanceCategoryHeaders() {
  */
 
 const CATEGORIAS_VOTACION = {
-  // LOTE 1
-  "Viajero/a del año": [ { nombre: "Ines",   foto: "fotos/ines.jpeg" },
-    { nombre: "Labrada",   foto: "fotos/labrada.jpeg" },
-    { nombre: "Poru",   foto: "fotos/Poru.jpeg" },
-    { nombre: "Manu",   foto: "fotos/manu.jpeg" }
-  ],
-  "Picado/a del año": [ { nombre: "Marco",   foto: "fotos/marco.jpeg" },
-    { nombre: "Rulas",   foto: "fotos/rulillas.jpeg" },
-    { nombre: "Ivanp",   foto: "fotos/ivanp.jpeg" },
-    { nombre: "Mario",   foto: "fotos/mario.jpeg" }
-  ],
-  "Guarrete del año": [ { nombre: "Iker",   foto: "fotos/iker.jpeg" },
-    { nombre: "Marco",   foto: "fotos/marco.jpeg" },
-    { nombre: "Darío",   foto: "fotos/dario.jpeg" },
-    { nombre: "Labrada",   foto: "fotos/labrada.jpeg" }
-  ],
-  "Papi/Mami del año": 
-  [ { nombre: "Fervico",   foto: "fotos/fervico.jpeg" },
-    { nombre: "Labrada",   foto: "fotos/labrada.jpeg" },
-    { nombre: "Lucía",   foto: "fotos/Lucia.jpeg" },
-    { nombre: "Ines",   foto: "fotos/ines.jpeg" }
-  ],
-  "Meme del año": [ 
-    { nombre: "Ivanp Gustavo(Poru)", video: "fotos/meme/ivanp.mp4", poster: "fotos/meme/ivanpe.jpeg" },
-    { nombre: "Fer en las tetorras(Ivanp)", video: "fotos/meme/fer.mp4", poster: "fotos/meme/fervico.jpeg" },
-    { nombre: "Artupa en (Rober)", video: "fotos/meme/artupa.jpeg", poster: "fotos/meme/artupa.jpeg" },
-    { nombre: "Gusano saca lenguas(Iker)", video: "fotos/meme/lengua.mp4", poster: "fotos/meme/lengua.jpg" },
-  ],
-  "Brainhot del año": [
-    { nombre: "Geimpro e geimpra", video: "fotos/brainhot/gamepro.mp4", poster: "fotos/brainhot/gamepro.jpeg" },
-    { nombre: "Fermorini quesini", video: "fotos/brainhot/fermo.mp4", poster: "fotos/brainhot/fermo.jpeg" },
-    { nombre: "Poru ropu sopu tropu", video: "fotos/brainhot/poru.mp4", poster: "fotos/brainhot/poru.jpeg" },
-    { nombre: "Quinitu quinato", video: "fotos/brainhot/iker.mp4", poster: "fotos/brainhot/iker.jpeg" },
-
-
-  ],
-  "Correon del año": [
-    { nombre: "La correa de Gamepro",   foto: "fotos/correon/gamepro.jpeg" },
-    { nombre: "La correa de Rober",   foto: "fotos/correon/rober.jpeg" },
-    { nombre: "La correa de Dani",   foto: "fotos/correon/dani.jpeg" },
-    { nombre: "La correa de Manu",   foto: "fotos/correon/manu.jpeg" },
-
-  ],
-  "Trio/Cuarteto del año": [
-        { nombre: "Marco, Rulas y Asier (Veterinarios)",   foto: "fotos/Trio/primes.jpeg" },
-        { nombre: "Labrada, Lucia y Gamepro (Gofreros)",   foto: "fotos/Trio/gofres.jpeg" },
-        { nombre: "Dani,Iker,Asier y Gamepro (Tomelloseros) ",   foto: "fotos/Trio/tomelloseros.jpeg" },
-        { nombre: "Ines,Lucia y Maria (Pibardas)",   foto: "fotos/Trio/pibas.jpeg" },
-
-
-  ],
-  "Soltero del año": [
-    { nombre: "Darío",   foto: "fotos/soltero/dario.jpeg" },
-    { nombre: "Rulas",   foto: "fotos/soltero/rulas.jpeg" },
-    { nombre: "Marco",   foto: "fotos/soltero/marco.jpeg" },
-    { nombre: "Fervico",   foto: "fotos/soltero/fer.jpeg" },
-
-  ],
-  "El que mejor viste del año": [ { nombre: "Marco",   foto: "fotos/marco.jpeg" },
-    { nombre: "Ines",   foto: "fotos/ines.jpeg" },
-    { nombre: "Fervico",   foto: "fotos/fervico.jpeg" },
-    { nombre: "Rober",   foto: "fotos/rober.jpeg" }
-  ],
-
-  // LOTE 2
-  "Llorón del año": [
-    { nombre: "Rulas",   foto: "fotos/rulillas.jpeg" },
-    { nombre: "Poru",   foto: "fotos/Poru.jpeg" },
-    { nombre: "Mario",   foto: "fotos/mario.jpeg" },
-    { nombre: "Marco",   foto: "fotos/marco.jpeg" },
-  ],
-
-  "Fiestero/a del año": [
-    { nombre: "Asier",   foto: "fotos/asieras.jpeg" },
-    { nombre: "Iker",   foto: "fotos/iker.jpeg" },
-    { nombre: "Rulas",   foto: "fotos/rulillas.jpeg" },
-    { nombre: "Ines",   foto: "fotos/ines.jpeg" },
-  ],
-  "Borracho/a del año": [
-  { nombre: "Asier",   foto: "fotos/asieras.jpeg" },
-      { nombre: "Maria",   foto: "fotos/maria.jpeg" },
-    { nombre: "Dani",   foto: "fotos/dani.jpeg" },
-    { nombre: "Labrada",   foto: "fotos/labrada.jpeg" },
-
-  ],
-  "Mejor Personaje fuera de JyP del año": [
-        { nombre: "Diegote cipote",   foto: "fotos/perosnajes/diego.jpeg" },
-        { nombre: "Iceman",   foto: "fotos/perosnajes/iceman.jpeg" },
-        { nombre: "Pepito",   foto: "fotos/perosnajes/pepito.jpeg" },
-        { nombre: "Unai el guay",   foto: "fotos/perosnajes/unai.jpeg" },
-
-
-  ],
-  "Peor momento del año": [
-          { nombre: "Desastre de la yedra(Ivanp)",   foto: "fotos/p_momento/ivanp.jpeg" },
-        { nombre: "Navidades en muletas(Rulas)",   foto: "fotos/p_momento/rulasmuletas.jpeg" },
-        { nombre: "Fermoriv en carnavales(Fermoriv)",   foto: "fotos/p_momento/fermo.jpeg" },
-        { nombre: "Vecina nos denuncia en Londres",   foto: "fotos/p_momento/londres.jpeg" },
-
-  ],
-  "Mensaje del año": [
-        { nombre: "el celoso(Gamepro)",   foto: "fotos/mensaje/gamepro.jpeg" },
-        { nombre: "Haberlo Preguntado mañana(Labrada)",   foto: "fotos/mensaje/labmanu.jpeg" },
-        { nombre: "Fermoriv Solitario(Fermoriv)",   foto: "fotos/mensaje/fermo.jpeg" },
-        { nombre: "Erasmus(María)",   foto: "fotos/mensaje/maria.jpeg" },
-
-  ],
-  "Mote del año": [
-        { nombre: "Cafetera(Poru)",   foto: "fotos/mote/cafetera.jpeg" },
-        { nombre: "Fish and Chips(Darío y Rober)",   foto: "fotos/mote/fish.jpeg" },
-        { nombre: "Gamepollo(Gamepro)",   foto: "fotos/mote/gamepollo.jpeg" },
-        { nombre: "Dj Ventosa(Marco)",   foto: "fotos/mote/djventosa.jpeg" },
-
-  ],
-  "Palabra/Frase del año": [
-        { nombre: "Sirulo",   foto: "fotos/palabra/sirulo.jpeg" },
-        { nombre: "Tengo Miedo a que se me caigan las patatas(Poru)",   foto: "fotos/palabra/patatas.jpeg" },
-        { nombre: "Esa peña",   foto: "fotos/palabra/peña.jpeg" },
-        { nombre: "Vamos no me jodas",   foto: "fotos/palabra/vamos.jpeg" },
-
-  ],
-  "Objeto del año": [
-        { nombre: "Ositopro(Gamepro)",   foto: "fotos/objeto/ositopro.jpeg" },
-        { nombre: "Ana Rosa",   foto: "fotos/objeto/anarosa.jpeg" },
-        { nombre: "Tequifresi(Marco y Asier)",   foto: "fotos/objeto/tequifresi.jpeg" },
-        { nombre: "Pelusa(Rober)",   foto: "fotos/objeto/pelusa.jpeg" },
-
-  ],
-  "Baile del año": [
-    { nombre: "Señorita Surferita(Los que estan en el Baile)", video: "fotos/bailes/Surferita.mp4", poster: "fotos/bailes/Surferita.jpeg" },
-    { nombre: "Ivanp X Mozos(Ivanp)", video: "fotos/bailes/ivanp.mp4", poster: "fotos/bailes/ivanp.jpeg" },
-    { nombre: "Mambo de Labrada(Labrada)", video: "fotos/bailes/labrada.mp4", poster: "fotos/bailes/labrada.jpeg" },
-    { nombre: "Shiny(Lucia)", video: "fotos/bailes/lucia.mp4", poster: "fotos/bailes/lucia.jpeg" },
-
-
-
-  ],
-
-  // LOTE 3
-  "Autistada del año": [
-        { nombre: "Robo de Botellas X",   foto: "fotos/autistada/yoryo.jpeg" },
-        { nombre: "Foto de perfil Fervico(Fervico)",   foto: "fotos/autistada/foto.jpeg" },
-        { nombre: "Ludopatia capibara(Rulas)",   foto: "fotos/autistada/ludopatia.jpeg" },
-        { nombre: "Reformas Poru y enano(Poru y Fervico)",   foto: "fotos/autistada/reformas.jpeg" },
-
-  ],
-  "Fail del año": [
-        { nombre: "La mesa de Fer(Fervico)",   foto: "fotos/fail/mesa.jpeg" },
-        { nombre: "Tele por la ventana(Asier)",   foto: "fotos/fail/tele.jpeg" },
-        { nombre: "Ivanp contra el tomate(Ivanp)",   foto: "fotos/fail/tomate.jpeg" },
-        { nombre: "Matalascañas(Marco)",   foto: "fotos/fail/matalascañas.jpeg" },
-
-
-    
-  ],
-  "Broma del año": [
-        { nombre: "Oye siri(Lucia)",   foto: "fotos/broma/lucia.jpeg" },
-        { nombre: "Grabaciones de cagada(Mario y Dario)",   foto: "fotos/broma/lab.jpeg" },
-        { nombre: "Patatas contra la cama de Labrada(Rober y Asier)",   foto: "fotos/broma/patata.jpeg" },
-        { nombre: "Lanzamiento de Objetos a la Piscina(Dani, por jugarse la vida)",   foto: "fotos/broma/lanzamiento.jpeg" },
-
-  ],
-  "Foto del año": [
-        { nombre: "Cafeteros(los de la foto)",   foto: "fotos/fotos/peruanos.jpeg" },
-        { nombre: "Beso de Judas(Labrada y Fermoriv)",   foto: "fotos/fotos/ferlab.jpeg" },
-        { nombre: "Porno X(Gamepro y Marco)",   foto: "fotos/fotos/marconuria.jpeg" },
-        { nombre: "Paleto Bob esponja(Iker)",   foto: "fotos/fotos/bob.jpeg" },
-
-  ],
-  "Video del año": [
-    { nombre: "La muerte de Ana Rosa(Iker)", video: "videos/iker.mp4", poster: "videos/posters/iker.jpeg" },
-    { nombre: "Castor alimentando a castor(Mario)", video: "videos/castor.mp4", poster: "videos/posters/castor.jpeg" },
-    { nombre: "Dj Ventosa en acción(Marco y Dani)", video: "videos/marcoNuria.mp4", poster: "videos/posters/marcoNuria.jpeg" },
-    { nombre: "Desfase de Noblejas(Asier y Juan)", video: "videos/juan.mp4", poster: "videos/posters/juan.jpeg" },
-
-  ],
-  "Fiesta del año": [
-        { nombre: "Halloween",   foto: "fotos/fiesta/Hallowen.jpeg" },
-        { nombre: "Proyecto X (Los organizadores)",   foto: "fotos/fiesta/proyecto x.jpeg" },
-        { nombre: "Zurra",   foto: "fotos/fiesta/zurra.jpeg" },
-        { nombre: "Ferias de Ciu",   foto: "fotos/fiesta/ciu.jpeg" },
-
-  ],
-  "Mejor momento del año": [
-        { nombre: "Sala Vip Chino Juan",   foto: "fotos/m_momento/chino.jpeg" },
-        { nombre: "Marco Pagando(Marco)",   foto: "fotos/m_momento/marco.jpeg" },
-        { nombre: "Ivanp vs Rulas(Ivanp y Rulas)",   foto: "fotos/m_momento/ivanp.jpeg" },
-        { nombre: "Carrera con tio borracho",   foto: "fotos/m_momento/carrera.jpeg" },
-
-  ],
-  "Revelación del año": [       
-    { nombre: "Fervico",   foto: "fotos/fervico.jpeg" },
-    { nombre: "Maria",   foto: "fotos/maria.jpeg" },
-    { nombre: "Poru",   foto: "fotos/Poru.jpeg" },
-    { nombre: "Labrada",   foto: "fotos/labrada.jpeg" },
-
+  // LOTE FINAL 1
+  // LOTE FINAL 1
+"Mejor jugador de pádel del año": [
+  { nombre: "Gamepro", foto: "fotos/gamepro.jpeg" },
+  { nombre: "Lab El Viejo", foto: "fotos/labrada.jpeg" },
+  { nombre: "Toñaco", foto: "fotos/marco.jpeg" },
+  { nombre: "Ivanpechotes", foto: "fotos/ivanp.jpeg" }
 ],
-  "Decepción del año": [
-        { nombre: "Manu",   foto: "fotos/manu.jpeg" },
-        { nombre: "Fermo",   foto: "fotos/Fermoriv.jpeg" },
-        { nombre: "Rober",   foto: "fotos/rober.jpeg" },
 
-  ],
-  "MVP del año": [
-        { nombre: "Iker",   foto: "fotos/iker.jpeg" },
-        { nombre: "Maria",   foto: "fotos/maria.jpeg" },
-        { nombre: "Asier",   foto: "fotos/asieras.jpeg" },
-        { nombre: "Lucia",   foto: "fotos/Lucia.jpeg" },
+"Peor Playus del año": [
+  { nombre: "Almansa", foto: "fotos/ines.jpeg" },
+  { nombre: "Asieras", foto: "fotos/asieras.jpeg" },
+  { nombre: "Gamepro", foto: "fotos/gamepro.jpeg" },
+  { nombre: "Lusilu", foto: "fotos/Lucia.jpeg" }
+],
 
-  ]
+"Correa del Año": [
+  { nombre: "Hugo y el Popeyes", foto: "fotos/correa/hugo.png" },
+  { nombre: "Labrada y el TFG", foto: "fotos/correa/labrada.png" },
+  { nombre: "Dani y el Ejército", foto: "fotos/correa/dani.png" },
+  { nombre: "Ines y caminos", foto: "fotos/correa/ines.png" }
+],
+
+"Viajero del año": [
+  { nombre: "Asieras", foto: "fotos/asieras.jpeg" },
+  { nombre: "Poru", foto: "fotos/Poru.jpeg" },
+  { nombre: "Lab el Viejo", foto: "fotos/labrada.jpeg" },
+  { nombre: "Darawayas", foto: "fotos/dario.jpeg" }
+],
+
+"Llorón del año": [
+  { nombre: "Poru", foto: "fotos/Poru.jpeg" },
+  { nombre: "Toñaco", foto: "fotos/marco.jpeg" },
+  { nombre: "El Enano", foto: "fotos/fervico.jpeg" },
+  { nombre: "Kastor", foto: "fotos/mario.jpeg" }
+],
+
+"Absolute Cinema del Año": [
+  { nombre: "Absolute Quegas", foto: "fotos/absolute cinema/poru.jpeg" },
+  { nombre: "Absolute Battles", foto: "fotos/absolute cinema/batallas.jpeg" },
+  { nombre: "Absolute Asier", foto: "fotos/absolute cinema/asier.jpeg" },
+  { nombre: "Absolute My Bad", foto: "fotos/absolute cinema/ivanpe.jpeg" }
+],
+
+"Fiestero del año": [
+  { nombre: "Asieras", foto: "fotos/asieras.jpeg" },
+  { nombre: "Ikardo", foto: "fotos/iker.jpeg" },
+  { nombre: "Gamepro", foto: "fotos/gamepro.jpeg" },
+  { nombre: "Rulillas", foto: "fotos/rulillas.jpeg" }
+],
+
+"Borrachera del año": [
+  { nombre: "No Mas Tequila, Por Favor (Labrada)", foto: "fotos/borrachera/labrada.jpeg" },
+  { nombre: "Abrazado al Retrete (Gamepro)", foto: "fotos/borrachera/hugo.jpeg" },
+  { nombre: "La palmera Ropax (Poru)", foto: "fotos/borrachera/poru.jpeg" },
+  { nombre: "Sin pantalones (Ivanpe)", foto: "fotos/borrachera/ivanpe.jpeg" }
+],
+
+"Picado del año": [
+  { nombre: "El Enano", foto: "fotos/fervico.jpeg" },
+  { nombre: "Kastor", foto: "fotos/mario.jpeg" },
+  { nombre: "Manolo", foto: "fotos/manu.jpeg" },
+  { nombre: "Ivanpechotes", foto: "fotos/ivanp.jpeg" }
+],
+
+"Princeso del año": [
+  { nombre: "Rulillas", foto: "fotos/rulillas.jpeg" },
+  { nombre: "Lab el Viejo", foto: "fotos/labrada.jpeg" },
+  { nombre: "Toñaco", foto: "fotos/marco.jpeg" },
+  { nombre: "El Enano", foto: "fotos/fervico.jpeg" }
+],
+
+  // LOTE FINAL 2
+  "Huella Digital": [],
+  "Mensaje del año": [],
+  "Sticker del año": [],
+  "Outfit del año": [],
+  "Objeto del año": [],
+  "Mejor personaje fuera de CT del año": [],
+  "Enemigo del año": [],
+  "Palabra/Frase del año": [],
+  "Mote del año": [],
+  "Broma del año": [],
+
+  // LOTE FINAL 3
+  "Fail del año": [],
+  "Autistada del año": [],
+  "Fiesta del año": [],
+  "Foto del año": [],
+  "Video del año": [],
+  "Peor momento del año": [],
+  "Revelación del año": [],
+  "Mejor momento del año": [],
+  "Decepción del año": [],
+  "MVP del año": []
 };
-
 
 /* ============================
    LOTES PARA LA VOTACIÓN FINAL
@@ -1214,52 +1151,103 @@ const CATEGORIAS_VOTACION = {
 ============================ */
 
 const LOTE_VOTACION_1 = [
-  "Viajero/a del año",
-  "Picado/a del año",
-  "Guarrete del año",
-  "Papi/Mami del año",
-  "Meme del año",
-  "Brainhot del año",
-  "Correon del año",
-  "Trio/Cuarteto del año",
-  "Soltero del año",
-  "El que mejor viste del año"
+  "Mejor jugador de pádel del año",
+  "Peor Playus del año",
+  "Correa del Año",
+  "Viajero del año",
+  "Llorón del año",
+  "Absolute Cinema del Año",
+  "Fiestero del año",
+  "Borrachera del año",
+  "Picado del año",
+  "Princeso del año"
 ];
 
 const LOTE_VOTACION_2 = [
-  "Llorón del año",
-  "Fiestero/a del año",
-  "Borracho/a del año",
-  "Mejor Personaje fuera de JyP del año",
-  "Peor momento del año",
+  "Huella Digital",
   "Mensaje del año",
-  "Mote del año",
-  "Palabra/Frase del año",
+  "Sticker del año",
+  "Outfit del año",
   "Objeto del año",
-  "Baile del año"
+  "Mejor personaje fuera de CT del año",
+  "Enemigo del año",
+  "Palabra/Frase del año",
+  "Mote del año",
+  "Broma del año"
 ];
 
 const LOTE_VOTACION_3 = [
-  "Autistada del año",
   "Fail del año",
-  "Broma del año",
+  "Autistada del año",
+  "Fiesta del año",
   "Foto del año",
   "Video del año",
-  "Fiesta del año",
-  "Mejor momento del año",
+  "Peor momento del año",
   "Revelación del año",
+  "Mejor momento del año",
   "Decepción del año",
   "MVP del año"
 ];
-
 
 const LOTES_VOTACION = [LOTE_VOTACION_1, LOTE_VOTACION_2, LOTE_VOTACION_3];
 
 // 👇 Lote activo de la VOTACIÓN FINAL (1, 2 o 3)
 // Cambias este número cuando quieras pasar de lote.
-const LOTE_VOTACION_ACTIVO = 3;
+let LOTE_VOTACION_ACTIVO = null;
+const MODO_PRUEBAS_VOTACION = true;
+const LOTE_PRUEBAS_VOTACION = 1;
 
-// Devuelve el lote actual de la votación final
+async function sincronizarLoteVotacionActivo() {
+
+  if (MODO_PRUEBAS_VOTACION) {
+  LOTE_VOTACION_ACTIVO = LOTE_PRUEBAS_VOTACION;
+  return LOTE_VOTACION_ACTIVO;
+}
+
+  const snap = await getDocs(
+    collection(db, "lotes_votacion_final_2026")
+  );
+
+  const lotesAbiertos = [];
+
+  snap.forEach(docSnap => {
+
+    const data = docSnap.data();
+
+    const match =
+      docSnap.id.match(/^lote_([1-3])$/);
+
+    if (
+      data.abierto === true &&
+      match
+    ) {
+      lotesAbiertos.push(
+        Number(match[1])
+      );
+    }
+
+  });
+
+  if (lotesAbiertos.length === 1) {
+
+    LOTE_VOTACION_ACTIVO = lotesAbiertos[0];
+
+  } else {
+
+    LOTE_VOTACION_ACTIVO = null;
+
+    if (lotesAbiertos.length > 1) {
+      console.error(
+        "ERROR: hay varios lotes de votación final abiertos:",
+        lotesAbiertos
+      );
+    }
+
+  }
+
+  return LOTE_VOTACION_ACTIVO;
+}
+
 function getLoteVotacionActual() {
   return LOTE_VOTACION_ACTIVO;
 }
@@ -1282,6 +1270,18 @@ function pintarVotacion() {
   votacionWrapper.innerHTML = "";
 
   const loteActual = getLoteVotacionActual();
+  if (loteActual === null) {
+
+  votacionWrapper.innerHTML = "";
+
+  const aviso = document.createElement("div");
+  aviso.className = "lote-separador";
+  aviso.textContent = "🔒 No hay ningún lote de votación final abierto ahora mismo.";
+
+  votacionWrapper.appendChild(aviso);
+
+  return;
+}
   const indice = loteActual - 1;
   const categoriasDelLote = LOTES_VOTACION[indice] || [];
 
@@ -1301,14 +1301,19 @@ function pintarVotacion() {
     img.alt = categoria;
 
     const titleWrap = document.createElement("div");
-    titleWrap.className = "title-group";
+titleWrap.className = "title-group";
 
-    const h3 = document.createElement("h3");
-    h3.textContent = categoria;
+const h2 = document.createElement("h2");
+h2.textContent = categoria;
 
-    titleWrap.appendChild(h3);
-    header.appendChild(img);
-    header.appendChild(titleWrap);
+const p = document.createElement("p");
+p.innerHTML = `Selecciona exactamente <strong>1</strong> finalista.`;
+
+titleWrap.appendChild(h2);
+titleWrap.appendChild(p);
+
+header.appendChild(img);
+header.appendChild(titleWrap);
 
     // ===== GRID DE NOMINADOS =====
     const grid = document.createElement("div");
@@ -1448,56 +1453,109 @@ pintarVotacion();
 ============================================ */
 
 document.getElementById("enviarVotacion")?.addEventListener("click", async () => {
-  const usuario = localStorage.getItem("usuarioLogueado");
 
-  if (!usuario) {
+  const firebaseUser = auth.currentUser;
+
+  if (!firebaseUser) {
     alert("Debes iniciar sesión para votar.");
     mostrarSeccion("login");
     return;
   }
-  // Categorías del lote actual que están ACTIVAS (tienen finalistas definidos)
-  const loteActual = getLoteVotacionActual();
-  const indice = loteActual - 1;
-  const categoriasDelLote = LOTES_VOTACION[indice] || [];
-  const categoriasActivas = categoriasDelLote.filter(
-    cat => Array.isArray(CATEGORIAS_VOTACION[cat]) && CATEGORIAS_VOTACION[cat].length > 0
+
+  const usuario = Object.keys(loginMap).find(
+    nombre => loginMap[nombre].email === firebaseUser.email
   );
 
-  const pendientes = categoriasActivas.filter(cat => !votosSeleccionados[cat]);
-  if (pendientes.length) {
-    alert(`Te falta votar en: ${pendientes.join(", ")}`);
+  if (!usuario) {
+    alert("La cuenta autenticada no es válida.");
     return;
   }
 
+  const uid = firebaseUser.uid;
+
+  const loteActual = getLoteVotacionActual();
+  const loteId = `lote_${loteActual}`;
+
+  const categoriasDelLote =
+    LOTES_VOTACION[loteActual - 1] || [];
+
+  const categoriasActivas = categoriasDelLote.filter(
+    categoria =>
+      Array.isArray(CATEGORIAS_VOTACION[categoria]) &&
+      CATEGORIAS_VOTACION[categoria].length > 0
+  );
+
+  if (categoriasActivas.length === 0) {
+    alert("Este lote todavía no tiene finalistas configurados.");
+    return;
+  }
+
+  for (const categoria of categoriasActivas) {
+    if (!votosSeleccionados[categoria]) {
+      alert(`Te falta votar en: ${categoria}`);
+      return;
+    }
+  }
+
+  const votos = {};
+
+  categoriasActivas.forEach(categoria => {
+    votos[categoria] = votosSeleccionados[categoria];
+  });
+
+  const referencia = doc(
+    db,
+    "votaciones_finales_2026",
+    uid,
+    "lotes",
+    loteId
+  );
+
   try {
-    const ciclo = await getCicloActual();
 
-    // Guardamos solo las categorías de este lote
-    for (const categoria of categoriasActivas) {
-      const nominado = votosSeleccionados[categoria];
-      if (!nominado) continue;
+    const existente = await getDoc(referencia);
 
-      await addDoc(collection(db, "votaciones"), {
-        usuario,
-        categoria,
-        voto: nominado,
-        ciclo,
-        timestamp: serverTimestamp()
-      });
+    if (existente.exists()) {
+      alert(`Ya has enviado tu votación del Lote ${loteActual}.`);
+      return;
     }
 
-    alert("✅ Tus votos de este lote se han registrado correctamente.");
+    await setDoc(referencia, {
+      edicion: 2026,
+      loteId,
+      usuario,
+      votos,
+      enviadoEn: serverTimestamp()
+    });
 
-    document.querySelectorAll(".nominado").forEach(c => c.classList.remove("selected"));
+    alert(
+      `✅ Tus votos del Lote ${loteActual} se han registrado correctamente.`
+    );
+
+    document
+      .querySelectorAll("#votacionWrapper .nominado")
+      .forEach(card => card.classList.remove("selected"));
+
+    Object.keys(votosSeleccionados)
+      .forEach(categoria => delete votosSeleccionados[categoria]);
 
     if (window.actualizarEstadoBotonVotacion) {
       await window.actualizarEstadoBotonVotacion();
     }
 
   } catch (err) {
-    console.error(err);
-    alert("❌ Error al guardar los votos.");
+
+    console.error("Error guardando votación final:", err);
+
+    if (err?.code === "permission-denied") {
+      alert(
+        "No se ha podido guardar la votación. Puede que ya hayas enviado este lote."
+      );
+    } else {
+      alert("❌ Error al guardar los votos.");
+    }
   }
+
 });
 
 
@@ -2652,41 +2710,27 @@ window.actualizarEstadoBotonNominaciones = actualizarEstadoBotonNominaciones;
 /* ============================================================
    ¿YA HA VOTADO EN ESTE CICLO?
 ============================================================ */
-async function yaHaVotadoEnCiclo(usuario) {
-  if (!usuario) return false;
+async function yaHaVotadoEnLoteFinal() {
 
-  const ciclo = await getCicloActual();
+  const firebaseUser = auth.currentUser;
+
+  if (!firebaseUser) return false;
+
+  const uid = firebaseUser.uid;
   const loteActual = getLoteVotacionActual();
-  const indice = loteActual - 1;
-  const categoriasDelLote = LOTES_VOTACION[indice] || [];
+  const loteId = `lote_${loteActual}`;
 
-  // Solo consideramos categorías que realmente tengan finalistas definidos
-  const categoriasActivas = categoriasDelLote.filter(
-    cat => Array.isArray(CATEGORIAS_VOTACION[cat]) && CATEGORIAS_VOTACION[cat].length > 0
+  const referencia = doc(
+    db,
+    "votaciones_finales_2026",
+    uid,
+    "lotes",
+    loteId
   );
 
-  if (!categoriasActivas.length) return false;
+  const snap = await getDoc(referencia);
 
-  const q = query(
-    collection(db, "votaciones"),
-    where("usuario", "==", usuario),
-    where("ciclo", "==", ciclo)
-  );
-  const snap = await getDocs(q);
-  if (snap.empty) return false;
-
-  const categoriasVotadas = new Set();
-
-  snap.forEach(d => {
-    const data = d.data() || {};
-    const cat = data.categoria;
-    if (cat && categoriasActivas.includes(cat)) {
-      categoriasVotadas.add(cat);
-    }
-  });
-
-  // "Ya ha votado" si tiene al menos un voto en TODAS las categorías activas de este lote
-  return categoriasActivas.every(cat => categoriasVotadas.has(cat));
+  return snap.exists();
 }
 
 
@@ -2705,7 +2749,7 @@ async function actualizarEstadoBotonVotacion() {
     return;
   }
 
-  const enviado = await yaHaVotadoEnCiclo(usuario);
+  const enviado = await yaHaVotadoEnLoteFinal();
   btn.disabled = enviado;
   btn.textContent = enviado
     ? "Ya has enviado tu votación"
@@ -2732,12 +2776,8 @@ async function cargarResultados() {
     const ciclo = await getCicloActual();
 
     const snapVotos = await getDocs(
-  query(
-    collection(db, "votaciones"),
-    where("ciclo", "==", ciclo)
-  )
+  collectionGroup(db, "lotes")
 );
-
    // ============================================
 // NOMINACIONES 2026
 // ============================================
@@ -2959,61 +2999,214 @@ bloqueNom.appendChild(resumen);
 
 }
 
-frag.appendChild(bloqueNom);
 
-    /* =======================
-       BLOQUE — VOTACIÓN FINAL
-    ======================= */
-    const bloqueVot = document.createElement('section');
-    bloqueVot.innerHTML = `
-      <h3>🗳️ Votación Final Ciclo ${ciclo}</h3>
-      <p style="opacity:.8">Ganadores por votos.</p>
-    `;
+/* =======================
+   BLOQUE — VOTACIÓN FINAL
+======================= */
 
-    if (snapVotos.empty) {
-      bloqueVot.insertAdjacentHTML('beforeend', `<p>No hay votos aún.</p>`);
-    } else {
-      const votosPorCat = {};
-      const votantes = new Set();
+const bloqueVot = document.createElement("section");
+bloqueVot.className = "resultados-final";
 
-      snapVotos.forEach(d => {
-        const data = d.data();
-        votosPorCat[data.categoria] ||= [];
-        votosPorCat[data.categoria].push({ voto: data.voto, user: data.usuario });
-        votantes.add(data.usuario);
-      });
+bloqueVot.innerHTML = `
+  <div class="resultados-final-header">
+    <h3>🗳️ Votación Final</h3>
+    <p>Resultados provisionales de la votación final.</p>
+  </div>
+`;
 
-      bloqueVot.insertAdjacentHTML(
-        'beforeend',
-        `<p>Han votado: ${Array.from(votantes).join(', ')}</p>`
-      );
+const votosPorCat = {};
+const votantes = new Set();
 
-      Object.entries(votosPorCat).forEach(([cat, lista]) => {
-        const div = document.createElement('div');
-        div.innerHTML = `<h4>${cat}</h4>`;
+const votantesPorLote = {
+  lote_1: new Set(),
+  lote_2: new Set(),
+  lote_3: new Set()
+};
 
-        const cuenta = {};
-        const detalle = {};
+snapVotos.forEach(docSnap => {
 
-        lista.forEach(({voto, user}) => {
-          cuenta[voto] = (cuenta[voto] || 0) + 1;
-          (detalle[voto] ||= new Set()).add(user);
-        });
+  if (!docSnap.ref.path.startsWith("votaciones_finales_2026/")) {
+    return;
+  }
 
-        const ul = document.createElement('ul');
-        Object.entries(cuenta).sort((a,b)=>b[1]-a[1]).forEach(([opcion, n]) => {
-          const li = document.createElement('li');
-          li.innerHTML = `${opcion}: ${n} voto(s)<br>
-                          <span style="opacity:.8">Votaron: ${Array.from(detalle[opcion]).join(', ')}</span>`;
-          ul.appendChild(li);
-        });
+  const data = docSnap.data() || {};
 
-        div.appendChild(ul);
-        bloqueVot.appendChild(div);
-      });
-    }
+  if (data.edicion !== 2026) return;
+
+  const usuario = data.usuario || "Desconocido";
+  const votos = data.votos || {};
+  const loteId = data.loteId;
+
+if (votantesPorLote[loteId]) {
+  votantesPorLote[loteId].add(usuario);
+}
+
+  votantes.add(usuario);
+
+  Object.entries(votos).forEach(([categoria, voto]) => {
+
+    votosPorCat[categoria] ||= [];
+
+    votosPorCat[categoria].push({
+      voto,
+      user: usuario
+    });
+
+  });
+
+});
+
+if (Object.keys(votosPorCat).length === 0) {
+
+  bloqueVot.insertAdjacentHTML(
+    "beforeend",
+    `<p class="resultados-vacio">No hay votos todavía.</p>`
+  );
+
+} else {
+
+  LOTES_VOTACION.forEach((categoriasDelLote, indiceLote) => {
+
+  const numeroLote = indiceLote + 1;
+  const loteId = `lote_${numeroLote}`;
+
+  const categoriasConVotos = categoriasDelLote.filter(
+    categoria => votosPorCat[categoria]
+  );
+
+  if (categoriasConVotos.length === 0) return;
+
+  const tituloLote = document.createElement("h3");
+  tituloLote.className = "resultado-titulo-lote";
+  tituloLote.textContent = `❄️ Lote ${numeroLote}`;
+
+  bloqueVot.appendChild(tituloLote);
+
+  const todosLosUsuarios = Object.keys(loginMap);
+
+  const hanVotado =
+    votantesPorLote[loteId] || new Set();
+
+  const faltan = todosLosUsuarios.filter(
+    usuario => !hanVotado.has(usuario)
+  );
+
+  const resumen = document.createElement("div");
+  resumen.className = "resultado-resumen-lote";
+
+  resumen.innerHTML = `
+    <p>
+      <strong>Participación:</strong>
+      ${hanVotado.size}/${todosLosUsuarios.length}
+    </p>
+
+    <p>
+      <strong>Han votado:</strong>
+      ${
+        hanVotado.size
+          ? Array.from(hanVotado).join(", ")
+          : "Nadie todavía"
+      }
+    </p>
+
+    <p>
+      <strong>Faltan:</strong>
+      ${
+        faltan.length
+          ? faltan.join(", ")
+          : "Nadie ✅"
+      }
+    </p>
+  `;
+
+  bloqueVot.appendChild(resumen);
+
+  categoriasConVotos.forEach(cat => {
+
+    const lista = votosPorCat[cat];
+
+    const tarjeta = document.createElement("div");
+    tarjeta.className = "resultado-final-categoria";
+
+    const titulo = document.createElement("h4");
+    titulo.textContent = cat;
+
+    tarjeta.appendChild(titulo);
+
+    const cuenta = {};
+    const detalle = {};
+
+    lista.forEach(({ voto, user }) => {
+
+      cuenta[voto] = (cuenta[voto] || 0) + 1;
+      (detalle[voto] ||= new Set()).add(user);
+
+    });
+
+    const ranking = Object.entries(cuenta)
+      .sort((a, b) => b[1] - a[1]);
+
+    const totalVotosCategoria = lista.length;
+
+    ranking.forEach(([opcion, n], indice) => {
+
+      const fila = document.createElement("div");
+      fila.className =
+        "resultado-final-opcion resultado-candidato";
+
+      if (indice === 0) {
+        fila.classList.add(
+          "resultado-final-lider",
+          "resultado-top4"
+        );
+      }
+
+      const porcentaje =
+        Math.round((n / totalVotosCategoria) * 100);
+
+      fila.innerHTML = `
+        <div class="resultado-final-linea">
+
+          <span class="resultado-final-nombre">
+            ${indice === 0 ? "🏆 " : ""}
+            ${opcion}
+            ${
+              indice === 0
+                ? '<span class="resultado-final-badge">LÍDER</span>'
+                : ''
+            }
+          </span>
+
+          <strong>${n} voto${n !== 1 ? "s" : ""}</strong>
+
+        </div>
+
+        <div class="resultado-final-barra">
+          <div
+            class="resultado-final-barra-fill"
+            style="width:${porcentaje}%"
+          ></div>
+        </div>
+
+        <div class="resultado-final-detalle">
+          Votado por: ${Array.from(detalle[opcion]).join(", ")}
+        </div>
+      `;
+
+      tarjeta.appendChild(fila);
+
+    });
+
+    bloqueVot.appendChild(tarjeta);
+
+  });
+
+});
+
+ }
 
     frag.appendChild(bloqueVot);
+    frag.appendChild(bloqueNom);
 
     contenedor.replaceChildren(frag);
 
@@ -3055,6 +3248,55 @@ async function borrarColeccion(nombreColeccion) {
   } catch (error) {
     console.error(`Error borrando ${nombreColeccion}:`, error);
     alert(`Error al borrar "${nombreColeccion}".`);
+  }
+}
+
+async function borrarVotacionesFinales2026() {
+  try {
+    let borrados = 0;
+
+    const snap = await getDocs(
+      collectionGroup(db, "lotes")
+    );
+
+    for (const docSnap of snap.docs) {
+
+      if (
+        !docSnap.ref.path.startsWith(
+          "votaciones_finales_2026/"
+        )
+      ) {
+        continue;
+      }
+
+      const data = docSnap.data() || {};
+
+      if (data.edicion !== 2026) {
+        continue;
+      }
+
+      await deleteDoc(docSnap.ref);
+      borrados++;
+    }
+
+    alert(
+      `Se han borrado ${borrados} documentos de votación final 2026.`
+    );
+
+    if (typeof cargarResultados === "function") {
+      cargarResultados();
+    }
+
+  } catch (error) {
+
+    console.error(
+      "Error borrando votaciones finales 2026:",
+      error
+    );
+
+    alert(
+      "Error al borrar las votaciones finales 2026."
+    );
   }
 }
 
@@ -3133,7 +3375,7 @@ if (btnBorrarVotos && !btnBorrarVotos.dataset.bound) {
   btnBorrarVotos.addEventListener('click', async () => {
     if (!confirm("Vas a BORRAR definitivamente TODOS los votos de la votación final. ¿Continuar?")) return;
     setBtnLoading(btnBorrarVotos, 'Borrando…');
-    await borrarColeccion('votaciones');
+    await borrarVotacionesFinales2026();
 
     unsetBtnLoading(btnBorrarVotos);
     if (typeof cargarResultados === 'function') cargarResultados();
